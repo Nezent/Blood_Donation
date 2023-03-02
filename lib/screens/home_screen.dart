@@ -174,6 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           name: nickName,
                           number: data.number,
                           bag: data.bag,
+                          address: data.address,
                         );
                       },
                       childCount: totalData,

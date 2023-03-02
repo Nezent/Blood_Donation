@@ -1,8 +1,8 @@
+import 'package:blood_connection/components/location_tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/components/request_model.dart';
 import 'package:blood_connection/widgets/widgets.dart';
-import 'package:mongo_dart/mongo_dart.dart' as MGD;
 
 class RequestScreen extends StatefulWidget {
   const RequestScreen({Key? key}) : super(key: key);
@@ -12,11 +12,27 @@ class RequestScreen extends StatefulWidget {
 }
 
 class _RequestScreenState extends State<RequestScreen> {
+  LocationTracker _tracker = LocationTracker();
   final _bloodType = ["How much Units you need", "1", "2", "3", "4"];
   String _currentSelectedValue = 'How much Units you need';
   String? blood_type;
+  late String address;
   var nameController = TextEditingController();
   var numberController = TextEditingController();
+
+  void _getAddress() async {
+    List temporary_address = await _tracker.requestScreenAddress();
+    var temp_address = temporary_address.elementAt(0).split(' ');
+    var short_address = temp_address[0].trim();
+    address = "${short_address},${temporary_address.elementAt(1)}";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getAddress();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,7 +207,12 @@ class _RequestScreenState extends State<RequestScreen> {
   Future<void> _insertData(
       String name, String number, int bag, String blood_type) async {
     final data = RequestModel(
-        name: name, bloodType: blood_type, number: number, bag: bag);
+      name: name,
+      bloodType: blood_type,
+      number: number,
+      bag: bag,
+      address: address,
+    );
     var result = await MongoDB.insert(data);
     _clearData();
   }

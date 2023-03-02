@@ -1,7 +1,6 @@
+import 'package:blood_connection/components/location_tracker.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -11,55 +10,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final LocationTracker _tracker = LocationTracker();
   String location = 'Null,tap button';
   String address = 'waiting';
   String? blood_type;
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
 
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-        forceAndroidLocationManager: false);
-  }
-
-  Future<void> getAddress(Position position) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark place = placemarks[0];
-    address =
-        '${place.subLocality}, ${place.locality}\n${place.subAdministrativeArea}, ${place.country}';
+  void _getAddress() async {
+    address = await _tracker.getAddress();
     if (mounted) {
       setState(() {});
     }
@@ -69,16 +26,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getPermission();
-  }
-
-  Future<void> _getPermission() async {
-    Position position = await _determinePosition();
-    location = 'Lat: ${position.latitude}, Long: ${position.longitude}';
-    getAddress(position);
-    if (mounted) {
-      setState(() {});
-    }
+    _getAddress();
   }
 
   @override
@@ -131,7 +79,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                     child: FutureBuilder(
-                      future: _getPermission(),
+                      future: _tracker.getAddress(),
                       builder: (context, snapshot) {
                         if (address == 'waiting') {
                           return Center(
@@ -157,11 +105,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    address == 'waiting';
-                    Position position = await _determinePosition();
-                    location =
-                        'Lat: ${position.latitude}, Long: ${position.longitude}';
-                    getAddress(position);
+                    address = await _tracker.getAddress();
                     setState(() {});
                   },
                   child: Container(

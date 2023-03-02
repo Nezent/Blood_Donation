@@ -15,6 +15,7 @@ class RequestDataModel {
     required this.bloodType,
     required this.number,
     required this.bag,
+    required this.address,
   });
 
   ObjectId? id;
@@ -22,6 +23,7 @@ class RequestDataModel {
   String bloodType;
   String number;
   int bag;
+  String address;
 
   factory RequestDataModel.fromJson(Map<String, dynamic> json) =>
       RequestDataModel(
@@ -30,6 +32,7 @@ class RequestDataModel {
         bloodType: json["blood_type"],
         number: json["number"],
         bag: json["bag"],
+        address: json["address"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,5 +41,6 @@ class RequestDataModel {
         "blood_type": bloodType,
         "number": number,
         "bag": bag,
+        "address": address,
       };
 }
