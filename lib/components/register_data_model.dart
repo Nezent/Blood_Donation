@@ -1,44 +1,56 @@
 import 'dart:convert';
 
-RequestModel requestModelFromJson(String str) =>
-    RequestModel.fromJson(json.decode(str));
+import 'package:mongo_dart/mongo_dart.dart';
 
-String requestModelToJson(RequestModel data) => json.encode(data.toJson());
+RegisterDataModel registerDataModelFromJson(String str) =>
+    RegisterDataModel.fromJson(json.decode(str));
 
-class RequestModel {
-  RequestModel({
+String registerDataModelToJson(RegisterDataModel data) =>
+    json.encode(data.toJson());
+
+class RegisterDataModel {
+  RegisterDataModel({
+    required this.id,
     required this.name,
     required this.bloodType,
+    required this.gender,
     required this.number,
-    required this.bag,
+    required this.password,
     required this.address,
     required this.latitude,
     required this.longitude,
   });
 
+  ObjectId id;
   String name;
   String bloodType;
+  String? gender;
   String number;
-  int bag;
+  String? password;
   String address;
   double latitude;
   double longitude;
 
-  factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
+  factory RegisterDataModel.fromJson(Map<String, dynamic> json) =>
+      RegisterDataModel(
+        id: json["_id"],
         name: json["name"],
         bloodType: json["blood_type"],
+        gender: json["gender"],
         number: json["number"],
-        bag: json["bag"],
+        password: json["password"],
         address: json["address"],
         latitude: json["latitude"],
         longitude: json["longitude"],
       );
 
   Map<String, dynamic> toJson() => {
+        "_id": id,
         "name": name,
         "blood_type": bloodType,
+        "gender": gender,
         "number": number,
-        "bag": bag,
+        "password": password,
         "address": address,
         "latitude": latitude,
         "longitude": longitude,

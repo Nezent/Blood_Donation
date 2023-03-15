@@ -1,3 +1,4 @@
+import 'package:blood_connection/screens/donor_screen.dart';
 import 'package:flutter/material.dart';
 
 class SideBar extends StatefulWidget {
@@ -39,8 +40,13 @@ class _SideBarState extends State<SideBar> {
           ),
           ListTile(
             leading: Icon(Icons.star),
-            title: Text("Listing"),
-            onTap: () {},
+            title: Text("Donor List"),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DonorScreen(),
+              ),
+            ),
           ),
           Divider(),
           ListTile(

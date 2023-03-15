@@ -1,9 +1,13 @@
 import 'package:blood_connection/components/components.dart';
+import 'package:blood_connection/components/location_tracker.dart';
 import 'package:blood_connection/components/request_data_model.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:geolocator/geolocator.dart';
+
+import '../components/register_data_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,20 +19,43 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   String _currentSelectedValue = 'AB+';
+  late Future<List<Map<String, dynamic>>> Requests;
+  late Future<List<Map<String, dynamic>>> Donors;
+  double? latitude;
+  double? longitude;
+  void _getAddress() async {
+    LocationTracker _tracker = LocationTracker();
+    List temporary_address = await _tracker.requestAddress();
+    setState(() {
+      latitude = double.parse(temporary_address.elementAt(2));
+      longitude = double.parse(temporary_address.elementAt(3));
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getAddress();
+    Requests = MongoDB.getData();
+    Donors = MongoDB.getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const SideBar(),
       body: SafeArea(
         child: FutureBuilder(
-          future: MongoDB.getData(),
-          builder: (context, AsyncSnapshot snapshot) {
+          future: Future.wait([Requests, Donors]),
+          builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasData) {
-              var totalData = snapshot.data.length;
+              var totalRequests = snapshot.data![0].length;
+              var totalDonors = snapshot.data![1].length;
               return CustomScrollView(
                 slivers: [
                   SliverPadding(
@@ -153,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
                       child: Text(
-                        'Blood Request',
+                        'Blood Requests',
                         style: TextStyle(
                           fontSize: 19.0,
                           fontWeight: FontWeight.w600,
@@ -166,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         var data =
-                            RequestDataModel.fromJson(snapshot.data[index]);
+                            RequestDataModel.fromJson(snapshot.data![0][index]);
                         var names = data.name.split(' ');
                         var nickName = names[0].trim();
                         return BloodRequest(
@@ -175,9 +202,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           number: data.number,
                           bag: data.bag,
                           address: data.address,
+                          distance: Geolocator.distanceBetween(
+                              data.latitude,
+                              data.longitude,
+                              latitude ?? 0.0,
+                              longitude ?? 0.0),
                         );
                       },
-                      childCount: totalData,
+                      childCount: totalRequests,
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -246,9 +278,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return DonorList();
+                        var data = RegisterDataModel.fromJson(
+                            snapshot.data![1][index]);
+                        var names = data.name.split(' ');
+                        var nickName = names[0].trim();
+                        return DonorList(
+                          blood_type: data.bloodType,
+                          name: nickName,
+                          number: data.number,
+                          address: data.address,
+                          distance: Geolocator.distanceBetween(
+                              data.latitude,
+                              data.longitude,
+                              latitude ?? 0.00,
+                              longitude ?? 0.00),
+                        );
                       },
-                      childCount: 5,
+                      childCount: totalDonors,
                     ),
                   ),
                 ],

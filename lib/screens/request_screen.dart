@@ -13,18 +13,22 @@ class RequestScreen extends StatefulWidget {
 
 class _RequestScreenState extends State<RequestScreen> {
   LocationTracker _tracker = LocationTracker();
-  final _bloodType = ["How much Units you need", "1", "2", "3", "4"];
+  final _bloodBag = ["How much Units you need", "1", "2", "3", "4"];
   String _currentSelectedValue = 'How much Units you need';
   String? blood_type;
   late String address;
+  late double latitude;
+  late double longitude;
   var nameController = TextEditingController();
   var numberController = TextEditingController();
 
   void _getAddress() async {
-    List temporary_address = await _tracker.requestScreenAddress();
+    List temporary_address = await _tracker.requestAddress();
     var temp_address = temporary_address.elementAt(0).split(' ');
     var short_address = temp_address[0].trim();
     address = "${short_address},${temporary_address.elementAt(1)}";
+    latitude = double.parse(temporary_address.elementAt(2));
+    longitude = double.parse(temporary_address.elementAt(3));
   }
 
   @override
@@ -116,7 +120,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                   _currentSelectedValue = newValue!;
                                 });
                               },
-                              items: _bloodType.map((String value) {
+                              items: _bloodBag.map((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(
@@ -169,7 +173,9 @@ class _RequestScreenState extends State<RequestScreen> {
                           nameController.text,
                           numberController.text,
                           int.parse(_currentSelectedValue),
-                          blood_type!);
+                          blood_type!,
+                          latitude,
+                          longitude);
                     },
                     child: Center(
                       child: Container(
@@ -204,14 +210,16 @@ class _RequestScreenState extends State<RequestScreen> {
     );
   }
 
-  Future<void> _insertData(
-      String name, String number, int bag, String blood_type) async {
+  Future<void> _insertData(String name, String number, int bag,
+      String blood_type, double latitude, double longitude) async {
     final data = RequestModel(
       name: name,
       bloodType: blood_type,
       number: number,
       bag: bag,
       address: address,
+      latitude: latitude,
+      longitude: longitude,
     );
     var result = await MongoDB.insert(data);
     _clearData();

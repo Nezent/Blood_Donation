@@ -44,28 +44,21 @@ class LocationTracker {
         forceAndroidLocationManager: false);
   }
 
-  Future<String> getAddress() async {
+  Future<List> requestAddress() async {
     Position position = await _determinePosition();
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark place = placemarks[0];
-    String location = 'Lat: ${position.latitude}, Long: ${position.longitude}';
-    String address =
-        '${place.subLocality}, ${place.locality}\n${place.subAdministrativeArea}, ${place.country}';
-    return Future.value(address);
-  }
-
-  Future<List> requestScreenAddress() async {
-    Position position = await _determinePosition();
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark place = placemarks[0];
-    String location = 'Lat: ${position.latitude}, Long: ${position.longitude}';
+    double latitude = position.latitude;
+    double longitude = position.longitude;
     List<String> request_address = [];
     request_address.add('${place.subAdministrativeArea}');
     request_address.add('${place.country}');
+    request_address.add('${latitude}');
+    request_address.add('${longitude}');
     String address =
         '${place.subLocality}, ${place.locality}\n${place.subAdministrativeArea}, ${place.country}';
+    request_address.add('${address}');
     return Future.value(request_address);
   }
 }

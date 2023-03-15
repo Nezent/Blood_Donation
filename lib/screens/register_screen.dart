@@ -1,5 +1,11 @@
+import 'package:blood_connection/screens/home_screen.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+
+import '../components/connection.dart';
+import '../components/location_tracker.dart';
+import '../components/register_data_model.dart';
+import '../components/register_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -10,7 +16,31 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen>
     with TickerProviderStateMixin {
+  LocationTracker _tracker = LocationTracker();
+  late String address;
+  late double latitude;
+  late double longitude;
   String? blood_type;
+  String? gender_type;
+  var nameController = TextEditingController();
+  var numberController = TextEditingController();
+  var passwordController = TextEditingController();
+  var passwordCheckController = TextEditingController();
+  void _getAddress() async {
+    List temporary_address = await _tracker.requestAddress();
+    var temp_address = temporary_address.elementAt(0).split(' ');
+    var short_address = temp_address[0].trim();
+    address = "${short_address},${temporary_address.elementAt(1)}";
+    latitude = double.parse(temporary_address.elementAt(2));
+    longitude = double.parse(temporary_address.elementAt(3));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getAddress();
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 2, vsync: this);
@@ -95,6 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 40, vertical: 8),
                                 child: TextFormField(
+                                  controller: numberController,
                                   keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
                                     hintText: 'Enter your Phone Number',
@@ -107,6 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 40, vertical: 8),
                                 child: TextFormField(
+                                  controller: passwordController,
                                   decoration: InputDecoration(
                                     hintText: 'Enter your Password',
                                     label: Text('Password'),
@@ -118,20 +150,26 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 height: 60,
                               ),
                               Center(
-                                child: Container(
-                                  height: 46,
-                                  width: 340,
-                                  decoration: BoxDecoration(
-                                    color: Palette.cardBackground,
-                                    borderRadius: BorderRadius.circular(4.0),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Log In',
-                                      style: TextStyle(
-                                        fontSize: 19.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Palette.cardText,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    _logIn(numberController.text,
+                                        passwordController.text);
+                                  },
+                                  child: Container(
+                                    height: 46,
+                                    width: 340,
+                                    decoration: BoxDecoration(
+                                      color: Palette.cardBackground,
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Log In',
+                                        style: TextStyle(
+                                          fontSize: 19.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Palette.cardText,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -194,6 +232,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 40, vertical: 8),
                               child: TextFormField(
+                                controller: nameController,
                                 keyboardType: TextInputType.name,
                                 decoration: InputDecoration(
                                   hintText: 'Enter your Name',
@@ -206,6 +245,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 40, vertical: 8),
                               child: TextFormField(
+                                controller: numberController,
                                 keyboardType: TextInputType.phone,
                                 decoration: InputDecoration(
                                   hintText: 'Enter your Phone Number',
@@ -218,6 +258,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 40, vertical: 8),
                               child: TextFormField(
+                                controller: passwordController,
                                 decoration: InputDecoration(
                                   hintText: 'Enter a Password',
                                   label: Text('Password'),
@@ -229,6 +270,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 40, vertical: 8),
                               child: TextFormField(
+                                controller: passwordCheckController,
                                 decoration: InputDecoration(
                                   hintText: 'Re-type Password',
                                   label: Text('Password'),
@@ -253,7 +295,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                               padding: EdgeInsets.symmetric(
                                 horizontal: 55,
                               ),
-                              child: Gender(),
+                              child: Gender(
+                                gender_type: (String value) {
+                                  gender_type = value;
+                                },
+                              ),
                             ),
                             SizedBox(
                               height: 16,
@@ -296,7 +342,15 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 ),
                                 child: Center(
                                   child: GestureDetector(
-                                    onTap: () {},
+                                    onTap: () async {
+                                      await _insertData(
+                                        nameController.text,
+                                        numberController.text,
+                                        passwordCheckController.text,
+                                        blood_type!,
+                                        gender_type!,
+                                      );
+                                    },
                                     child: Text(
                                       'Register',
                                       style: TextStyle(
@@ -324,5 +378,48 @@ class _RegisterScreenState extends State<RegisterScreen>
         ),
       ),
     );
+  }
+
+  Future<void> _insertData(String name, String number, String password,
+      String blood_type, String gender) async {
+    final data = RegisterModel(
+      name: name,
+      bloodType: blood_type,
+      number: number,
+      password: password,
+      gender: gender,
+      address: address,
+      latitude: latitude,
+      longitude: longitude,
+    );
+    var result = await MongoDB.register(data);
+    _clearData();
+  }
+
+  void _clearData() {
+    nameController.text = '';
+    numberController.text = '';
+    passwordController.text = '';
+    passwordCheckController.text = '';
+  }
+
+  Future<void> _logIn(String number, String password) async {
+    try {
+      var userData = await MongoDB.logIn(number, password);
+      var user = RegisterDataModel.fromJson(userData!);
+      print(user.id);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("No Data Found"),
+        ),
+      );
+    }
   }
 }

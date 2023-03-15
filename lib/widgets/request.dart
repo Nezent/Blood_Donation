@@ -5,14 +5,16 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 class BloodRequest extends StatefulWidget {
   String blood_type, name, number, address;
   int bag;
-  BloodRequest(
-      {Key? key,
-      required this.blood_type,
-      required this.name,
-      required this.number,
-      required this.bag,
-      required this.address})
-      : super(key: key);
+  double distance;
+  BloodRequest({
+    Key? key,
+    required this.blood_type,
+    required this.name,
+    required this.number,
+    required this.bag,
+    required this.address,
+    required this.distance,
+  }) : super(key: key);
 
   @override
   State<BloodRequest> createState() => _BloodRequestState();
@@ -81,7 +83,7 @@ class _BloodRequestState extends State<BloodRequest> {
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
                           style: TextStyle(
-                            fontSize: 18.0,
+                            fontSize: 16.0,
                             fontWeight: FontWeight.w600,
                             color: Palette.text,
                           ),
@@ -113,12 +115,15 @@ class _BloodRequestState extends State<BloodRequest> {
                             SizedBox(
                               width: 4.0,
                             ),
-                            Text(
-                              '500 m Away',
-                              style: TextStyle(
-                                fontSize: 11.0,
-                                fontWeight: FontWeight.w500,
-                                color: Palette.text,
+                            Expanded(
+                              child: Text(
+                                '${(widget.distance / 1000).toStringAsFixed(2)} km Away',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 11.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: Palette.text,
+                                ),
                               ),
                             ),
                           ],

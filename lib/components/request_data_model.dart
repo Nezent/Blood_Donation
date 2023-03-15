@@ -16,6 +16,8 @@ class RequestDataModel {
     required this.number,
     required this.bag,
     required this.address,
+    required this.latitude,
+    required this.longitude,
   });
 
   ObjectId? id;
@@ -24,6 +26,8 @@ class RequestDataModel {
   String number;
   int bag;
   String address;
+  double latitude;
+  double longitude;
 
   factory RequestDataModel.fromJson(Map<String, dynamic> json) =>
       RequestDataModel(
@@ -33,6 +37,8 @@ class RequestDataModel {
         number: json["number"],
         bag: json["bag"],
         address: json["address"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,5 +48,7 @@ class RequestDataModel {
         "number": number,
         "bag": bag,
         "address": address,
+        "latitude": latitude,
+        "longitude": longitude,
       };
 }

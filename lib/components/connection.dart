@@ -1,21 +1,23 @@
 import 'dart:developer';
 
+import 'package:blood_connection/components/register_model.dart';
 import 'package:blood_connection/components/request_model.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoDB {
-  static var db, userCollection;
+  static var db;
   static connect() async {
     db = await Db.create(
         "mongodb+srv://Anon:2010013@cluster0.seaspb1.mongodb.net/Blood_Connection?retryWrites=true&w=majority");
     await db.open();
-    userCollection = db.collection('Request');
     inspect(db);
   }
 
+  // Request Model
+
   static Future<String> insert(RequestModel data) async {
     try {
-      var result = await userCollection.insertOne(data.toJson());
+      var result = await db.collection('Request').insertOne(data.toJson());
       if (result.isSuccess) {
         print("Data Inserted");
         return "Data Inserted";
@@ -29,7 +31,41 @@ class MongoDB {
   }
 
   static Future<List<Map<String, dynamic>>> getData() async {
-    final arrData = await userCollection.find().toList();
+    final arrData = await db.collection('Request').find().toList();
     return arrData;
+  }
+
+  // Register Model
+
+  static Future<String> register(RegisterModel data) async {
+    try {
+      var result = await db.collection('Register').insertOne(data.toJson());
+      if (result.isSuccess) {
+        print("Data Inserted");
+        return "Data Inserted";
+      } else {
+        print("Sorry");
+        return "Something Wrong";
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getUser() async {
+    final arrData = await db.collection('Register').find().toList();
+    return arrData;
+  }
+
+  static Future<Map<String, dynamic>?> logIn(
+      String number, String password) async {
+    try {
+      final data = await db
+          .collection('Register')
+          .findOne({"number": number, "password": password});
+      return data;
+    } catch (e) {
+      return null;
+    }
   }
 }

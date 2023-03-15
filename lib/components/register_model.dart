@@ -1,16 +1,17 @@
 import 'dart:convert';
 
-RequestModel requestModelFromJson(String str) =>
-    RequestModel.fromJson(json.decode(str));
+RegisterModel registerModelFromJson(String str) =>
+    RegisterModel.fromJson(json.decode(str));
 
-String requestModelToJson(RequestModel data) => json.encode(data.toJson());
+String registerModelToJson(RegisterModel data) => json.encode(data.toJson());
 
-class RequestModel {
-  RequestModel({
+class RegisterModel {
+  RegisterModel({
     required this.name,
     required this.bloodType,
+    required this.gender,
     required this.number,
-    required this.bag,
+    required this.password,
     required this.address,
     required this.latitude,
     required this.longitude,
@@ -18,17 +19,19 @@ class RequestModel {
 
   String name;
   String bloodType;
+  String gender;
   String number;
-  int bag;
+  String password;
   String address;
   double latitude;
   double longitude;
 
-  factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
+  factory RegisterModel.fromJson(Map<String, dynamic> json) => RegisterModel(
         name: json["name"],
         bloodType: json["blood_type"],
+        gender: json["gender"],
         number: json["number"],
-        bag: json["bag"],
+        password: json["password"],
         address: json["address"],
         latitude: json["latitude"],
         longitude: json["longitude"],
@@ -37,8 +40,9 @@ class RequestModel {
   Map<String, dynamic> toJson() => {
         "name": name,
         "blood_type": bloodType,
+        "gender": gender,
         "number": number,
-        "bag": bag,
+        "password": password,
         "address": address,
         "latitude": latitude,
         "longitude": longitude,

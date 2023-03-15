@@ -2,7 +2,8 @@ import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class Gender extends StatefulWidget {
-  const Gender({Key? key}) : super(key: key);
+  ValueChanged<String> gender_type;
+  Gender({Key? key, required this.gender_type}) : super(key: key);
 
   @override
   State<Gender> createState() => _GenderState();
@@ -15,6 +16,7 @@ class _GenderState extends State<Gender> {
       onTap: () {
         setState(() {
           selectedGender = index;
+          widget.gender_type(text);
         });
       },
       child: Container(

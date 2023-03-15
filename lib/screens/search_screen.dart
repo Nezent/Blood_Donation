@@ -16,7 +16,8 @@ class _SearchScreenState extends State<SearchScreen> {
   String? blood_type;
 
   void _getAddress() async {
-    address = await _tracker.getAddress();
+    var temp_address = await _tracker.requestAddress();
+    address = temp_address.elementAt(4);
     if (mounted) {
       setState(() {});
     }
@@ -79,7 +80,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                     child: FutureBuilder(
-                      future: _tracker.getAddress(),
+                      future: _tracker.requestAddress(),
                       builder: (context, snapshot) {
                         if (address == 'waiting') {
                           return Center(
@@ -105,7 +106,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    address = await _tracker.getAddress();
+                    var temp_address = await _tracker.requestAddress();
+                    address = temp_address.elementAt(4);
                     setState(() {});
                   },
                   child: Container(
