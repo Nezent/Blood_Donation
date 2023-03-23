@@ -79,7 +79,7 @@ class _DonorListState extends State<DonorList> {
                           widget.address,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 18.0,
+                            fontSize: 17.0,
                             fontWeight: FontWeight.w600,
                             color: Palette.text,
                           ),

@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
 import '../components/register_data_model.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final Mongo.ObjectId? id;
+  const HomeScreen({Key? key, required this.id}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -44,7 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SideBar(),
+      drawer: SideBar(
+        id: widget.id,
+      ),
       body: SafeArea(
         child: FutureBuilder(
           future: Future.wait([Requests, Donors]),
@@ -282,17 +286,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             snapshot.data![1][index]);
                         var names = data.name.split(' ');
                         var nickName = names[0].trim();
-                        return DonorList(
-                          blood_type: data.bloodType,
-                          name: nickName,
-                          number: data.number,
-                          address: data.address,
-                          distance: Geolocator.distanceBetween(
-                              data.latitude,
-                              data.longitude,
-                              latitude ?? 0.00,
-                              longitude ?? 0.00),
-                        );
+                        if (data.isAvailable) {
+                          return DonorList(
+                            blood_type: data.bloodType,
+                            name: nickName,
+                            number: data.number,
+                            address: data.address,
+                            distance: Geolocator.distanceBetween(
+                                data.latitude,
+                                data.longitude,
+                                latitude ?? 0.00,
+                                longitude ?? 0.00),
+                          );
+                        }
                       },
                       childCount: totalDonors,
                     ),

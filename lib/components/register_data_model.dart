@@ -19,17 +19,19 @@ class RegisterDataModel {
     required this.address,
     required this.latitude,
     required this.longitude,
+    required this.isAvailable,
   });
 
-  ObjectId id;
+  ObjectId? id;
   String name;
   String bloodType;
-  String? gender;
+  String gender;
   String number;
   String? password;
   String address;
   double latitude;
   double longitude;
+  bool isAvailable;
 
   factory RegisterDataModel.fromJson(Map<String, dynamic> json) =>
       RegisterDataModel(
@@ -42,6 +44,7 @@ class RegisterDataModel {
         address: json["address"],
         latitude: json["latitude"],
         longitude: json["longitude"],
+        isAvailable: json["isAvailable"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,5 +57,6 @@ class RegisterDataModel {
         "address": address,
         "latitude": latitude,
         "longitude": longitude,
+        "isAvailable": isAvailable,
       };
 }

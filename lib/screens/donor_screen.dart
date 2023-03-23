@@ -50,7 +50,7 @@ class _DonorScreenState extends State<DonorScreen> {
         ),
       ),
       body: FutureBuilder(
-          future: MongoDB.getData(),
+          future: MongoDB.getUser(),
           builder: (context, AsyncSnapshot snapshot) {
             return Column(
               children: [
@@ -72,7 +72,7 @@ class _DonorScreenState extends State<DonorScreen> {
                       padding: const EdgeInsets.fromLTRB(0, 18, 17, 8),
                       child: Container(
                         height: 24,
-                        width: 62,
+                        width: 65,
                         decoration: BoxDecoration(
                           border: Border.all(
                             width: 1,
@@ -128,17 +128,19 @@ class _DonorScreenState extends State<DonorScreen> {
                             RegisterDataModel.fromJson(snapshot.data[index]);
                         var names = data.name.split(' ');
                         var nickName = names[0].trim();
-                        return DonorList(
-                          name: nickName,
-                          number: data.number,
-                          blood_type: data.bloodType,
-                          address: data.address,
-                          distance: Geolocator.distanceBetween(
-                              data.latitude,
-                              data.longitude,
-                              latitude ?? 0.00,
-                              longitude ?? 0.00),
-                        );
+                        if (data.isAvailable) {
+                          return DonorList(
+                            name: nickName,
+                            number: data.number,
+                            blood_type: data.bloodType,
+                            address: data.address,
+                            distance: Geolocator.distanceBetween(
+                                data.latitude,
+                                data.longitude,
+                                latitude ?? 0.00,
+                                longitude ?? 0.00),
+                          );
+                        }
                       } else {
                         return Center(
                           child: Text("No Data Found"),

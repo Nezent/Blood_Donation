@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Palette.background,
       ),
-      home: const HomeScreen(),
+      home: const HomeScreen(
+        id: null,
+      ),
     );
   }
 }

@@ -44,7 +44,7 @@ class MongoDB {
         print("Data Inserted");
         return "Data Inserted";
       } else {
-        print("Sorry");
+        print("Something went wrong!");
         return "Something Wrong";
       }
     } catch (e) {
@@ -66,6 +66,25 @@ class MongoDB {
       return data;
     } catch (e) {
       return null;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> getUserData(ObjectId? id) async {
+    try {
+      final userData = await db.collection('Register').findOne({"_id": id});
+      return userData;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<void> changeAvailability(ObjectId? id, bool value) async {
+    try {
+      await db
+          .collection('Register')
+          .updateOne({"_id": id}, modify.set("isAvailable", value));
+    } catch (e) {
+      print("Error!");
     }
   }
 }

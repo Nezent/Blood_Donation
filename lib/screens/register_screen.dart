@@ -343,13 +343,24 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 child: Center(
                                   child: GestureDetector(
                                     onTap: () async {
-                                      await _insertData(
-                                        nameController.text,
-                                        numberController.text,
-                                        passwordCheckController.text,
-                                        blood_type!,
-                                        gender_type!,
-                                      );
+                                      if (passwordController.text ==
+                                          passwordCheckController.text) {
+                                        await _insertData(
+                                          nameController.text,
+                                          numberController.text,
+                                          passwordCheckController.text,
+                                          blood_type ?? "AB+",
+                                          gender_type ?? "Male",
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text("Password Didn't Match!"),
+                                          ),
+                                        );
+                                      }
                                     },
                                     child: Text(
                                       'Register',
@@ -391,6 +402,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       address: address,
       latitude: latitude,
       longitude: longitude,
+      isAvailable: true,
     );
     var result = await MongoDB.register(data);
     _clearData();
@@ -407,11 +419,12 @@ class _RegisterScreenState extends State<RegisterScreen>
     try {
       var userData = await MongoDB.logIn(number, password);
       var user = RegisterDataModel.fromJson(userData!);
-      print(user.id);
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeScreen(),
+          builder: (context) => HomeScreen(
+            id: user.id,
+          ),
         ),
       );
     } catch (e) {

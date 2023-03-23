@@ -83,7 +83,7 @@ class _BloodRequestState extends State<BloodRequest> {
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
                           style: TextStyle(
-                            fontSize: 16.0,
+                            fontSize: 17.0,
                             fontWeight: FontWeight.w600,
                             color: Palette.text,
                           ),
