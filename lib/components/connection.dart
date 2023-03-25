@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:blood_connection/components/register_model.dart';
@@ -5,6 +6,8 @@ import 'package:blood_connection/components/request_model.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoDB {
+  StreamController requestController = StreamController();
+  StreamController donorController = StreamController();
   static var db;
   static connect() async {
     db = await Db.create(
@@ -19,10 +22,8 @@ class MongoDB {
     try {
       var result = await db.collection('Request').insertOne(data.toJson());
       if (result.isSuccess) {
-        print("Data Inserted");
         return "Data Inserted";
       } else {
-        print("Sorry");
         return "Something Wrong";
       }
     } catch (e) {
@@ -30,9 +31,9 @@ class MongoDB {
     }
   }
 
-  static Future<List<Map<String, dynamic>>> getData() async {
+  Future<void> getData() async {
     final arrData = await db.collection('Request').find().toList();
-    return arrData;
+    requestController.sink.add(arrData);
   }
 
   // Register Model
@@ -41,10 +42,8 @@ class MongoDB {
     try {
       var result = await db.collection('Register').insertOne(data.toJson());
       if (result.isSuccess) {
-        print("Data Inserted");
         return "Data Inserted";
       } else {
-        print("Something went wrong!");
         return "Something Wrong";
       }
     } catch (e) {
@@ -52,9 +51,10 @@ class MongoDB {
     }
   }
 
-  static Future<List<Map<String, dynamic>>> getUser() async {
-    final arrData = await db.collection('Register').find().toList();
-    return arrData;
+  Future<void> getUser() async {
+    final arrData =
+        await db.collection('Register').find({"isAvailable": true}).toList();
+    donorController.sink.add(arrData);
   }
 
   static Future<Map<String, dynamic>?> logIn(
@@ -84,7 +84,7 @@ class MongoDB {
           .collection('Register')
           .updateOne({"_id": id}, modify.set("isAvailable", value));
     } catch (e) {
-      print("Error!");
+      return;
     }
   }
 }

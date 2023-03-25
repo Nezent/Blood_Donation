@@ -24,15 +24,17 @@ class _GenderState extends State<Gender> {
         width: 132,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(31),
-          color: (selectedGender == index
-              ? Palette.cardText
-              : Palette.cardBackground),
+          color: (selectedGender == index ? Palette.cyan : Palette.cyanLight),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon),
-            SizedBox(
+            Icon(
+              icon,
+              color:
+                  (selectedGender == index ? Palette.card : Palette.cyanText),
+            ),
+            const SizedBox(
               width: 8,
             ),
             Text(
@@ -41,7 +43,7 @@ class _GenderState extends State<Gender> {
                 fontSize: 19,
                 fontWeight: FontWeight.w500,
                 color:
-                    (selectedGender == index ? Palette.card : Palette.outText),
+                    (selectedGender == index ? Palette.card : Palette.cyanText),
               ),
             ),
           ],

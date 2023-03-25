@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -35,7 +37,7 @@ class _BloodRequestState extends State<BloodRequest> {
         decoration: BoxDecoration(
           color: Palette.card,
           borderRadius: BorderRadius.circular(4.0),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 1.0,
@@ -55,7 +57,7 @@ class _BloodRequestState extends State<BloodRequest> {
                     height: 40.0,
                     width: 40.0,
                     decoration: BoxDecoration(
-                      color: Palette.outText,
+                      color: Palette.cyanLight,
                       borderRadius: BorderRadius.circular(
                         31.0,
                       ),
@@ -63,15 +65,15 @@ class _BloodRequestState extends State<BloodRequest> {
                     child: Center(
                       child: Text(
                         widget.blood_type,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14.0,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black38,
+                          fontWeight: FontWeight.w500,
+                          color: Palette.cyanText,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 14,
                   ),
                   Expanded(
@@ -82,26 +84,26 @@ class _BloodRequestState extends State<BloodRequest> {
                           widget.address,
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 17.0,
                             fontWeight: FontWeight.w600,
-                            color: Palette.text,
+                            color: Palette.newText,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 11.0,
                         ),
                         Row(
                           children: [
                             Text(
                               widget.name,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w500,
-                                color: Palette.text,
+                                color: Palette.newText,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 8.0,
                             ),
                             Container(
@@ -109,20 +111,20 @@ class _BloodRequestState extends State<BloodRequest> {
                               width: 6.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(3.0),
-                                color: Palette.outText,
+                                color: Palette.cyanText,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 4.0,
                             ),
                             Expanded(
                               child: Text(
                                 '${(widget.distance / 1000).toStringAsFixed(2)} km Away',
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 11.0,
                                   fontWeight: FontWeight.w500,
-                                  color: Palette.text,
+                                  color: Palette.newText,
                                 ),
                               ),
                             ),
@@ -131,7 +133,7 @@ class _BloodRequestState extends State<BloodRequest> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 14,
                   ),
                   GestureDetector(
@@ -140,25 +142,26 @@ class _BloodRequestState extends State<BloodRequest> {
                       height: 40.0,
                       width: MediaQuery.of(context).size.width * 0.272,
                       decoration: BoxDecoration(
+                        color: Palette.cyan,
                         borderRadius: BorderRadius.circular(4.0),
                         border: Border.all(
                           width: 1.0,
-                          color: Palette.text,
+                          color: Palette.cyan,
                         ),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
+                        children: const [
                           Icon(
                             Icons.call_outlined,
-                            color: Palette.text,
+                            color: Palette.card,
                           ),
                           Text(
                             'Donate',
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w500,
-                              color: Palette.text,
+                              color: Palette.card,
                             ),
                           ),
                         ],
@@ -187,22 +190,22 @@ class _BloodRequestState extends State<BloodRequest> {
                         Container(
                           height: 5.0,
                           width: maxBarWidth,
-                          color: Palette.cardBackground,
+                          color: Palette.cyanLight,
                         ),
                         Container(
                           height: 5.0,
                           width: barWidth,
-                          color: Palette.outText,
+                          color: Palette.cyan,
                         ),
                       ],
                     );
                   }),
                   Text(
                     '${widget.bag}/$totalBag Units',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: Palette.text,
+                      color: Palette.newText,
                     ),
                   ),
                 ],

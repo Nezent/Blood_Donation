@@ -32,7 +32,7 @@ class _DonorListState extends State<DonorList> {
         decoration: BoxDecoration(
           color: Palette.card,
           borderRadius: BorderRadius.circular(4.0),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 1.0,
@@ -52,7 +52,7 @@ class _DonorListState extends State<DonorList> {
                     height: 40.0,
                     width: 40.0,
                     decoration: BoxDecoration(
-                      color: Palette.outText,
+                      color: Palette.cyanLight,
                       borderRadius: BorderRadius.circular(
                         31.0,
                       ),
@@ -60,15 +60,15 @@ class _DonorListState extends State<DonorList> {
                     child: Center(
                       child: Text(
                         widget.blood_type,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14.0,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black38,
+                          fontWeight: FontWeight.w500,
+                          color: Palette.cyanText,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 14,
                   ),
                   Expanded(
@@ -78,26 +78,26 @@ class _DonorListState extends State<DonorList> {
                         Text(
                           widget.address,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 17.0,
                             fontWeight: FontWeight.w600,
-                            color: Palette.text,
+                            color: Palette.newText,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 11.0,
                         ),
                         Row(
                           children: [
                             Text(
                               widget.name,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w500,
-                                color: Palette.text,
+                                color: Palette.newText,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 8.0,
                             ),
                             Container(
@@ -105,20 +105,20 @@ class _DonorListState extends State<DonorList> {
                               width: 6.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(3.0),
-                                color: Palette.outText,
+                                color: Palette.cyanText,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 4.0,
                             ),
                             Expanded(
                               child: Text(
                                 '${(widget.distance / 1000).toStringAsFixed(2)} km Away',
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 11.0,
                                   fontWeight: FontWeight.w500,
-                                  color: Palette.text,
+                                  color: Palette.newText,
                                 ),
                               ),
                             ),
@@ -127,7 +127,7 @@ class _DonorListState extends State<DonorList> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 14,
                   ),
                   GestureDetector(
@@ -136,25 +136,26 @@ class _DonorListState extends State<DonorList> {
                       height: 40.0,
                       width: MediaQuery.of(context).size.width * 0.22,
                       decoration: BoxDecoration(
+                        color: Palette.cyan,
                         borderRadius: BorderRadius.circular(4.0),
                         border: Border.all(
                           width: 1.0,
-                          color: Palette.text,
+                          color: Palette.cyan,
                         ),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
+                        children: const [
                           Icon(
                             Icons.call_outlined,
-                            color: Palette.text,
+                            color: Palette.card,
                           ),
                           Text(
                             'Call',
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w500,
-                              color: Palette.text,
+                              color: Palette.card,
                             ),
                           ),
                         ],

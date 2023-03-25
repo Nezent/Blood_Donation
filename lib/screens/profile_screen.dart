@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -18,16 +19,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         title: const Text(
           "Profile",
-          style: TextStyle(color: Palette.cardText),
+          style: TextStyle(color: Palette.card),
         ),
         centerTitle: true,
-        backgroundColor: Palette.card,
+        backgroundColor: Palette.cyan,
         leading: IconButton(
           splashRadius: 8.0,
           onPressed: () => Navigator.pop(context),
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_outlined,
-            color: Colors.black,
+            color: Palette.card,
             size: 36,
           ),
         ),
@@ -37,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 32,
             ),
             SizedBox(
@@ -46,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     backgroundImage: AssetImage(
                       "images/avatar.png",
                     ),
@@ -62,26 +63,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         borderRadius: BorderRadius.circular(
                           50.0,
                         ),
-                        border:
-                            Border.all(color: Palette.cardBackground, width: 2),
+                        border: Border.all(color: Palette.cyanText, width: 2),
                       ),
                       child: Center(
-                        child: Image.asset("images/camera.png"),
+                        child: SvgPicture.asset(
+                          "images/camera.svg",
+                          height: 24,
+                          width: 24,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 32,
             ),
-            ProfileWidget(icon: "user.png", text: "My Profile"),
-            SizedBox(
+            const ProfileWidget(icon: "user.svg", text: "My Profile"),
+            const SizedBox(
               height: 12,
             ),
-            ProfileWidget(icon: "bell-ring.png", text: "Notifications"),
-            SizedBox(
+            const ProfileWidget(
+                icon: "notifications.svg", text: "Notifications"),
+            const SizedBox(
               height: 12,
             ),
             Padding(
@@ -95,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 decoration: BoxDecoration(
                   color: Palette.card,
                   borderRadius: BorderRadius.circular(8.0),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 0.5,
@@ -123,23 +128,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                                 child: Center(
-                                  child: Image.asset("images/blood-drop.png"),
+                                  child: SvgPicture.asset(
+                                    "images/drop-of-blood.svg",
+                                    height: 32,
+                                    width: 32,
+                                  ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 32,
                               ),
-                              Text(
+                              const Text(
                                 "Availability",
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Palette.text,
+                                  color: Palette.newText,
                                 ),
                               ),
                             ],
                           ),
                           Switch.adaptive(
+                              activeColor: Palette.cyanText,
+                              activeTrackColor: Palette.cyan,
+                              inactiveThumbColor: Palette.cyanLight,
+                              inactiveTrackColor: Palette.cyan,
                               value: newValue,
                               onChanged: (bool value) {
                                 setState(() {
@@ -153,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Padding(
@@ -167,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 decoration: BoxDecoration(
                   color: Palette.card,
                   borderRadius: BorderRadius.circular(8.0),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 0.5,
@@ -195,23 +208,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                                 child: Center(
-                                  child: Image.asset("images/night-mode.png"),
+                                  child: SvgPicture.asset(
+                                    "images/night-mode.svg",
+                                    height: 32,
+                                    width: 32,
+                                  ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 32,
                               ),
-                              Text(
+                              const Text(
                                 "Dark Mode",
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Palette.text,
+                                  color: Palette.newText,
                                 ),
                               ),
                             ],
                           ),
                           Switch.adaptive(
+                              activeColor: Palette.cyanText,
+                              activeTrackColor: Palette.cyan,
+                              inactiveThumbColor: Palette.cyanLight,
+                              inactiveTrackColor: Palette.cyan,
                               value: dark,
                               onChanged: (bool value) {
                                 setState(() {
@@ -225,14 +246,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
-            ProfileWidget(icon: "setting.png", text: "Settings"),
-            SizedBox(
+            const ProfileWidget(icon: "settings.svg", text: "Settings"),
+            const SizedBox(
               height: 12,
             ),
-            ProfileWidget(icon: "question-mark.png", text: "Help Center"),
+            const ProfileWidget(icon: "help.svg", text: "Help Center"),
           ],
         ),
       ),

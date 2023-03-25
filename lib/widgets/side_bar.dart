@@ -1,8 +1,13 @@
+// ignore_for_file: library_prefixes
+
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/components/register_data_model.dart';
 import 'package:blood_connection/screens/donor_screen.dart';
 import 'package:blood_connection/screens/home_screen.dart';
+import 'package:blood_connection/screens/request_blood_screen.dart';
+import 'package:blood_connection/widgets/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
 class SideBar extends StatefulWidget {
@@ -18,6 +23,7 @@ class _SideBarState extends State<SideBar> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Palette.cyanLight,
       child: FutureBuilder(
           future: MongoDB.getUserData(widget.id),
           builder: (context, snapshot) {
@@ -30,6 +36,7 @@ class _SideBarState extends State<SideBar> {
                 padding: EdgeInsets.zero,
                 children: [
                   UserAccountsDrawerHeader(
+                    decoration: const BoxDecoration(color: Palette.cyanText),
                     accountName: Text(userData.name),
                     accountEmail: Text(userData.number),
                     currentAccountPicture: CircleAvatar(
@@ -42,40 +49,60 @@ class _SideBarState extends State<SideBar> {
                     ),
                   ),
                   ListTile(
-                    leading: Icon(Icons.home),
-                    title: Text("Home"),
+                    leading: SvgPicture.asset("images/homes.svg"),
+                    title: const Text("Home"),
                     onTap: () {},
                   ),
                   ListTile(
-                    leading: Icon(Icons.favorite),
-                    title: Text("Favourite"),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.star),
-                    title: Text("Donor List"),
+                    leading: SvgPicture.asset("images/donate-blood.svg"),
+                    title: const Text("Requests List"),
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DonorScreen(),
+                        builder: (context) => const RequestBloodScreen(),
                       ),
                     ),
                   ),
-                  Divider(),
                   ListTile(
-                    leading: Icon(Icons.bloodtype_sharp),
-                    title: Text("Availibility"),
+                    leading: SvgPicture.asset(
+                      "images/donors.svg",
+                      height: 24,
+                      width: 24,
+                    ),
+                    title: const Text("Donors List"),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DonorScreen(),
+                      ),
+                    ),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: SvgPicture.asset(
+                      "images/blood-test.svg",
+                      height: 24,
+                      width: 24,
+                    ),
+                    title: const Text("Availibility"),
                     trailing: Switch.adaptive(
+                        activeColor: Palette.cyanText,
+                        activeTrackColor: Palette.cyan,
+                        inactiveThumbColor: Palette.cyanLight,
+                        inactiveTrackColor: Palette.cyan,
                         value: userData.isAvailable,
                         onChanged: (bool newValue) {
                           MongoDB.changeAvailability(widget.id, newValue);
                         }),
                   ),
-                  Divider(),
+                  const Divider(),
                   ListTile(
-                    leading: Icon(Icons.exit_to_app),
-                    title: Text("Logout"),
-                    onTap: () {},
+                    leading: SvgPicture.asset("images/logout.svg"),
+                    title: const Text("Logout"),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen(id: null))),
                   ),
                 ],
               );
@@ -87,52 +114,57 @@ class _SideBarState extends State<SideBar> {
   }
 
   Widget _defaultData() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          UserAccountsDrawerHeader(
-            accountName: Text("Anonymous"),
-            accountEmail: Text("01XXXXXXXXX"),
-            currentAccountPicture: CircleAvatar(
-              child: ClipOval(
-                child: Image.asset(
-                  "images/avatar.png",
-                  fit: BoxFit.cover,
+    return SizedBox(
+      width: 120,
+      child: Drawer(
+        backgroundColor: Palette.cyanLight,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: const Text("Anonymous"),
+              accountEmail: const Text("01XXXXXXXXX"),
+              decoration: const BoxDecoration(color: Palette.cyanText),
+              currentAccountPicture: CircleAvatar(
+                child: ClipOval(
+                  child: Image.asset(
+                    "images/avatar.png",
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text("Home"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text("Favourite"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(Icons.star),
-            title: Text("Donor List"),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DonorScreen(),
-              ),
+            ListTile(
+              leading: SvgPicture.asset("images/homes.svg"),
+              title: const Text("Home"),
+              onTap: () {},
             ),
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text("Logout"),
-            onTap: () => Navigator.push(
+            ListTile(
+              leading: SvgPicture.asset("images/donate-blood.svg"),
+              title: const Text("Requests List"),
+              onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const HomeScreen(id: null))),
-          ),
-        ],
+                  builder: (context) => const RequestBloodScreen(),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: SvgPicture.asset(
+                "images/donors.svg",
+                height: 24,
+                width: 24,
+              ),
+              title: const Text("Donors List"),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DonorScreen(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

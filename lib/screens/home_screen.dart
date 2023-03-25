@@ -1,12 +1,17 @@
+import 'dart:async';
+
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/components/location_tracker.dart';
 import 'package:blood_connection/components/request_data_model.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 
 import '../components/register_data_model.dart';
 
@@ -19,10 +24,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  MongoDB mongoDB = MongoDB();
   final _bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   String _currentSelectedValue = 'AB+';
-  late Future<List<Map<String, dynamic>>> Requests;
-  late Future<List<Map<String, dynamic>>> Donors;
   double? latitude;
   double? longitude;
   void _getAddress() async {
@@ -39,27 +43,37 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     _getAddress();
-    Requests = MongoDB.getData();
-    Donors = MongoDB.getUser();
+    Timer.periodic(const Duration(seconds: 6), (timer) {
+      mongoDB.getData();
+      mongoDB.getUser();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Palette.cyan,
+    ));
     return Scaffold(
       drawer: SideBar(
         id: widget.id,
       ),
       body: SafeArea(
-        child: FutureBuilder(
-          future: Future.wait([Requests, Donors]),
-          builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+        child: StreamBuilder2(
+          streams: StreamTuple2(
+              mongoDB.requestController.stream, mongoDB.donorController.stream),
+          builder: (context, SnapshotTuple2<dynamic, dynamic> snapshots) {
+            if (snapshots.snapshot1.connectionState ==
+                    ConnectionState.waiting &&
+                snapshots.snapshot2.connectionState ==
+                    ConnectionState.waiting) {
+              return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (snapshot.hasData) {
-              var totalRequests = snapshot.data![0].length;
-              var totalDonors = snapshot.data![1].length;
+            } else if (snapshots.snapshot1.hasData &&
+                snapshots.snapshot2.hasData) {
+              var totalRequests = snapshots.snapshot1.data!.length;
+              var totalDonors = snapshots.snapshot2.data!.length;
               return CustomScrollView(
                 slivers: [
                   SliverPadding(
@@ -93,13 +107,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                         onPressed: () {
                                           Scaffold.of(context).openDrawer();
                                         },
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.menu_outlined,
+                                          color: Palette.newText,
                                           size: 24.0,
                                         ),
                                       );
                                     }),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 16.9,
                                     ),
                                     Expanded(
@@ -128,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             const ProfileScreen())),
-                                child: CircleAvatar(
+                                child: const CircleAvatar(
                                   radius: 16.0,
                                   backgroundImage:
                                       AssetImage('images/avatar.png'),
@@ -140,15 +155,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(
+                  const SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
+                      padding: EdgeInsets.fromLTRB(17, 18, 0, 8),
                       child: Text(
                         'Our Partners',
                         style: TextStyle(
                           fontSize: 19.0,
                           fontWeight: FontWeight.w600,
-                          color: Palette.outText,
+                          color: Palette.newText,
                         ),
                       ),
                     ),
@@ -170,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 90.0,
                                 width: 113.0,
                                 decoration: BoxDecoration(
-                                  color: Palette.cardBackground,
+                                  color: Palette.cyanLight,
                                   borderRadius: BorderRadius.circular(4.0),
                                 ),
                               ),
@@ -180,15 +195,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(
+                  const SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
+                      padding: EdgeInsets.fromLTRB(17, 18, 0, 8),
                       child: Text(
                         'Blood Requests',
                         style: TextStyle(
                           fontSize: 19.0,
                           fontWeight: FontWeight.w600,
-                          color: Palette.outText,
+                          color: Palette.newText,
                         ),
                       ),
                     ),
@@ -196,8 +211,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        var data =
-                            RequestDataModel.fromJson(snapshot.data![0][index]);
+                        var data = RequestDataModel.fromJson(
+                            snapshots.snapshot1.data![index]);
                         var names = data.name.split(' ');
                         var nickName = names[0].trim();
                         return BloodRequest(
@@ -220,14 +235,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(17, 18, 0, 8),
                           child: Text(
                             'Blood Donors',
                             style: TextStyle(
                               fontSize: 19.0,
                               fontWeight: FontWeight.w600,
-                              color: Palette.outText,
+                              color: Palette.newText,
                             ),
                           ),
                         ),
@@ -263,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           child: Text(
                                             value,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Palette.outText,
                                             ),
                                           ),
@@ -283,22 +298,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         var data = RegisterDataModel.fromJson(
-                            snapshot.data![1][index]);
+                            snapshots.snapshot2.data![index]);
                         var names = data.name.split(' ');
                         var nickName = names[0].trim();
-                        if (data.isAvailable) {
-                          return DonorList(
-                            blood_type: data.bloodType,
-                            name: nickName,
-                            number: data.number,
-                            address: data.address,
-                            distance: Geolocator.distanceBetween(
-                                data.latitude,
-                                data.longitude,
-                                latitude ?? 0.00,
-                                longitude ?? 0.00),
-                          );
-                        }
+                        return DonorList(
+                          blood_type: data.bloodType,
+                          name: nickName,
+                          number: data.number,
+                          address: data.address,
+                          distance: Geolocator.distanceBetween(
+                              data.latitude,
+                              data.longitude,
+                              latitude ?? 0.00,
+                              longitude ?? 0.00),
+                        );
                       },
                       childCount: totalDonors,
                     ),
@@ -306,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               );
             } else {
-              return Center(
+              return const Center(
                 child: Text("No Data Found"),
               );
             }
@@ -315,43 +328,49 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: SpeedDial(
         icon: Icons.expand_less_outlined,
-        backgroundColor: Palette.cardBackground,
+        backgroundColor: Palette.cyan,
         overlayColor: Colors.black38,
         overlayOpacity: 0.5,
         spacing: 8,
         spaceBetweenChildren: 4,
         children: [
           SpeedDialChild(
+            backgroundColor: Palette.cyan,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RequestScreen(),
+                builder: (context) => const RequestScreen(),
               ),
             ),
-            child: Icon(
-              Icons.bloodtype_outlined,
+            child: SvgPicture.asset(
+              "images/blood-white.svg",
+              height: 24,
+              width: 24,
             ),
             label: 'Request',
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Palette.card,
             ),
-            labelBackgroundColor: Colors.black,
+            labelBackgroundColor: Palette.textColor,
           ),
           SpeedDialChild(
+            backgroundColor: Palette.cyan,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RegisterScreen(),
+                builder: (context) => const RegisterScreen(),
               ),
             ),
-            child: Icon(
-              Icons.bloodtype_outlined,
+            child: SvgPicture.asset(
+              "images/donates-white.svg",
+              height: 24,
+              width: 24,
             ),
             label: 'Donate',
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Palette.card,
             ),
-            labelBackgroundColor: Colors.black,
+            labelBackgroundColor: Palette.textColor,
           ),
         ],
       ),

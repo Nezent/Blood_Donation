@@ -24,9 +24,7 @@ class _SelectBloodState extends State<SelectBlood> {
         width: 64,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(31),
-          color: (selectedType == index
-              ? Palette.cardText
-              : Palette.cardBackground),
+          color: (selectedType == index ? Palette.cyan : Palette.cyanLight),
         ),
         child: Center(
           child: Text(
@@ -34,7 +32,7 @@ class _SelectBloodState extends State<SelectBlood> {
             style: TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.w500,
-              color: (selectedType == index ? Palette.card : Palette.outText),
+              color: (selectedType == index ? Palette.card : Palette.cyanText),
             ),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfileWidget extends StatelessWidget {
   final String icon, text;
@@ -18,7 +19,7 @@ class ProfileWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: Palette.card,
           borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 0.5,
@@ -46,25 +47,29 @@ class ProfileWidget extends StatelessWidget {
                           ),
                         ),
                         child: Center(
-                          child: Image.asset("images/$icon"),
+                          child: SvgPicture.asset(
+                            "images/$icon",
+                            height: 32,
+                            width: 32,
+                          ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 32,
                       ),
                       Text(
                         text,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
-                          color: Palette.text,
+                          color: Palette.newText,
                         ),
                       ),
                     ],
                   ),
-                  Icon(
+                  const Icon(
                     Icons.arrow_forward_ios,
-                    color: Palette.text,
+                    color: Palette.newText,
                   ),
                 ],
               ),
