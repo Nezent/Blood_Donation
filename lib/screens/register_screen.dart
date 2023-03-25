@@ -1,11 +1,11 @@
 import 'package:blood_connection/screens/home_screen.dart';
+import 'package:blood_connection/screens/validation_screen.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../components/connection.dart';
 import '../components/location_tracker.dart';
 import '../components/register_data_model.dart';
-import '../components/register_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -55,7 +55,12 @@ class _RegisterScreenState extends State<RegisterScreen>
           backgroundColor: Palette.cyan,
           leading: IconButton(
             splashRadius: 8.0,
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(id: null),
+              ),
+            ),
             icon: const Icon(
               Icons.arrow_back_outlined,
               color: Palette.card,
@@ -405,13 +410,27 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     child: GestureDetector(
                                       onTap: () async {
                                         if (_signUp.currentState!.validate()) {
-                                          await _insertData(
-                                            nameController.text,
-                                            numberController.text,
-                                            passwordCheckController.text,
-                                            blood_type ?? "AB+",
-                                            gender_type ?? "Male",
-                                          );
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ValidationScreen(
+                                                          address: address,
+                                                          blood_type:
+                                                              blood_type ??
+                                                                  "AB+",
+                                                          gender: gender_type ??
+                                                              "Male",
+                                                          latitude: latitude,
+                                                          longitude: longitude,
+                                                          name: nameController
+                                                              .text,
+                                                          number:
+                                                              numberController
+                                                                  .text,
+                                                          password:
+                                                              passwordController
+                                                                  .text)));
                                         }
                                       },
                                       child: const Text(
@@ -442,30 +461,6 @@ class _RegisterScreenState extends State<RegisterScreen>
         ),
       ),
     );
-  }
-
-  Future<void> _insertData(String name, String number, String password,
-      String blood_type, String gender) async {
-    final data = RegisterModel(
-      name: name,
-      bloodType: blood_type,
-      number: number,
-      password: password,
-      gender: gender,
-      address: address,
-      latitude: latitude,
-      longitude: longitude,
-      isAvailable: true,
-    );
-    var result = await MongoDB.register(data);
-    _clearData();
-  }
-
-  void _clearData() {
-    nameController.text = '';
-    numberController.text = '';
-    passwordController.text = '';
-    passwordCheckController.text = '';
   }
 
   Future<void> _logIn(String number, String password) async {

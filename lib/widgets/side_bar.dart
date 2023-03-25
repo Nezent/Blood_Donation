@@ -19,7 +19,6 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
-  bool value = false;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -31,7 +30,7 @@ class _SideBarState extends State<SideBar> {
               return const Center(child: CircularProgressIndicator.adaptive());
             } else if (snapshot.hasData) {
               var userData = RegisterDataModel.fromJson(snapshot.data!);
-
+              bool available = userData.isAvailable;
               return ListView(
                 padding: EdgeInsets.zero,
                 children: [
@@ -90,8 +89,11 @@ class _SideBarState extends State<SideBar> {
                         activeTrackColor: Palette.cyan,
                         inactiveThumbColor: Palette.cyanLight,
                         inactiveTrackColor: Palette.cyan,
-                        value: userData.isAvailable,
+                        value: available,
                         onChanged: (bool newValue) {
+                          setState(() {
+                            available = newValue;
+                          });
                           MongoDB.changeAvailability(widget.id, newValue);
                         }),
                   ),

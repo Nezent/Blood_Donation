@@ -1,7 +1,6 @@
 import 'package:blood_connection/components/location_tracker.dart';
+import 'package:blood_connection/screens/request_validation_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_connection/components/components.dart';
-import 'package:blood_connection/components/request_model.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 
 class RequestScreen extends StatefulWidget {
@@ -194,13 +193,17 @@ class _RequestScreenState extends State<RequestScreen> {
                         if (_formKey.currentState!.validate()) {
                           if (_currentSelectedValue !=
                               'How much Units you need') {
-                            await _insertData(
-                                nameController.text,
-                                numberController.text,
-                                int.parse(_currentSelectedValue),
-                                blood_type ?? "AB+",
-                                latitude,
-                                longitude);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RequestValidation(
+                                        bag: int.parse(_currentSelectedValue),
+                                        blood_type: blood_type ?? "AB+",
+                                        latitude: latitude,
+                                        longitude: longitude,
+                                        name: nameController.text,
+                                        number: numberController.text,
+                                        address: address)));
                           }
                         }
                       },
@@ -236,26 +239,5 @@ class _RequestScreenState extends State<RequestScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _insertData(String name, String number, int bag,
-      String blood_type, double latitude, double longitude) async {
-    final data = RequestModel(
-      name: name,
-      bloodType: blood_type,
-      number: number,
-      bag: bag,
-      address: address,
-      latitude: latitude,
-      longitude: longitude,
-    );
-    var result = await MongoDB.insert(data);
-    _clearData();
-  }
-
-  void _clearData() {
-    nameController.text = '';
-    numberController.text = '';
-    _currentSelectedValue = 'How much Units you need';
   }
 }
