@@ -37,9 +37,14 @@ class _RegisterScreenState extends State<RegisterScreen>
     longitude = double.parse(temporary_address.elementAt(3));
   }
 
+  void _connection() async {
+    await MongoDB.connect();
+  }
+
   @override
   void initState() {
     super.initState();
+    _connection();
     _getAddress();
   }
 

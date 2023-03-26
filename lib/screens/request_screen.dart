@@ -1,3 +1,4 @@
+import 'package:blood_connection/components/connection.dart';
 import 'package:blood_connection/components/location_tracker.dart';
 import 'package:blood_connection/screens/request_validation_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +32,14 @@ class _RequestScreenState extends State<RequestScreen> {
     longitude = double.parse(temporary_address.elementAt(3));
   }
 
+  void _connection() async {
+    await MongoDB.connect();
+  }
+
   @override
   void initState() {
     super.initState();
+    _connection();
     _getAddress();
   }
 

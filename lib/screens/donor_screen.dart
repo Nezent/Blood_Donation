@@ -32,10 +32,15 @@ class _DonorScreenState extends State<DonorScreen> {
     });
   }
 
+  void _connection() async {
+    await MongoDB.connect();
+  }
+
   @override
   void initState() {
     super.initState();
     _getAddress();
+    _connection();
     Timer.periodic(const Duration(seconds: 8), (timer) {
       mongoDB.getUser();
     });

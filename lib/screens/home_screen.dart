@@ -39,15 +39,24 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _connection() async {
+    await MongoDB.connect();
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _connection();
     _getAddress();
     Timer.periodic(const Duration(seconds: 8), (timer) {
       mongoDB.getData();
       mongoDB.getUser();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

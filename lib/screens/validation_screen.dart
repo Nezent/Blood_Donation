@@ -172,6 +172,6 @@ class _ValidationScreenState extends State<ValidationScreen> {
       longitude: widget.longitude,
       isAvailable: true,
     );
-    var result = await MongoDB.register(data);
+    await MongoDB.register(data);
   }
 }
