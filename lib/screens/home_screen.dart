@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     _getAddress();
-    Timer.periodic(const Duration(seconds: 6), (timer) {
+    Timer.periodic(const Duration(seconds: 8), (timer) {
       mongoDB.getData();
       mongoDB.getUser();
     });
@@ -67,8 +68,98 @@ class _HomeScreenState extends State<HomeScreen> {
                     ConnectionState.waiting &&
                 snapshots.snapshot2.connectionState ==
                     ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Skeleton(
+                        height: 54, width: MediaQuery.of(context).size.width),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Skeleton(height: 20, width: 130),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: SizedBox(
+                      height: 90,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 4,
+                        itemBuilder: (BuildContext context, int index) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4),
+                            child: Skeleton(height: 90, width: 113),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Skeleton(height: 20, width: 130),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: 4,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          child: Skeleton(
+                              height: 95,
+                              width: MediaQuery.of(context).size.width),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Skeleton(height: 20, width: 130),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Skeleton(height: 20, width: 65),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: 8,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          child: Skeleton(
+                              height: 80,
+                              width: MediaQuery.of(context).size.width),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             } else if (snapshots.snapshot1.hasData &&
                 snapshots.snapshot2.hasData) {
@@ -319,8 +410,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               );
             } else {
-              return const Center(
-                child: Text("No Data Found"),
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Lottie.asset(
+                      'animations/not-found.json',
+                      height: 240,
+                      width: 240,
+                      fit: BoxFit.fill,
+                    ),
+                    const Text(
+                      "NO DATA FOUND",
+                      style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w600,
+                          color: Palette.cyanText),
+                    ),
+                  ],
+                ),
               );
             }
           },

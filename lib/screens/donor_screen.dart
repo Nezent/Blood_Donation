@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:blood_connection/components/components.dart';
+import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lottie/lottie.dart';
 
 import '../components/location_tracker.dart';
 import '../components/register_data_model.dart';
@@ -34,7 +36,7 @@ class _DonorScreenState extends State<DonorScreen> {
   void initState() {
     super.initState();
     _getAddress();
-    Timer.periodic(const Duration(seconds: 6), (timer) {
+    Timer.periodic(const Duration(seconds: 8), (timer) {
       mongoDB.getUser();
     });
   }
@@ -59,8 +61,42 @@ class _DonorScreenState extends State<DonorScreen> {
           stream: mongoDB.donorController.stream,
           builder: (context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
+              return Column(
+                children: [
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Skeleton(height: 20, width: 130),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Skeleton(height: 20, width: 65),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: 8,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          child: Skeleton(
+                              height: 80,
+                              width: MediaQuery.of(context).size.width),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             } else if (snapshot.hasData) {
               return Column(
@@ -151,8 +187,26 @@ class _DonorScreenState extends State<DonorScreen> {
                 ],
               );
             } else {
-              return const Center(
-                child: Text("No Donors found"),
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Lottie.asset(
+                      'animations/not-found.json',
+                      height: 240,
+                      width: 240,
+                      fit: BoxFit.fill,
+                    ),
+                    const Text(
+                      "NO DATA FOUND",
+                      style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w600,
+                          color: Palette.cyanText),
+                    ),
+                  ],
+                ),
               );
             }
           }),
