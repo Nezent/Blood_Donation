@@ -1,38 +1,40 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:blood_connection/components/register_model.dart';
 import 'package:blood_connection/components/request_model.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:blood_connection/components/components.dart';
 
 class MongoDB {
   StreamController requestController = StreamController();
   StreamController donorController = StreamController();
+
   static var dataBase;
   static connect() async {
     try {
       dataBase = await Db.create(
               "mongodb+srv://Anon:2010013@cluster0.seaspb1.mongodb.net/Blood_Connection?retryWrites=true&w=majority")
           .timeout(
-        const Duration(seconds: 3),
+        const Duration(seconds: 10),
       );
-      await dataBase.open();
+      await dataBase.open(secure: true);
       // inspect(db);
     } on SocketException {
       final SnackBar snackBar = SnackbarMessage("No Internet Connection!");
       snackbarKey.currentState?.showSnackBar(snackBar);
     } on TimeoutException {
-      final SnackBar snackBar = SnackbarMessage("Database Timeout!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
-    } catch (e) {
+      return;
+    } on ConnectionException {
       final SnackBar snackBar = SnackbarMessage("IO Exception!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
+    } on ClientException {
+      final SnackBar snackBar = SnackbarMessage("CAN'T FIND CLIENT!");
       snackbarKey.currentState?.showSnackBar(snackBar);
     }
   }
-
   // Request Model
 
   static Future<void> insert(RequestModel data) async {
@@ -49,7 +51,11 @@ class MongoDB {
       final arrData = await dataBase.collection('Request').find().toList();
       requestController.sink.add(arrData);
     } on NoSuchMethodError {
-      final SnackBar snackBar = SnackbarMessage("Cant't Load Data!");
+      return;
+    } on MongoDartError {
+      return;
+    } on ConnectionException {
+      final SnackBar snackBar = SnackbarMessage("IO Exception!");
       snackbarKey.currentState?.showSnackBar(snackBar);
     }
   }
@@ -73,7 +79,11 @@ class MongoDB {
           .find({"isAvailable": true}).toList();
       donorController.sink.add(arrData);
     } on NoSuchMethodError {
-      final SnackBar snackBar = SnackbarMessage("Cant't Load Data!");
+      return;
+    } on MongoDartError {
+      return;
+    } on ConnectionException {
+      final SnackBar snackBar = SnackbarMessage("IO Exception!");
       snackbarKey.currentState?.showSnackBar(snackBar);
     }
   }

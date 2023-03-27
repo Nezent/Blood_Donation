@@ -1,15 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/components/location_tracker.dart';
 import 'package:blood_connection/components/request_data_model.dart';
 import 'package:blood_connection/screens/screens.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
@@ -30,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String _currentSelectedValue = 'AB+';
   double? latitude;
   double? longitude;
+  late StreamSubscription _subscription;
+  bool isDeviceConnected = false;
   void _getAddress() async {
     LocationTracker _tracker = LocationTracker();
     List temporary_address = await _tracker.requestAddress();
@@ -43,9 +48,23 @@ class _HomeScreenState extends State<HomeScreen> {
     await MongoDB.connect();
   }
 
+  void _getConnectivity() {
+    try {
+      _subscription = Connectivity()
+          .onConnectivityChanged
+          .listen((ConnectivityResult result) async {
+        isDeviceConnected = await InternetConnectionChecker().hasConnection;
+      });
+    } catch (_) {
+      final SnackBar snackBar = SnackbarMessage("NO INTERNET!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _getConnectivity();
     _connection();
     _getAddress();
     Timer.periodic(const Duration(seconds: 8), (timer) {
@@ -56,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    _subscription.cancel();
     super.dispose();
   }
 
@@ -429,13 +449,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 240,
                       width: 240,
                       fit: BoxFit.fill,
-                    ),
-                    const Text(
-                      "NO DATA FOUND",
-                      style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
-                          color: Palette.cyanText),
                     ),
                   ],
                 ),

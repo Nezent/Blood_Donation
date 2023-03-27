@@ -182,7 +182,7 @@ class _BloodRequestState extends State<BloodRequest> {
                       (BuildContext context, BoxConstraints constraints) {
                     double maxBarWidth =
                         MediaQuery.of(context).size.width * 0.65;
-                    final double left = widget.bag / totalBag;
+                    final double left = 1 / widget.bag;
                     double barWidth = left * maxBarWidth;
 
                     return Stack(
@@ -201,7 +201,7 @@ class _BloodRequestState extends State<BloodRequest> {
                     );
                   }),
                   Text(
-                    '${widget.bag}/$totalBag Units',
+                    '${widget.bag}/${widget.bag} Units',
                     style: const TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,

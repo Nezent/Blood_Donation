@@ -7,6 +7,7 @@ import 'package:blood_connection/screens/home_screen.dart';
 import 'package:blood_connection/screens/request_blood_screen.dart';
 import 'package:blood_connection/widgets/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
@@ -22,7 +23,7 @@ class _SideBarState extends State<SideBar> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Palette.cyanLight,
+      backgroundColor: Palette.cyan,
       child: FutureBuilder(
           future: MongoDB.getUserData(widget.id),
           builder: (context, snapshot) {
@@ -30,81 +31,147 @@ class _SideBarState extends State<SideBar> {
               return const Center(child: CircularProgressIndicator.adaptive());
             } else if (snapshot.hasData) {
               var userData = RegisterDataModel.fromJson(snapshot.data!);
+              final _controller = ValueNotifier<bool>(userData.isAvailable);
               bool available = userData.isAvailable;
-              return ListView(
-                padding: EdgeInsets.zero,
+              return Column(
                 children: [
-                  UserAccountsDrawerHeader(
-                    decoration: const BoxDecoration(color: Palette.cyanText),
-                    accountName: Text(userData.name),
-                    accountEmail: Text(userData.number),
-                    currentAccountPicture: CircleAvatar(
-                      child: ClipOval(
-                        child: Image.asset(
-                          "images/avatar.png",
-                          fit: BoxFit.cover,
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        UserAccountsDrawerHeader(
+                          decoration:
+                              const BoxDecoration(color: Palette.cyanText),
+                          accountName: Text(userData.name),
+                          accountEmail: Text(userData.number),
+                          currentAccountPicture: Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: CircleAvatar(
+                              child: ClipOval(
+                                child: Image.asset(
+                                  "images/avatar.png",
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          leading: SvgPicture.asset("images/homes.svg"),
+                          title: const Text(
+                            "Home",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onTap: () {},
+                        ),
+                        ListTile(
+                          leading: SvgPicture.asset("images/donate-blood.svg"),
+                          title: const Text(
+                            "Requests List",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RequestBloodScreen(),
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          leading: SvgPicture.asset(
+                            "images/donors.svg",
+                            height: 24,
+                            width: 24,
+                          ),
+                          title: const Text(
+                            "Donors List",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DonorScreen(),
+                            ),
+                          ),
+                        ),
+                        const Divider(),
+                        ListTile(
+                          leading: SvgPicture.asset(
+                            "images/blood-test.svg",
+                            height: 24,
+                            width: 24,
+                          ),
+                          title: const Text(
+                            "Availibility",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          trailing: AdvancedSwitch(
+                            controller: _controller,
+                            height: 26,
+                            width: 48,
+                            activeColor: Palette.cyanText,
+                            inactiveColor:
+                                const Color.fromARGB(255, 123, 200, 192),
+                            thumb: ValueListenableBuilder(
+                                valueListenable: _controller,
+                                builder: (BuildContext context, value, child) {
+                                  MongoDB.changeAvailability(widget.id, value);
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(20),
+                                      ),
+                                      color: value
+                                          ? Palette.cyan
+                                          : Palette.cyanText,
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ),
+                        const Divider(),
+                        ListTile(
+                          leading: SvgPicture.asset("images/logout.svg"),
+                          title: const Text(
+                            "Logout",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const HomeScreen(id: null))),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Align(
+                      alignment: FractionalOffset.bottomCenter,
+                      child: Text(
+                        "Version: 1.0.0",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    leading: SvgPicture.asset("images/homes.svg"),
-                    title: const Text("Home"),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: SvgPicture.asset("images/donate-blood.svg"),
-                    title: const Text("Requests List"),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RequestBloodScreen(),
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: SvgPicture.asset(
-                      "images/donors.svg",
-                      height: 24,
-                      width: 24,
-                    ),
-                    title: const Text("Donors List"),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DonorScreen(),
-                      ),
-                    ),
-                  ),
-                  const Divider(),
-                  ListTile(
-                    leading: SvgPicture.asset(
-                      "images/blood-test.svg",
-                      height: 24,
-                      width: 24,
-                    ),
-                    title: const Text("Availibility"),
-                    trailing: Switch.adaptive(
-                        activeColor: Palette.cyanText,
-                        activeTrackColor: Palette.cyan,
-                        inactiveThumbColor: Palette.cyanLight,
-                        inactiveTrackColor: Palette.cyan,
-                        value: available,
-                        onChanged: (bool newValue) {
-                          setState(() {
-                            available = newValue;
-                          });
-                          MongoDB.changeAvailability(widget.id, newValue);
-                        }),
-                  ),
-                  const Divider(),
-                  ListTile(
-                    leading: SvgPicture.asset("images/logout.svg"),
-                    title: const Text("Logout"),
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeScreen(id: null))),
                   ),
                 ],
               );
@@ -119,49 +186,89 @@ class _SideBarState extends State<SideBar> {
     return SizedBox(
       width: 120,
       child: Drawer(
-        backgroundColor: Palette.cyanLight,
-        child: ListView(
-          padding: EdgeInsets.zero,
+        backgroundColor: Palette.cyan,
+        child: Column(
           children: [
-            UserAccountsDrawerHeader(
-              accountName: const Text("Anonymous"),
-              accountEmail: const Text("01XXXXXXXXX"),
-              decoration: const BoxDecoration(color: Palette.cyanText),
-              currentAccountPicture: CircleAvatar(
-                child: ClipOval(
-                  child: Image.asset(
-                    "images/avatar.png",
-                    fit: BoxFit.cover,
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  UserAccountsDrawerHeader(
+                    accountName: const Text("Anonymous"),
+                    accountEmail: const Text(""),
+                    decoration: const BoxDecoration(color: Palette.cyanText),
+                    currentAccountPicture: Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: CircleAvatar(
+                        child: ClipOval(
+                          child: Image.asset(
+                            "images/avatar.png",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  ListTile(
+                    leading: SvgPicture.asset("images/homes.svg"),
+                    title: const Text(
+                      "Home",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: SvgPicture.asset("images/donate-blood.svg"),
+                    title: const Text(
+                      "Requests List",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RequestBloodScreen(),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: SvgPicture.asset(
+                      "images/donors.svg",
+                      height: 24,
+                      width: 24,
+                    ),
+                    title: const Text(
+                      "Donors List",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DonorScreen(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            ListTile(
-              leading: SvgPicture.asset("images/homes.svg"),
-              title: const Text("Home"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: SvgPicture.asset("images/donate-blood.svg"),
-              title: const Text("Requests List"),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const RequestBloodScreen(),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: SvgPicture.asset(
-                "images/donors.svg",
-                height: 24,
-                width: 24,
-              ),
-              title: const Text("Donors List"),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DonorScreen(),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: Text(
+                  "Version: 1.0.0",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
