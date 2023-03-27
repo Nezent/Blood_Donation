@@ -18,8 +18,16 @@ SnackBar SnackbarMessage(String message) {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset(
+              "images/logo.png",
+              height: 32,
+              width: 32,
+            ),
+            SizedBox(
+              width: 8,
+            ),
             Text(
-              "Sorry!",
+              "Network Failure:",
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -27,7 +35,7 @@ SnackBar SnackbarMessage(String message) {
                   overflow: TextOverflow.ellipsis),
             ),
             SizedBox(
-              width: 4,
+              width: 6,
             ),
             Text(
               message,
