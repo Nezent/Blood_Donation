@@ -32,7 +32,6 @@ class _SideBarState extends State<SideBar> {
             } else if (snapshot.hasData) {
               var userData = RegisterDataModel.fromJson(snapshot.data!);
               final _controller = ValueNotifier<bool>(userData.isAvailable);
-              bool available = userData.isAvailable;
               return Column(
                 children: [
                   Expanded(
@@ -57,23 +56,13 @@ class _SideBarState extends State<SideBar> {
                           ),
                         ),
                         ListTile(
-                          leading: SvgPicture.asset("images/homes.svg"),
-                          title: const Text(
-                            "Home",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          onTap: () {},
-                        ),
-                        ListTile(
-                          leading: SvgPicture.asset("images/donate-blood.svg"),
+                          leading: SvgPicture.asset("images/donates-white.svg"),
                           title: const Text(
                             "Requests List",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
+                              color: Palette.card,
                             ),
                           ),
                           onTap: () => Navigator.push(
@@ -85,7 +74,7 @@ class _SideBarState extends State<SideBar> {
                         ),
                         ListTile(
                           leading: SvgPicture.asset(
-                            "images/donors.svg",
+                            "images/blood-white.svg",
                             height: 24,
                             width: 24,
                           ),
@@ -94,6 +83,7 @@ class _SideBarState extends State<SideBar> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
+                              color: Palette.card,
                             ),
                           ),
                           onTap: () => Navigator.push(
@@ -106,7 +96,7 @@ class _SideBarState extends State<SideBar> {
                         const Divider(),
                         ListTile(
                           leading: SvgPicture.asset(
-                            "images/blood-test.svg",
+                            "images/blood-tube-white.svg",
                             height: 24,
                             width: 24,
                           ),
@@ -115,6 +105,7 @@ class _SideBarState extends State<SideBar> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
+                              color: Palette.card,
                             ),
                           ),
                           trailing: AdvancedSwitch(
@@ -122,8 +113,7 @@ class _SideBarState extends State<SideBar> {
                             height: 26,
                             width: 48,
                             activeColor: Palette.cyanText,
-                            inactiveColor:
-                                const Color.fromARGB(255, 123, 200, 192),
+                            inactiveColor: Palette.cyanLight,
                             thumb: ValueListenableBuilder(
                                 valueListenable: _controller,
                                 builder: (BuildContext context, value, child) {
@@ -143,12 +133,25 @@ class _SideBarState extends State<SideBar> {
                         ),
                         const Divider(),
                         ListTile(
-                          leading: SvgPicture.asset("images/logout.svg"),
+                          leading: SvgPicture.asset("images/cup-white.svg"),
+                          title: const Text(
+                            "Buy Us a Ko-Fi",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Palette.card,
+                            ),
+                          ),
+                          onTap: () {},
+                        ),
+                        ListTile(
+                          leading: SvgPicture.asset("images/logout-white.svg"),
                           title: const Text(
                             "Logout",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
+                              color: Palette.card,
                             ),
                           ),
                           onTap: () => Navigator.push(
@@ -169,6 +172,7 @@ class _SideBarState extends State<SideBar> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
+                          color: Palette.card,
                         ),
                       ),
                     ),
@@ -210,23 +214,13 @@ class _SideBarState extends State<SideBar> {
                     ),
                   ),
                   ListTile(
-                    leading: SvgPicture.asset("images/homes.svg"),
-                    title: const Text(
-                      "Home",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: SvgPicture.asset("images/donate-blood.svg"),
+                    leading: SvgPicture.asset("images/donates-white.svg"),
                     title: const Text(
                       "Requests List",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
+                        color: Palette.card,
                       ),
                     ),
                     onTap: () => Navigator.push(
@@ -238,7 +232,7 @@ class _SideBarState extends State<SideBar> {
                   ),
                   ListTile(
                     leading: SvgPicture.asset(
-                      "images/donors.svg",
+                      "images/blood-white.svg",
                       height: 24,
                       width: 24,
                     ),
@@ -247,6 +241,7 @@ class _SideBarState extends State<SideBar> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
+                        color: Palette.card,
                       ),
                     ),
                     onTap: () => Navigator.push(
@@ -255,6 +250,18 @@ class _SideBarState extends State<SideBar> {
                         builder: (context) => const DonorScreen(),
                       ),
                     ),
+                  ),
+                  ListTile(
+                    leading: SvgPicture.asset("images/cup-white.svg"),
+                    title: const Text(
+                      "Buy Us a Ko-Fi",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Palette.card,
+                      ),
+                    ),
+                    onTap: () {},
                   ),
                 ],
               ),
@@ -268,6 +275,7 @@ class _SideBarState extends State<SideBar> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
+                    color: Palette.card,
                   ),
                 ),
               ),

@@ -125,4 +125,28 @@ class MongoDB {
       return;
     }
   }
+
+  static Future<void> changeTheme(ObjectId? id, bool value) async {
+    try {
+      await dataBase
+          .collection('Register')
+          .updateOne({"_id": id}, modify.set("isDark", value));
+    } catch (e) {
+      final SnackBar snackBar = SnackbarMessage("Try Again After Sometime!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
+      return;
+    }
+  }
+
+  static Future<void> changeProfilePicture(ObjectId? id, String value) async {
+    try {
+      await dataBase
+          .collection('Register')
+          .updateOne({"_id": id}, modify.set("profilePicture", value));
+    } catch (e) {
+      final SnackBar snackBar = SnackbarMessage("Try Again After Sometime!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
+      return;
+    }
+  }
 }

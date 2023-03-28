@@ -259,10 +259,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               GestureDetector(
                                 onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ProfileScreen())),
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => widget.id != null
+                                        ? ProfileScreen(
+                                            id: widget.id,
+                                          )
+                                        : const RegisterScreen(),
+                                  ),
+                                ),
                                 child: const CircleAvatar(
                                   radius: 16.0,
                                   backgroundImage:
@@ -437,22 +442,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ],
-              );
-            } else if (snapshots.snapshot1.hasError &&
-                snapshots.snapshot2.hasError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Lottie.asset(
-                      'animations/not-found.json',
-                      height: 240,
-                      width: 240,
-                      fit: BoxFit.fill,
-                    ),
-                  ],
-                ),
               );
             } else {
               return Center(

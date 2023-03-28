@@ -9,4 +9,6 @@ class Palette {
   static const Color cyanText = Color(0xff054540);
   static const Color newText = Color(0xff636363);
   static const Color textColor = Color(0xff494949);
+  static const Color darkPrimary = Color(0xff121212);
+  static const Color darkSecondary = Color(0xff1F1F1F);
 }

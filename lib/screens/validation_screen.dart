@@ -163,6 +163,7 @@ class _ValidationScreenState extends State<ValidationScreen> {
       String blood_type, String gender) async {
     final data = RegisterModel(
       name: name,
+      profilePicture: null,
       bloodType: blood_type,
       number: number,
       password: password,
@@ -171,6 +172,7 @@ class _ValidationScreenState extends State<ValidationScreen> {
       latitude: widget.latitude,
       longitude: widget.longitude,
       isAvailable: true,
+      isDark: false,
     );
     await MongoDB.register(data);
   }

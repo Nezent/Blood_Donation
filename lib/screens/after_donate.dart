@@ -43,14 +43,14 @@ class _AfterDonationState extends State<AfterDonation> {
                 reverse: true,
               ),
               const Text(
-                "THANK YOU FOR THE",
+                "THANK YOU FOR",
                 style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
                     color: Palette.cyanText),
               ),
               const Text(
-                "DONATION",
+                "JOINING US",
                 style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w600,

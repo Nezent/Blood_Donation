@@ -12,6 +12,7 @@ class RegisterDataModel {
   RegisterDataModel({
     required this.id,
     required this.name,
+    required this.profilePicture,
     required this.bloodType,
     required this.gender,
     required this.number,
@@ -20,36 +21,42 @@ class RegisterDataModel {
     required this.latitude,
     required this.longitude,
     required this.isAvailable,
+    required this.isDark,
   });
 
   ObjectId? id;
   String name;
+  String? profilePicture;
   String bloodType;
   String gender;
   String number;
-  String? password;
+  String password;
   String address;
   double latitude;
   double longitude;
   bool isAvailable;
+  bool isDark;
 
   factory RegisterDataModel.fromJson(Map<String, dynamic> json) =>
       RegisterDataModel(
         id: json["_id"],
         name: json["name"],
+        profilePicture: json["profilePicture"],
         bloodType: json["blood_type"],
         gender: json["gender"],
         number: json["number"],
         password: json["password"],
         address: json["address"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
+        latitude: json["latitude"]?.toDouble(),
+        longitude: json["longitude"]?.toDouble(),
         isAvailable: json["isAvailable"],
+        isDark: json["isDark"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "name": name,
+        "profilePicture": profilePicture,
         "blood_type": bloodType,
         "gender": gender,
         "number": number,
@@ -58,5 +65,6 @@ class RegisterDataModel {
         "latitude": latitude,
         "longitude": longitude,
         "isAvailable": isAvailable,
+        "isDark": isDark,
       };
 }

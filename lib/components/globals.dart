@@ -38,7 +38,7 @@ SnackBar SnackbarMessage(String message) {
               width: 6,
             ),
             Text(
-              message,
+              "I/O Exception",
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

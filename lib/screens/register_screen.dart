@@ -1,4 +1,5 @@
 import 'package:blood_connection/screens/home_screen.dart';
+import 'package:blood_connection/screens/profile_screen.dart';
 import 'package:blood_connection/screens/validation_screen.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -475,7 +476,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeScreen(
+          builder: (context) => ProfileScreen(
             id: user.id,
           ),
         ),
