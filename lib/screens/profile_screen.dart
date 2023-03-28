@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/components/register_data_model.dart';
-import 'package:blood_connection/screens/home_screen.dart';
+import 'package:blood_connection/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Mongo.ObjectId? id;
@@ -73,8 +74,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
         future: MongoDB.getUserData(widget.id),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: Text("waiting"),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 32),
+                  child: SizedBox(
+                    child: Shimmer.fromColors(
+                      baseColor: const Color.fromARGB(255, 30, 29, 29),
+                      highlightColor: const Color.fromARGB(146, 238, 238, 233),
+                      child: Container(
+                        height: 124,
+                        width: 124,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.04),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(100),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Skeleton(height: 32, width: 240),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 10,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        child: Skeleton(
+                            height: 64,
+                            width: MediaQuery.of(context).size.width),
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           } else if (snapshot.hasData) {
             var userData = RegisterDataModel.fromJson(snapshot.data!);
