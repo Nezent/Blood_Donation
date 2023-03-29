@@ -48,7 +48,9 @@ class _RequestScreenState extends State<RequestScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Palette.cyan,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Palette.cyan
+            : Palette.darkSecondary,
         leading: IconButton(
           splashRadius: 8.0,
           onPressed: () => Navigator.pop(context),
@@ -66,12 +68,14 @@ class _RequestScreenState extends State<RequestScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Make a Request',
                 style: TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.bold,
-                  color: Palette.newText,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Palette.newText
+                      : Palette.darkText,
                 ),
               ),
               const SizedBox(
@@ -165,8 +169,8 @@ class _RequestScreenState extends State<RequestScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 40,
                       ),
                       child: Text(
@@ -174,7 +178,10 @@ class _RequestScreenState extends State<RequestScreen> {
                         style: TextStyle(
                           fontSize: 19.0,
                           fontWeight: FontWeight.w600,
-                          color: Palette.newText,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.newText
+                                  : Palette.darkText,
                         ),
                       ),
                     ),
@@ -218,16 +225,22 @@ class _RequestScreenState extends State<RequestScreen> {
                           height: 46,
                           width: 340,
                           decoration: BoxDecoration(
-                            color: Palette.cyan,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.cyan
+                                    : Palette.darkSecondary,
                             borderRadius: BorderRadius.circular(4.0),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               'Request',
                               style: TextStyle(
                                 fontSize: 19.0,
                                 fontWeight: FontWeight.bold,
-                                color: Palette.card,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Palette.card
+                                    : Palette.darkText,
                               ),
                             ),
                           ),

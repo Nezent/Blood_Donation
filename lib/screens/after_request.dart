@@ -44,19 +44,23 @@ class _AfterRequestState extends State<AfterRequest> {
                 fit: BoxFit.fill,
                 reverse: true,
               ),
-              const Text(
-                "THANK YOU FOR THE",
+              Text(
+                "THANKS FOR THE",
                 style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
-                    color: Palette.cyanText),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.cyanText
+                        : Palette.darkText),
               ),
-              const Text(
+              Text(
                 "REQUEST",
                 style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
-                    color: Palette.cyanText),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.cyanText
+                        : Palette.darkText),
               ),
             ],
           ),

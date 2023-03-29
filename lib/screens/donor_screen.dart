@@ -7,9 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 
-import '../components/location_tracker.dart';
-import '../components/register_data_model.dart';
-
 class DonorScreen extends StatefulWidget {
   const DonorScreen({Key? key}) : super(key: key);
 

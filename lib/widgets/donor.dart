@@ -30,7 +30,9 @@ class _DonorListState extends State<DonorList> {
         height: 68.0,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: Palette.card,
+          color: Theme.of(context).brightness == Brightness.light
+              ? Palette.card
+              : Palette.darkSecondary,
           borderRadius: BorderRadius.circular(4.0),
           boxShadow: const [
             BoxShadow(
@@ -52,7 +54,9 @@ class _DonorListState extends State<DonorList> {
                     height: 40.0,
                     width: 40.0,
                     decoration: BoxDecoration(
-                      color: Palette.cyanLight,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.cyanLight
+                          : Palette.darkWidget,
                       borderRadius: BorderRadius.circular(
                         31.0,
                       ),
@@ -60,10 +64,13 @@ class _DonorListState extends State<DonorList> {
                     child: Center(
                       child: Text(
                         widget.blood_type,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14.0,
                           fontWeight: FontWeight.w500,
-                          color: Palette.cyanText,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.cyanText
+                                  : Palette.darkText,
                         ),
                       ),
                     ),
@@ -78,10 +85,13 @@ class _DonorListState extends State<DonorList> {
                         Text(
                           widget.address,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 17.0,
                             fontWeight: FontWeight.w600,
-                            color: Palette.newText,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.newText
+                                    : Palette.darkText,
                           ),
                         ),
                         const SizedBox(
@@ -91,10 +101,13 @@ class _DonorListState extends State<DonorList> {
                           children: [
                             Text(
                               widget.name,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w500,
-                                color: Palette.newText,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Palette.newText
+                                    : Palette.darkText,
                               ),
                             ),
                             const SizedBox(
@@ -105,7 +118,10 @@ class _DonorListState extends State<DonorList> {
                               width: 6.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(3.0),
-                                color: Palette.cyanText,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Palette.cyanText
+                                    : Palette.darkWidget,
                               ),
                             ),
                             const SizedBox(
@@ -115,10 +131,13 @@ class _DonorListState extends State<DonorList> {
                               child: Text(
                                 '${(widget.distance / 1000).toStringAsFixed(2)} km Away',
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 11.0,
                                   fontWeight: FontWeight.w500,
-                                  color: Palette.newText,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Palette.newText
+                                      : Palette.darkText,
                                 ),
                               ),
                             ),
@@ -136,26 +155,37 @@ class _DonorListState extends State<DonorList> {
                       height: 40.0,
                       width: MediaQuery.of(context).size.width * 0.22,
                       decoration: BoxDecoration(
-                        color: Palette.cyan,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Palette.cyan
+                            : Palette.darkButton,
                         borderRadius: BorderRadius.circular(4.0),
                         border: Border.all(
                           width: 1.0,
-                          color: Palette.cyan,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.cyan
+                                  : Palette.darkButton,
                         ),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.call_outlined,
-                            color: Palette.card,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.card
+                                    : Palette.darkText,
                           ),
                           Text(
                             'Call',
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w500,
-                              color: Palette.card,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Palette.card
+                                  : Palette.darkText,
                             ),
                           ),
                         ],

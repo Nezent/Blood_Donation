@@ -15,7 +15,9 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Palette.cyan,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Palette.cyan
+            : Palette.darkSecondary,
         leading: IconButton(
           splashRadius: 8.0,
           onPressed: () => Navigator.pop(context),

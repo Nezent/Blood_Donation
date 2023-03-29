@@ -24,7 +24,13 @@ class _SelectBloodState extends State<SelectBlood> {
         width: 64,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(31),
-          color: (selectedType == index ? Palette.cyan : Palette.cyanLight),
+          color: (selectedType == index
+              ? (Theme.of(context).brightness == Brightness.light
+                  ? Palette.cyan
+                  : Palette.darkWidget)
+              : (Theme.of(context).brightness == Brightness.light
+                  ? Palette.cyanLight
+                  : Palette.darkButton)),
         ),
         child: Center(
           child: Text(
@@ -32,7 +38,13 @@ class _SelectBloodState extends State<SelectBlood> {
             style: TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.w500,
-              color: (selectedType == index ? Palette.card : Palette.cyanText),
+              color: (selectedType == index
+                  ? (Theme.of(context).brightness == Brightness.light
+                      ? Palette.card
+                      : Palette.darkText)
+                  : (Theme.of(context).brightness == Brightness.light
+                      ? Palette.cyanText
+                      : Palette.textColor)),
             ),
           ),
         ),

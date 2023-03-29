@@ -1,5 +1,4 @@
 import 'package:blood_connection/components/components.dart';
-import 'package:blood_connection/components/request_model.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/palette.dart';
 import 'package:flutter/material.dart';

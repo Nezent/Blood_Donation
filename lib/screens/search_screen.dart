@@ -36,7 +36,9 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Palette.cyan,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Palette.cyan
+            : Palette.darkSecondary,
         leading: IconButton(
           splashRadius: 8.0,
           onPressed: () => Navigator.pop(context),
@@ -55,12 +57,14 @@ class _SearchScreenState extends State<SearchScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Location',
                   style: TextStyle(
                     fontSize: 19.0,
                     fontWeight: FontWeight.w600,
-                    color: Palette.textColor,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.textColor
+                        : Palette.darkText,
                   ),
                 ),
                 const SizedBox(
@@ -70,7 +74,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     height: 64,
                     width: 382,
                     decoration: BoxDecoration(
-                      color: Palette.card,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.card
+                          : Palette.darkSecondary,
                       borderRadius: BorderRadius.circular(4.0),
                       boxShadow: const [
                         BoxShadow(
@@ -91,10 +97,13 @@ class _SearchScreenState extends State<SearchScreen> {
                           return Center(
                             child: Text(
                               '$address',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 19.0,
                                 fontWeight: FontWeight.w600,
-                                color: Palette.outText,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Palette.outText
+                                    : Palette.darkText,
                               ),
                               overflow: TextOverflow.visible,
                             ),
@@ -116,15 +125,20 @@ class _SearchScreenState extends State<SearchScreen> {
                     height: 40,
                     width: 382,
                     decoration: BoxDecoration(
-                      color: Palette.cyan,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.cyan
+                          : Palette.darkSecondary,
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.my_location_outlined,
-                          color: Palette.card,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.card
+                                  : Palette.darkText,
                         ),
                         SizedBox(
                           width: 8,
@@ -134,7 +148,10 @@ class _SearchScreenState extends State<SearchScreen> {
                           style: TextStyle(
                             fontSize: 19.0,
                             fontWeight: FontWeight.w600,
-                            color: Palette.card,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.card
+                                    : Palette.darkText,
                           ),
                         ),
                       ],
@@ -144,12 +161,14 @@ class _SearchScreenState extends State<SearchScreen> {
                 const SizedBox(
                   height: 16,
                 ),
-                const Text(
+                Text(
                   'Blood Type',
                   style: TextStyle(
                     fontSize: 19.0,
                     fontWeight: FontWeight.w600,
-                    color: Palette.textColor,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.textColor
+                        : Palette.darkText,
                   ),
                 ),
                 const SizedBox(
@@ -174,16 +193,20 @@ class _SearchScreenState extends State<SearchScreen> {
                 height: 46,
                 width: 382,
                 decoration: BoxDecoration(
-                  color: Palette.cyan,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Palette.cyan
+                      : Palette.darkSecondary,
                   borderRadius: BorderRadius.circular(4.0),
                 ),
-                child: const Center(
+                child: Center(
                   child: Text(
                     'Submit',
                     style: TextStyle(
                       fontSize: 19.0,
                       fontWeight: FontWeight.bold,
-                      color: Palette.card,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.card
+                          : Palette.darkText,
                     ),
                   ),
                 ),

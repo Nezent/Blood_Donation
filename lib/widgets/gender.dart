@@ -24,15 +24,26 @@ class _GenderState extends State<Gender> {
         width: 132,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(31),
-          color: (selectedGender == index ? Palette.cyan : Palette.cyanLight),
+          color: (selectedGender == index
+              ? (Theme.of(context).brightness == Brightness.light
+                  ? Palette.cyan
+                  : Palette.darkWidget)
+              : (Theme.of(context).brightness == Brightness.light
+                  ? Palette.cyanLight
+                  : Palette.darkButton)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
-              color:
-                  (selectedGender == index ? Palette.card : Palette.cyanText),
+              color: (selectedGender == index
+                  ? (Theme.of(context).brightness == Brightness.light
+                      ? Palette.card
+                      : Palette.darkText)
+                  : (Theme.of(context).brightness == Brightness.light
+                      ? Palette.cyanText
+                      : Palette.textColor)),
             ),
             const SizedBox(
               width: 8,
@@ -42,8 +53,13 @@ class _GenderState extends State<Gender> {
               style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w500,
-                color:
-                    (selectedGender == index ? Palette.card : Palette.cyanText),
+                color: (selectedGender == index
+                    ? (Theme.of(context).brightness == Brightness.light
+                        ? Palette.card
+                        : Palette.darkText)
+                    : (Theme.of(context).brightness == Brightness.light
+                        ? Palette.cyanText
+                        : Palette.textColor)),
               ),
             ),
           ],

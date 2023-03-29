@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:blood_connection/components/register_model.dart';
-import 'package:blood_connection/components/request_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -11,6 +9,7 @@ import 'package:blood_connection/components/components.dart';
 class MongoDB {
   StreamController requestController = StreamController();
   StreamController donorController = StreamController();
+  StreamController profileController = StreamController();
 
   static var dataBase;
   static connect() async {
@@ -41,8 +40,7 @@ class MongoDB {
     try {
       await dataBase.collection('Request').insertOne(data.toJson());
     } catch (e) {
-      final SnackBar snackBar = SnackbarMessage("Request Was Unsuccessful!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
+      return;
     }
   }
 
@@ -55,8 +53,7 @@ class MongoDB {
     } on MongoDartError {
       return;
     } on ConnectionException {
-      final SnackBar snackBar = SnackbarMessage("IO Exception!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
+      return;
     }
   }
 
@@ -66,9 +63,7 @@ class MongoDB {
     try {
       await dataBase.collection('Register').insertOne(data.toJson());
     } catch (e) {
-      final SnackBar snackBar =
-          SnackbarMessage("Registration Was Unsuccessful!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
+      return;
     }
   }
 
@@ -83,8 +78,7 @@ class MongoDB {
     } on MongoDartError {
       return;
     } on ConnectionException {
-      final SnackBar snackBar = SnackbarMessage("IO Exception!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
+      return;
     }
   }
 
@@ -96,8 +90,6 @@ class MongoDB {
           .findOne({"number": number, "password": password});
       return data;
     } catch (e) {
-      final SnackBar snackBar = SnackbarMessage("Cant't Login Right Now!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
       return null;
     }
   }
@@ -108,9 +100,17 @@ class MongoDB {
           await dataBase.collection('Register').findOne({"_id": id});
       return userData;
     } catch (e) {
-      final SnackBar snackBar = SnackbarMessage("User Data Not Found!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
       return null;
+    }
+  }
+
+  Future<void> getProfileData(ObjectId? id) async {
+    try {
+      final userProfile =
+          await dataBase.collection('Register').findOne({"_id": id});
+      profileController.sink.add(userProfile);
+    } catch (e) {
+      return;
     }
   }
 
@@ -120,8 +120,6 @@ class MongoDB {
           .collection('Register')
           .updateOne({"_id": id}, modify.set("isAvailable", value));
     } catch (e) {
-      final SnackBar snackBar = SnackbarMessage("Try Again After Sometime!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
       return;
     }
   }
@@ -132,8 +130,6 @@ class MongoDB {
           .collection('Register')
           .updateOne({"_id": id}, modify.set("isDark", value));
     } catch (e) {
-      final SnackBar snackBar = SnackbarMessage("Try Again After Sometime!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
       return;
     }
   }
@@ -144,8 +140,6 @@ class MongoDB {
           .collection('Register')
           .updateOne({"_id": id}, modify.set("profilePicture", value));
     } catch (e) {
-      final SnackBar snackBar = SnackbarMessage("Try Again After Sometime!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
       return;
     }
   }

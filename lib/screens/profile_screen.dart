@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:blood_connection/components/components.dart';
-import 'package:blood_connection/components/register_data_model.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -49,12 +49,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text(
+        title: Text(
           "Profile",
-          style: TextStyle(color: Palette.card),
+          style: TextStyle(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Palette.card
+                  : Palette.darkText),
         ),
         centerTitle: true,
-        backgroundColor: Palette.cyan,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Palette.cyan
+            : Palette.darkSecondary,
         leading: IconButton(
           splashRadius: 8.0,
           onPressed: () => Navigator.push(
@@ -158,7 +163,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 36.0,
                               width: 36.0,
                               decoration: BoxDecoration(
-                                color: Palette.background,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Palette.background
+                                    : Palette.darkSecondary,
                                 borderRadius: BorderRadius.circular(
                                   50.0,
                                 ),
@@ -186,10 +194,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Center(
                       child: Text(
                         userData.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.w600,
-                            color: Palette.textColor,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.textColor
+                                    : Palette.darkText,
                             overflow: TextOverflow.ellipsis),
                       ),
                     ),
@@ -215,7 +226,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 64.0,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: Palette.card,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Palette.card
+                            : Palette.darkSecondary,
                         borderRadius: BorderRadius.circular(8.0),
                         boxShadow: const [
                           BoxShadow(
@@ -239,7 +252,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       height: 40.0,
                                       width: 40.0,
                                       decoration: BoxDecoration(
-                                        color: Palette.background,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? Palette.background
+                                            : Palette.darkWidget,
                                         borderRadius: BorderRadius.circular(
                                           31.0,
                                         ),
@@ -255,12 +271,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     const SizedBox(
                                       width: 32,
                                     ),
-                                    const Text(
+                                    Text(
                                       "Availability",
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.w600,
-                                        color: Palette.newText,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? Palette.newText
+                                            : Palette.darkText,
                                       ),
                                     ),
                                   ],
@@ -309,7 +328,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 64.0,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: Palette.card,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Palette.card
+                            : Palette.darkSecondary,
                         borderRadius: BorderRadius.circular(8.0),
                         boxShadow: const [
                           BoxShadow(
@@ -333,7 +354,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       height: 40.0,
                                       width: 40.0,
                                       decoration: BoxDecoration(
-                                        color: Palette.background,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? Palette.background
+                                            : Palette.darkWidget,
                                         borderRadius: BorderRadius.circular(
                                           31.0,
                                         ),
@@ -349,39 +373,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     const SizedBox(
                                       width: 32,
                                     ),
-                                    const Text(
+                                    Text(
                                       "Dark Mode",
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.w600,
-                                        color: Palette.newText,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? Palette.newText
+                                            : Palette.darkText,
                                       ),
                                     ),
                                   ],
                                 ),
-                                AdvancedSwitch(
-                                  controller: _themeController,
-                                  height: 26,
-                                  width: 48,
-                                  activeColor: Palette.cyanText,
-                                  inactiveColor: Palette.cyanLight,
-                                  thumb: ValueListenableBuilder(
-                                      valueListenable: _themeController,
-                                      builder:
-                                          (BuildContext context, value, child) {
-                                        MongoDB.changeTheme(widget.id, value);
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(20),
-                                            ),
-                                            color: value
-                                                ? Palette.cyan
-                                                : Palette.cyanText,
-                                          ),
-                                        );
-                                      }),
+                                Consumer<ThemeManager>(
+                                  builder: (context, provider, child) {
+                                    return AdvancedSwitch(
+                                      controller: _themeController,
+                                      height: 26,
+                                      width: 48,
+                                      activeColor: Palette.cyanText,
+                                      inactiveColor: Palette.cyanLight,
+                                      thumb: ValueListenableBuilder(
+                                          valueListenable: _themeController,
+                                          builder: (BuildContext context, value,
+                                              child) {
+                                            MongoDB.changeTheme(
+                                                widget.id, value);
+                                            provider.toggleTheme(value);
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(20),
+                                                ),
+                                                color: value
+                                                    ? Palette.cyan
+                                                    : Palette.cyanText,
+                                              ),
+                                            );
+                                          }),
+                                    );
+                                  },
                                 ),
                               ],
                             ),

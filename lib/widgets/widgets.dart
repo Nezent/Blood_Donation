@@ -6,3 +6,4 @@ export 'responsive.dart';
 export 'gender.dart';
 export 'side_bar.dart';
 export 'profile_menu.dart';
+export 'theme_manager.dart';

@@ -42,19 +42,23 @@ class _AfterDonationState extends State<AfterDonation> {
                 fit: BoxFit.fill,
                 reverse: true,
               ),
-              const Text(
+              Text(
                 "THANK YOU FOR",
                 style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
-                    color: Palette.cyanText),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.cyanText
+                        : Palette.darkText),
               ),
-              const Text(
+              Text(
                 "JOINING US",
                 style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
-                    color: Palette.cyanText),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.cyanText
+                        : Palette.darkText),
               ),
             ],
           ),

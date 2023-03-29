@@ -1,23 +1,17 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:convert';
 
 import 'package:blood_connection/components/components.dart';
-import 'package:blood_connection/components/location_tracker.dart';
-import 'package:blood_connection/components/request_data_model.dart';
 import 'package:blood_connection/screens/screens.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
-
-import '../components/register_data_model.dart';
 
 class HomeScreen extends StatefulWidget {
   final Mongo.ObjectId? id;
@@ -33,8 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String _currentSelectedValue = 'AB+';
   double? latitude;
   double? longitude;
-  late StreamSubscription _subscription;
-  bool isDeviceConnected = false;
+  // late StreamSubscription _subscription;
+
+  // bool isDeviceConnected = false;
+  String _base64 = "";
   void _getAddress() async {
     LocationTracker _tracker = LocationTracker();
     List temporary_address = await _tracker.requestAddress();
@@ -48,25 +44,33 @@ class _HomeScreenState extends State<HomeScreen> {
     await MongoDB.connect();
   }
 
-  void _getConnectivity() {
-    try {
-      _subscription = Connectivity()
-          .onConnectivityChanged
-          .listen((ConnectivityResult result) async {
-        isDeviceConnected = await InternetConnectionChecker().hasConnection;
-      });
-    } catch (_) {
-      final SnackBar snackBar = SnackbarMessage("NO INTERNET!");
-      snackbarKey.currentState?.showSnackBar(snackBar);
+  Future<void> getPicture() async {
+    if (widget.id != null) {
+      var result = await MongoDB.getUserData(widget.id);
+      _base64 = RegisterDataModel.fromJson(result!).profilePicture!;
     }
   }
+
+  // void _getConnectivity() {
+  //   try {
+  //     _subscription = Connectivity()
+  //         .onConnectivityChanged
+  //         .listen((ConnectivityResult result) async {
+  //       isDeviceConnected = await InternetConnectionChecker().hasConnection;
+  //     });
+  //   } catch (_) {
+  //     final SnackBar snackBar = SnackbarMessage("NO INTERNET!");
+  //     snackbarKey.currentState?.showSnackBar(snackBar);
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
-    _getConnectivity();
+    getPicture();
     _connection();
     _getAddress();
+    mongoDB.getProfileData(widget.id);
     Timer.periodic(const Duration(seconds: 8), (timer) {
       mongoDB.getData();
       mongoDB.getUser();
@@ -75,14 +79,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _subscription.cancel();
+    // _subscription.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Palette.cyan,
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Theme.of(context).brightness == Brightness.light
+          ? Palette.cyan
+          : Palette.darkSecondary,
     ));
     return Scaffold(
       drawer: SideBar(
@@ -203,11 +209,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 54,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          color: Palette.card,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.card
+                                  : Palette.darkSecondary,
                           borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: const [
+                          boxShadow: [
                             BoxShadow(
-                              color: Colors.black12,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Colors.black12
+                                  : Palette.newText.withOpacity(0.09),
                               blurRadius: 1.0,
                               offset: Offset(0, 1),
                             ),
@@ -227,9 +239,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         onPressed: () {
                                           Scaffold.of(context).openDrawer();
                                         },
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.menu_outlined,
-                                          color: Palette.newText,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.newText
+                                              : Palette.darkText,
                                           size: 24.0,
                                         ),
                                       );
@@ -244,12 +259,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     const SearchScreen())),
-                                        child: const Text(
+                                        child: Text(
                                           'Search Blood',
                                           style: TextStyle(
                                             fontSize: 19.0,
                                             fontWeight: FontWeight.w500,
-                                            color: Color(0xff8C8C8C),
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Palette.textColor
+                                                    : Palette.darkText,
                                           ),
                                         ),
                                       ),
@@ -280,15 +299,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SliverToBoxAdapter(
+                  SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(17, 18, 0, 8),
+                      padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
                       child: Text(
                         'Our Partners',
                         style: TextStyle(
                           fontSize: 19.0,
                           fontWeight: FontWeight.w600,
-                          color: Palette.newText,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.newText
+                                  : Palette.darkText,
                         ),
                       ),
                     ),
@@ -310,7 +332,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 90.0,
                                 width: 113.0,
                                 decoration: BoxDecoration(
-                                  color: Palette.cyanLight,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Palette.cyanLight
+                                      : Palette.darkSecondary,
                                   borderRadius: BorderRadius.circular(4.0),
                                 ),
                               ),
@@ -320,15 +345,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SliverToBoxAdapter(
+                  SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(17, 18, 0, 8),
+                      padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
                       child: Text(
                         'Blood Requests',
                         style: TextStyle(
                           fontSize: 19.0,
                           fontWeight: FontWeight.w600,
-                          color: Palette.newText,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.newText
+                                  : Palette.darkText,
                         ),
                       ),
                     ),
@@ -360,14 +388,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(17, 18, 0, 8),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
                           child: Text(
                             'Blood Donors',
                             style: TextStyle(
                               fontSize: 19.0,
                               fontWeight: FontWeight.w600,
-                              color: Palette.newText,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Palette.newText
+                                  : Palette.darkText,
                             ),
                           ),
                         ),
@@ -403,8 +434,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           child: Text(
                                             value,
-                                            style: const TextStyle(
-                                              color: Palette.outText,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? Palette.newText
+                                                  : Palette.darkText,
                                             ),
                                           ),
                                         ),
@@ -464,14 +499,18 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: SpeedDial(
         icon: Icons.expand_less_outlined,
-        backgroundColor: Palette.cyan,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Palette.cyan
+            : Color(0xff03DAC6),
         overlayColor: Colors.black38,
         overlayOpacity: 0.5,
         spacing: 8,
         spaceBetweenChildren: 4,
         children: [
           SpeedDialChild(
-            backgroundColor: Palette.cyan,
+            backgroundColor: Theme.of(context).brightness == Brightness.light
+                ? Palette.cyan
+                : Palette.darkSecondary,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -490,7 +529,9 @@ class _HomeScreenState extends State<HomeScreen> {
             labelBackgroundColor: Palette.textColor,
           ),
           SpeedDialChild(
-            backgroundColor: Palette.cyan,
+            backgroundColor: Theme.of(context).brightness == Brightness.light
+                ? Palette.cyan
+                : Palette.darkSecondary,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(

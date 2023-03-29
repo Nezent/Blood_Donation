@@ -17,7 +17,9 @@ class ProfileWidget extends StatelessWidget {
         height: 64.0,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: Palette.card,
+          color: Theme.of(context).brightness == Brightness.light
+              ? Palette.card
+              : Palette.darkSecondary,
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: const [
             BoxShadow(
@@ -41,7 +43,10 @@ class ProfileWidget extends StatelessWidget {
                         height: 40.0,
                         width: 40.0,
                         decoration: BoxDecoration(
-                          color: Palette.background,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.background
+                                  : Palette.darkButton,
                           borderRadius: BorderRadius.circular(
                             31.0,
                           ),
@@ -59,17 +64,22 @@ class ProfileWidget extends StatelessWidget {
                       ),
                       Text(
                         text,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
-                          color: Palette.newText,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.newText
+                                  : Palette.darkText,
                         ),
                       ),
                     ],
                   ),
-                  const Icon(
+                  Icon(
                     Icons.arrow_forward_ios,
-                    color: Palette.newText,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.newText
+                        : Palette.darkText,
                   ),
                 ],
               ),

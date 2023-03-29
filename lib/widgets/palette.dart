@@ -11,4 +11,7 @@ class Palette {
   static const Color textColor = Color(0xff494949);
   static const Color darkPrimary = Color(0xff121212);
   static const Color darkSecondary = Color(0xff1F1F1F);
+  static const Color darkText = Color(0xffE1E1E1);
+  static const Color darkWidget = Color(0xff353535);
+  static const Color darkButton = Color(0xff2C2C2C);
 }

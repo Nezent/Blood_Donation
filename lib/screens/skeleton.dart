@@ -9,13 +9,19 @@ class Skeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 30, 29, 29),
-        highlightColor: Color.fromARGB(146, 238, 238, 233),
+        baseColor: Theme.of(context).brightness == Brightness.light
+            ? Color.fromARGB(255, 54, 52, 52)
+            : Color.fromARGB(82, 255, 255, 255),
+        highlightColor: Theme.of(context).brightness == Brightness.light
+            ? Color.fromARGB(255, 171, 171, 168)
+            : Color.fromARGB(248, 41, 39, 39),
         child: Container(
           height: height,
           width: width,
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.04),
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black.withOpacity(0.08)
+                : Colors.white54,
             borderRadius: const BorderRadius.all(
               Radius.circular(16),
             ),

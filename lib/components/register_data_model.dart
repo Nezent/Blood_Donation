@@ -47,8 +47,8 @@ class RegisterDataModel {
         number: json["number"],
         password: json["password"],
         address: json["address"],
-        latitude: json["latitude"]?.toDouble(),
-        longitude: json["longitude"]?.toDouble(),
+        latitude: json["latitude"],
+        longitude: json["longitude"],
         isAvailable: json["isAvailable"],
         isDark: json["isDark"],
       );

@@ -30,7 +30,9 @@ class _ValidationScreenState extends State<ValidationScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Palette.cyan,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Palette.cyan
+            : Palette.darkSecondary,
         leading: IconButton(
           splashRadius: 8.0,
           onPressed: () => Navigator.pop(context),
@@ -70,11 +72,13 @@ class _ValidationScreenState extends State<ValidationScreen> {
                 width: 300,
                 child: Center(
                   child: Text(
-                    "Welcome ${widget.name}",
+                    "Welcome, ${widget.name}",
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Palette.cyanText),
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Palette.cyanText
+                            : Palette.darkText),
                   ),
                 ),
               ),
@@ -83,10 +87,12 @@ class _ValidationScreenState extends State<ValidationScreen> {
                 child: Center(
                   child: Text(
                     "OTP sent to ${widget.number.replaceRange(3, 9, '******')}",
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Palette.textColor),
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Palette.textColor
+                            : Palette.darkText),
                   ),
                 ),
               ),
@@ -131,22 +137,28 @@ class _ValidationScreenState extends State<ValidationScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         "Didn't get the code?",
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Palette.textColor),
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.textColor
+                                    : Palette.darkText),
                       ),
                       const SizedBox(
                         width: 4,
                       ),
-                      const Text(
+                      Text(
                         "Resend",
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Palette.cyanText),
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.cyanText
+                                    : Palette.darkText),
                       ),
                     ],
                   ),

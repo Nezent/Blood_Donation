@@ -1,12 +1,9 @@
+import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/home_screen.dart';
 import 'package:blood_connection/screens/profile_screen.dart';
 import 'package:blood_connection/screens/validation_screen.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-
-import '../components/connection.dart';
-import '../components/location_tracker.dart';
-import '../components/register_data_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -17,6 +14,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen>
     with TickerProviderStateMixin {
+  bool isLoading = false;
   final _signIn = GlobalKey<FormState>();
   final _signUp = GlobalKey<FormState>();
   final LocationTracker _tracker = LocationTracker();
@@ -58,7 +56,9 @@ class _RegisterScreenState extends State<RegisterScreen>
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Palette.cyan,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Palette.cyan
+              : Palette.darkSecondary,
           leading: IconButton(
             splashRadius: 8.0,
             onPressed: () => Navigator.push(
@@ -83,18 +83,24 @@ class _RegisterScreenState extends State<RegisterScreen>
                 width: 378,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: Palette.card,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Palette.card
+                      : Palette.darkSecondary,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TabBar(
-                    labelColor: Colors.black,
+                    labelColor: Theme.of(context).brightness == Brightness.light
+                        ? Colors.black
+                        : Palette.darkText,
                     labelStyle: const TextStyle(
                       fontSize: 19.0,
                       fontWeight: FontWeight.w600,
                     ),
                     indicator: BoxDecoration(
-                      color: Palette.cyan,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.cyan
+                          : Palette.darkWidget,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     controller: tabController,
@@ -117,12 +123,15 @@ class _RegisterScreenState extends State<RegisterScreen>
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Welcome',
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
-                          color: Palette.newText,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.newText
+                                  : Palette.darkText,
                         ),
                       ),
                       const SizedBox(
@@ -177,6 +186,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 Center(
                                   child: GestureDetector(
                                     onTap: () async {
+                                      setState(() {
+                                        isLoading = true;
+                                      });
                                       if (_signIn.currentState!.validate()) {
                                         _logIn(numberController.text,
                                             passwordController.text);
@@ -186,19 +198,30 @@ class _RegisterScreenState extends State<RegisterScreen>
                                       height: 46,
                                       width: 340,
                                       decoration: BoxDecoration(
-                                        color: Palette.cyan,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? Palette.cyan
+                                            : Palette.darkSecondary,
                                         borderRadius:
                                             BorderRadius.circular(4.0),
                                       ),
-                                      child: const Center(
-                                        child: Text(
-                                          'Log In',
-                                          style: TextStyle(
-                                            fontSize: 19.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Palette.card,
-                                          ),
-                                        ),
+                                      child: Center(
+                                        child: isLoading
+                                            ? CircularProgressIndicator(
+                                                color: Palette.card,
+                                              )
+                                            : Text(
+                                                'Log In',
+                                                style: TextStyle(
+                                                  fontSize: 19.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.light
+                                                      ? Palette.card
+                                                      : Palette.darkText,
+                                                ),
+                                              ),
                                       ),
                                     ),
                                   ),
@@ -212,23 +235,29 @@ class _RegisterScreenState extends State<RegisterScreen>
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
+                              Text(
                                 'Don\'t have an account?',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: Palette.newText,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Palette.newText
+                                      : Palette.darkText,
                                 ),
                               ),
                               GestureDetector(
                                 onTap: () => tabController
                                     .animateTo((tabController.index + 1) % 2),
-                                child: const Text(
+                                child: Text(
                                   'Register',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: Palette.cyanText,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? Palette.cyanText
+                                        : Palette.darkWidget,
                                   ),
                                 ),
                               ),
@@ -243,12 +272,15 @@ class _RegisterScreenState extends State<RegisterScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           'Register as a Blood Donor',
                           style: TextStyle(
                             fontSize: 19,
                             fontWeight: FontWeight.bold,
-                            color: Palette.newText,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.newText
+                                    : Palette.darkText,
                           ),
                         ),
                         const SizedBox(
@@ -346,8 +378,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   ),
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: 40,
                                 ),
                                 child: Text(
@@ -355,7 +387,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   style: TextStyle(
                                     fontSize: 19.0,
                                     fontWeight: FontWeight.w600,
-                                    color: Palette.outText,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? Palette.outText
+                                        : Palette.darkText,
                                   ),
                                 ),
                               ),
@@ -374,8 +409,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                               const SizedBox(
                                 height: 16,
                               ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: 40,
                                 ),
                                 child: Text(
@@ -383,7 +418,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   style: TextStyle(
                                     fontSize: 19.0,
                                     fontWeight: FontWeight.w600,
-                                    color: Palette.outText,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? Palette.outText
+                                        : Palette.darkText,
                                   ),
                                 ),
                               ),
@@ -409,7 +447,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   height: 46,
                                   width: 340,
                                   decoration: BoxDecoration(
-                                    color: Palette.cyan,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? Palette.cyan
+                                        : Palette.darkSecondary,
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
                                   child: Center(
@@ -439,12 +480,15 @@ class _RegisterScreenState extends State<RegisterScreen>
                                                                   .text)));
                                         }
                                       },
-                                      child: const Text(
+                                      child: Text(
                                         'Register',
                                         style: TextStyle(
                                           fontSize: 19.0,
                                           fontWeight: FontWeight.bold,
-                                          color: Palette.card,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.card
+                                              : Palette.darkText,
                                         ),
                                       ),
                                     ),

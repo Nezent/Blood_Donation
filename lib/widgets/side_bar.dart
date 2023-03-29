@@ -1,12 +1,14 @@
 // ignore_for_file: library_prefixes
 
+import 'dart:convert';
+
 import 'package:blood_connection/components/components.dart';
-import 'package:blood_connection/components/register_data_model.dart';
 import 'package:blood_connection/screens/donor_screen.dart';
 import 'package:blood_connection/screens/home_screen.dart';
 import 'package:blood_connection/screens/request_blood_screen.dart';
 import 'package:blood_connection/widgets/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
@@ -23,7 +25,9 @@ class _SideBarState extends State<SideBar> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Palette.cyan,
+      backgroundColor: Theme.of(context).brightness == Brightness.light
+          ? Palette.cyan
+          : Palette.darkSecondary,
       child: FutureBuilder(
           future: MongoDB.getUserData(widget.id),
           builder: (context, snapshot) {
@@ -39,60 +43,40 @@ class _SideBarState extends State<SideBar> {
                       padding: EdgeInsets.zero,
                       children: [
                         UserAccountsDrawerHeader(
-                          decoration:
-                              const BoxDecoration(color: Palette.cyanText),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Palette.cyanText
+                                  : Palette.darkWidget),
                           accountName: Text(userData.name),
                           accountEmail: Text(userData.number),
                           currentAccountPicture: Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: CircleAvatar(
-                              child: ClipOval(
-                                child: Image.asset(
-                                  "images/avatar.png",
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              backgroundImage: userData.profilePicture == null
+                                  ? const AssetImage("images/avatar.png")
+                                  : Image.memory(base64Decode(
+                                          userData.profilePicture!))
+                                      .image,
                             ),
                           ),
                         ),
-                        ListTile(
-                          leading: SvgPicture.asset("images/donates-white.svg"),
-                          title: const Text(
-                            "Requests List",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Palette.card,
-                            ),
-                          ),
-                          onTap: () => Navigator.push(
+                        sideBarList("donates-white.svg", "Requests List", () {
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const RequestBloodScreen(),
                             ),
-                          ),
-                        ),
-                        ListTile(
-                          leading: SvgPicture.asset(
-                            "images/blood-white.svg",
-                            height: 24,
-                            width: 24,
-                          ),
-                          title: const Text(
-                            "Donors List",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Palette.card,
-                            ),
-                          ),
-                          onTap: () => Navigator.push(
+                          );
+                        }),
+                        sideBarList("blood-white.svg", "Donors List", () {
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const DonorScreen(),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                         const Divider(),
                         ListTile(
                           leading: SvgPicture.asset(
@@ -100,12 +84,15 @@ class _SideBarState extends State<SideBar> {
                             height: 24,
                             width: 24,
                           ),
-                          title: const Text(
+                          title: Text(
                             "Availibility",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: Palette.card,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Palette.card
+                                  : Palette.darkText,
                             ),
                           ),
                           trailing: AdvancedSwitch(
@@ -132,39 +119,22 @@ class _SideBarState extends State<SideBar> {
                           ),
                         ),
                         const Divider(),
-                        ListTile(
-                          leading: SvgPicture.asset("images/cup-white.svg"),
-                          title: const Text(
-                            "Buy Us a Ko-Fi",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Palette.card,
-                            ),
-                          ),
-                          onTap: () {},
-                        ),
-                        ListTile(
-                          leading: SvgPicture.asset("images/logout-white.svg"),
-                          title: const Text(
-                            "Logout",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Palette.card,
-                            ),
-                          ),
-                          onTap: () => Navigator.push(
+                        sideBarList("cup-white.svg", "Buy Us a Ko-Fi", () {
+                          Clipboard.setData(
+                              const ClipboardData(text: "01830676720"));
+                        }),
+                        sideBarList("logout-white.svg", "Logout", () {
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const HomeScreen(id: null))),
-                        ),
+                                      const HomeScreen(id: null)));
+                        }),
                       ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(16.0),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
                     child: Align(
                       alignment: FractionalOffset.bottomCenter,
                       child: Text(
@@ -172,7 +142,10 @@ class _SideBarState extends State<SideBar> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: Palette.card,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.card
+                                  : Palette.darkText,
                         ),
                       ),
                     ),
@@ -190,7 +163,9 @@ class _SideBarState extends State<SideBar> {
     return SizedBox(
       width: 120,
       child: Drawer(
-        backgroundColor: Palette.cyan,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Palette.cyan
+            : Palette.darkSecondary,
         child: Column(
           children: [
             Expanded(
@@ -200,7 +175,10 @@ class _SideBarState extends State<SideBar> {
                   UserAccountsDrawerHeader(
                     accountName: const Text("Anonymous"),
                     accountEmail: const Text(""),
-                    decoration: const BoxDecoration(color: Palette.cyanText),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Palette.cyanText
+                            : Palette.darkWidget),
                     currentAccountPicture: Padding(
                       padding: const EdgeInsets.only(top: 8),
                       child: CircleAvatar(
@@ -213,61 +191,30 @@ class _SideBarState extends State<SideBar> {
                       ),
                     ),
                   ),
-                  ListTile(
-                    leading: SvgPicture.asset("images/donates-white.svg"),
-                    title: const Text(
-                      "Requests List",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Palette.card,
-                      ),
-                    ),
-                    onTap: () => Navigator.push(
+                  sideBarList("donates-white.svg", "Requests List", () {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const RequestBloodScreen(),
                       ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: SvgPicture.asset(
-                      "images/blood-white.svg",
-                      height: 24,
-                      width: 24,
-                    ),
-                    title: const Text(
-                      "Donors List",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Palette.card,
-                      ),
-                    ),
-                    onTap: () => Navigator.push(
+                    );
+                  }),
+                  sideBarList("blood-white.svg", "Donors List", () {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const DonorScreen(),
                       ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: SvgPicture.asset("images/cup-white.svg"),
-                    title: const Text(
-                      "Buy Us a Ko-Fi",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Palette.card,
-                      ),
-                    ),
-                    onTap: () {},
-                  ),
+                    );
+                  }),
+                  sideBarList("cup-white.svg", "Buy Us a Ko-Fi", () {
+                    Clipboard.setData(const ClipboardData(text: "01830676720"));
+                  }),
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: Text(
@@ -275,7 +222,9 @@ class _SideBarState extends State<SideBar> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Palette.card,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.card
+                        : Palette.darkText,
                   ),
                 ),
               ),
@@ -283,6 +232,27 @@ class _SideBarState extends State<SideBar> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget sideBarList(String image, String title, VoidCallback tap) {
+    return ListTile(
+      leading: SvgPicture.asset(
+        "images/${image}",
+        height: 24,
+        width: 24,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: Theme.of(context).brightness == Brightness.light
+              ? Palette.card
+              : Palette.darkText,
+        ),
+      ),
+      onTap: tap,
     );
   }
 }
