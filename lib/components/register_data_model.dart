@@ -21,7 +21,6 @@ class RegisterDataModel {
     required this.latitude,
     required this.longitude,
     required this.isAvailable,
-    required this.isDark,
   });
 
   ObjectId? id;
@@ -35,7 +34,6 @@ class RegisterDataModel {
   double latitude;
   double longitude;
   bool isAvailable;
-  bool isDark;
 
   factory RegisterDataModel.fromJson(Map<String, dynamic> json) =>
       RegisterDataModel(
@@ -50,7 +48,6 @@ class RegisterDataModel {
         latitude: json["latitude"],
         longitude: json["longitude"],
         isAvailable: json["isAvailable"],
-        isDark: json["isDark"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,6 +62,5 @@ class RegisterDataModel {
         "latitude": latitude,
         "longitude": longitude,
         "isAvailable": isAvailable,
-        "isDark": isDark,
       };
 }

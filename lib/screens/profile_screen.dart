@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
@@ -130,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           } else if (snapshot.hasData) {
             var userData = RegisterDataModel.fromJson(snapshot.data!);
             final _controller = ValueNotifier<bool>(userData.isAvailable);
-            final _themeController = ValueNotifier<bool>(userData.isDark);
+
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(
@@ -289,7 +290,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   height: 26,
                                   width: 48,
                                   activeColor: Palette.cyanText,
-                                  inactiveColor: Palette.cyanLight,
+                                  inactiveColor: Palette.cyan,
                                   thumb: ValueListenableBuilder(
                                       valueListenable: _controller,
                                       builder:
@@ -297,14 +298,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         MongoDB.changeAvailability(
                                             widget.id, value);
                                         return Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
                                               Radius.circular(20),
                                             ),
-                                            color: value
-                                                ? Palette.cyan
-                                                : Palette.cyanText,
+                                            color: Palette.card,
                                           ),
                                         );
                                       }),
@@ -388,32 +386,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 Consumer<ThemeManager>(
                                   builder: (context, provider, child) {
-                                    return AdvancedSwitch(
-                                      controller: _themeController,
-                                      height: 26,
-                                      width: 48,
-                                      activeColor: Palette.cyanText,
-                                      inactiveColor: Palette.cyanLight,
-                                      thumb: ValueListenableBuilder(
-                                          valueListenable: _themeController,
-                                          builder: (BuildContext context, value,
-                                              child) {
-                                            MongoDB.changeTheme(
-                                                widget.id, value);
+                                    return FlutterSwitch(
+                                        height: 26,
+                                        width: 48,
+                                        padding: 1.8,
+                                        toggleSize: 23,
+                                        activeColor: Palette.cyanText,
+                                        inactiveColor: Palette.cyan,
+                                        value: provider.themeMode ==
+                                            ThemeMode.dark,
+                                        onToggle: (bool value) {
+                                          setState(() {
                                             provider.toggleTheme(value);
-                                            return Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                  Radius.circular(20),
-                                                ),
-                                                color: value
-                                                    ? Palette.cyan
-                                                    : Palette.cyanText,
-                                              ),
-                                            );
-                                          }),
-                                    );
+                                          });
+                                        });
                                   },
                                 ),
                               ],

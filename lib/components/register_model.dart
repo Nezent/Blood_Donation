@@ -17,7 +17,6 @@ class RegisterModel {
     required this.latitude,
     required this.longitude,
     required this.isAvailable,
-    required this.isDark,
   });
 
   String name;
@@ -30,7 +29,6 @@ class RegisterModel {
   double latitude;
   double longitude;
   bool isAvailable;
-  bool isDark;
 
   factory RegisterModel.fromJson(Map<String, dynamic> json) => RegisterModel(
         name: json["name"],
@@ -43,7 +41,6 @@ class RegisterModel {
         latitude: json["latitude"],
         longitude: json["longitude"],
         isAvailable: json["isAvailable"],
-        isDark: json["isDark"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -57,6 +54,5 @@ class RegisterModel {
         "latitude": latitude,
         "longitude": longitude,
         "isAvailable": isAvailable,
-        "isDark": isDark,
       };
 }

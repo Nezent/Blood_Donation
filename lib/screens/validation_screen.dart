@@ -150,15 +150,18 @@ class _ValidationScreenState extends State<ValidationScreen> {
                       const SizedBox(
                         width: 4,
                       ),
-                      Text(
-                        "Resend",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color:
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Palette.cyanText
-                                    : Palette.darkText),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Text(
+                          "Resend",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Palette.cyanText
+                                  : Palette.darkText),
+                        ),
                       ),
                     ],
                   ),
@@ -184,7 +187,6 @@ class _ValidationScreenState extends State<ValidationScreen> {
       latitude: widget.latitude,
       longitude: widget.longitude,
       isAvailable: true,
-      isDark: false,
     );
     await MongoDB.register(data);
   }

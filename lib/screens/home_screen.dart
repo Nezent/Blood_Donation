@@ -45,9 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> getPicture() async {
-    if (widget.id != null) {
-      var result = await MongoDB.getUserData(widget.id);
-      _base64 = RegisterDataModel.fromJson(result!).profilePicture!;
+    try {
+      if (widget.id != null) {
+        var result = await MongoDB.getUserData(widget.id);
+        if (RegisterDataModel.fromJson(result!).profilePicture != null) {
+          _base64 = RegisterDataModel.fromJson(result).profilePicture!;
+        }
+      }
+    } catch (_) {
+      return;
     }
   }
 
