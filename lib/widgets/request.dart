@@ -1,19 +1,26 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
 class BloodRequest extends StatefulWidget {
+  final Mongo.ObjectId? objectId;
+  final Mongo.ObjectId requestId;
   String blood_type, name, number, address;
-  int bag;
+  int bag, initBag;
   double distance;
   BloodRequest({
     Key? key,
+    required this.objectId,
+    required this.requestId,
     required this.blood_type,
     required this.name,
     required this.number,
     required this.bag,
+    required this.initBag,
     required this.address,
     required this.distance,
   }) : super(key: key);
@@ -176,7 +183,7 @@ class _BloodRequestState extends State<BloodRequest> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.call_outlined,
                             color: Palette.card,
                           ),
@@ -209,7 +216,7 @@ class _BloodRequestState extends State<BloodRequest> {
                       (BuildContext context, BoxConstraints constraints) {
                     double maxBarWidth =
                         MediaQuery.of(context).size.width * 0.65;
-                    final double left = 1 / widget.bag;
+                    final double left = widget.initBag / widget.bag;
                     double barWidth = left * maxBarWidth;
 
                     return Stack(
@@ -234,7 +241,7 @@ class _BloodRequestState extends State<BloodRequest> {
                     );
                   }),
                   Text(
-                    '${widget.bag}/${widget.bag} Units',
+                    '${widget.initBag}/${widget.bag} Units',
                     style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
@@ -253,7 +260,17 @@ class _BloodRequestState extends State<BloodRequest> {
   }
 
   void _callNumber() async {
-    String number = widget.number; //set the number here
-    await FlutterPhoneDirectCaller.callNumber(number);
+    var result = await MongoDB.getUserData(widget.objectId);
+    var data = RegisterDataModel.fromJson(result!);
+    if (widget.objectId != null &&
+        data.donations.length <= 2 &&
+        data.isAvailable == true) {
+      await MongoDB.addDonations(widget.objectId, widget.requestId);
+      String number = widget.number; //set the number here
+      await FlutterPhoneDirectCaller.callNumber(number);
+    } else {
+      final SnackBar snackBar = SnackbarMessage("You aren't Eligible!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
+    }
   }
 }

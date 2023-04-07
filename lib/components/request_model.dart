@@ -11,6 +11,7 @@ class RequestModel {
     required this.bloodType,
     required this.number,
     required this.bag,
+    required this.initBag,
     required this.address,
     required this.latitude,
     required this.longitude,
@@ -20,6 +21,7 @@ class RequestModel {
   String bloodType;
   String number;
   int bag;
+  int initBag;
   String address;
   double latitude;
   double longitude;
@@ -29,6 +31,7 @@ class RequestModel {
         bloodType: json["blood_type"],
         number: json["number"],
         bag: json["bag"],
+        initBag: json["initBag"],
         address: json["address"],
         latitude: json["latitude"],
         longitude: json["longitude"],
@@ -39,6 +42,7 @@ class RequestModel {
         "blood_type": bloodType,
         "number": number,
         "bag": bag,
+        "initBag": initBag,
         "address": address,
         "latitude": latitude,
         "longitude": longitude,

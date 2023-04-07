@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:flutter/material.dart';
@@ -24,21 +21,21 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
-  void _getImageBase64() async {
-    String _base64 = "";
+  void _getImage() async {
+    String url = "";
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
-    Uint8List imageByte = await image.readAsBytes();
-    _base64 = base64Encode(imageByte);
-    if (_base64 != "") {
-      MongoDB.changeProfilePicture(widget.id, _base64);
+    // Uint8List imageByte = await image.readAsBytes();
+    url = "";
+    if (url != "") {
+      MongoDB.changeProfilePicture(widget.id, url);
     }
   }
 
   Widget showImage(BuildContext context, String? value) {
     return ClipOval(
-      child: Image.memory(
-        base64Decode(value!),
+      child: Image.network(
+        "",
         fit: BoxFit.cover,
       ),
     );
@@ -158,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           right: 0,
                           child: GestureDetector(
                             onTap: () {
-                              _getImageBase64();
+                              _getImage();
                             },
                             child: Container(
                               height: 36.0,
@@ -209,12 +206,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const ProfileWidget(icon: "user.svg", text: "My Profile"),
+                  ProfileWidget(
+                    icon: "user.svg",
+                    text: "My Profile",
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen(id: widget.id)));
+                    },
+                  ),
                   const SizedBox(
                     height: 12,
                   ),
-                  const ProfileWidget(
-                      icon: "notifications.svg", text: "Notifications"),
+                  ProfileWidget(
+                    icon: "donation-heart.svg",
+                    text: "My Donations",
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserRequestScreen(
+                                    donations: userData.donations,
+                                    id: widget.id,
+                                  )));
+                    },
+                  ),
                   const SizedBox(
                     height: 12,
                   ),
@@ -412,11 +429,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 12,
                   ),
-                  const ProfileWidget(icon: "settings.svg", text: "Settings"),
+                  ProfileWidget(
+                    icon: "settings.svg",
+                    text: "Settings",
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen(id: widget.id)));
+                    },
+                  ),
                   const SizedBox(
                     height: 12,
                   ),
-                  const ProfileWidget(icon: "help.svg", text: "Help Center"),
+                  ProfileWidget(
+                      icon: "help.svg",
+                      text: "Help Center",
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    HomeScreen(id: widget.id)));
+                      }),
                 ],
               ),
             );

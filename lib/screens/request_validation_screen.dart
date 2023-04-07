@@ -6,11 +6,12 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class RequestValidation extends StatefulWidget {
   String name, number, blood_type, address;
-  int bag;
+  int bag, initBag;
   double latitude, longitude;
   RequestValidation(
       {super.key,
       required this.bag,
+      required this.initBag,
       required this.blood_type,
       required this.latitude,
       required this.longitude,
@@ -165,6 +166,7 @@ class _RequestValidationState extends State<RequestValidation> {
       bloodType: blood_type,
       number: number,
       bag: bag,
+      initBag: widget.initBag,
       address: widget.address,
       latitude: latitude,
       longitude: longitude,

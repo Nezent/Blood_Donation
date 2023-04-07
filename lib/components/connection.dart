@@ -114,6 +114,16 @@ class MongoDB {
     }
   }
 
+  static Future<Map<String, dynamic>?> getRequestData(ObjectId? id) async {
+    try {
+      final userRequest =
+          await dataBase.collection('Request').findOne({"_id": id});
+      return userRequest;
+    } catch (e) {
+      return null;
+    }
+  }
+
   static Future<void> changeAvailability(ObjectId? id, bool value) async {
     try {
       await dataBase
@@ -124,11 +134,40 @@ class MongoDB {
     }
   }
 
-  static Future<void> changeTheme(ObjectId? id, bool value) async {
+  static Future<void> addBloodUnits(ObjectId? id, int value) async {
+    try {
+      await dataBase
+          .collection('Request')
+          .updateOne({"_id": id}, modify.set("initBag", value));
+    } catch (e) {
+      return;
+    }
+  }
+
+  static Future<void> deleteUnitRequest(ObjectId? id) async {
     try {
       await dataBase
           .collection('Register')
-          .updateOne({"_id": id}, modify.set("isDark", value));
+          .updateOne({"_id": id}, modify.set("donations", []));
+    } catch (e) {
+      return;
+    }
+  }
+
+  static Future<void> deleteRequest(ObjectId? id) async {
+    try {
+      await dataBase.collection('Request').deleteOne({"_id": id});
+    } catch (e) {
+      return;
+    }
+  }
+
+  static Future<void> addDonations(ObjectId? id, ObjectId requestId) async {
+    try {
+      await dataBase.collection('Register').updateOne(
+        {"_id": id},
+        modify.addToSet('donations', requestId),
+      );
     } catch (e) {
       return;
     }
@@ -136,9 +175,10 @@ class MongoDB {
 
   static Future<void> changeProfilePicture(ObjectId? id, String value) async {
     try {
-      await dataBase
-          .collection('Register')
-          .updateOne({"_id": id}, modify.set("profilePicture", value));
+      await dataBase.collection('Register').updateOne(
+        {"_id": id},
+        modify.set("profilePicture", value),
+      );
     } catch (e) {
       return;
     }

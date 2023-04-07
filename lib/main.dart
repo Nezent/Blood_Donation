@@ -38,9 +38,7 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData.dark()
             .copyWith(scaffoldBackgroundColor: Palette.darkPrimary),
         themeMode: provider.themeMode,
-        home: const HomeScreen(
-          id: null,
-        ),
+        home: const HomeScreen(id: null),
       );
     });
   }

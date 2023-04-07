@@ -187,6 +187,7 @@ class _ValidationScreenState extends State<ValidationScreen> {
       latitude: widget.latitude,
       longitude: widget.longitude,
       isAvailable: true,
+      donations: [],
     );
     await MongoDB.register(data);
   }

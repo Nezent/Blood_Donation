@@ -211,6 +211,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => RequestValidation(
                                         bag: int.parse(_currentSelectedValue),
+                                        initBag: 0,
                                         blood_type: blood_type ?? "AB+",
                                         latitude: latitude,
                                         longitude: longitude,

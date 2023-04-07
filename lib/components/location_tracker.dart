@@ -55,11 +55,11 @@ class LocationTracker {
     List<String> request_address = [];
     request_address.add('${place.subAdministrativeArea}');
     request_address.add('${place.country}');
-    request_address.add('${latitude}');
-    request_address.add('${longitude}');
+    request_address.add('$latitude');
+    request_address.add('$longitude');
     String address =
         '${place.subLocality}, ${place.locality}\n${place.subAdministrativeArea}, ${place.country}';
-    request_address.add('${address}');
+    request_address.add('$address');
     return Future.value(request_address);
   }
 }

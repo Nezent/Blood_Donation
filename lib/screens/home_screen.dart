@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
@@ -374,11 +373,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             snapshots.snapshot1.data![index]);
                         var names = data.name.split(' ');
                         var nickName = names[0].trim();
+                        if (data.initBag == data.bag) {
+                          _deleteRequest(data.id!);
+                        }
                         return BloodRequest(
+                          objectId: widget.id,
+                          requestId: data.id!,
                           blood_type: data.bloodType,
                           name: nickName,
                           number: data.number,
                           bag: data.bag,
+                          initBag: data.initBag,
                           address: data.address,
                           distance: Geolocator.distanceBetween(
                               data.latitude,
@@ -558,5 +563,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  void _deleteRequest(Mongo.ObjectId id) async {
+    MongoDB.deleteRequest(id);
   }
 }
