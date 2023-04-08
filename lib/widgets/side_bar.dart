@@ -3,9 +3,7 @@
 import 'dart:convert';
 
 import 'package:blood_connection/components/components.dart';
-import 'package:blood_connection/screens/donor_screen.dart';
-import 'package:blood_connection/screens/home_screen.dart';
-import 'package:blood_connection/screens/request_blood_screen.dart';
+import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,7 +71,7 @@ class _SideBarState extends State<SideBar> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DonorScreen(),
+                              builder: (context) => const HelpScreen(),
                             ),
                           );
                         }),
@@ -203,7 +201,7 @@ class _SideBarState extends State<SideBar> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DonorScreen(),
+                        builder: (context) => const HelpScreen(),
                       ),
                     );
                   }),

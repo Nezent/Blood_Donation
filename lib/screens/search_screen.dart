@@ -15,9 +15,13 @@ class _SearchScreenState extends State<SearchScreen> {
   String location = 'Null,tap button';
   String address = 'waiting';
   String? blood_type;
+  String? request_address;
 
   void _getAddress() async {
     var temp_address = await _tracker.requestAddress();
+    var temp = temp_address.elementAt(0).split(' ');
+    var short_address = temp[0].trim();
+    request_address = "${short_address},${temp_address.elementAt(1)}";
     address = temp_address.elementAt(4);
     if (mounted) {
       setState(() {});
@@ -117,9 +121,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 InkWell(
                   splashColor: Palette.cyanLight,
                   onTap: () async {
-                    var temp_address = await _tracker.requestAddress();
-                    address = temp_address.elementAt(4);
-                    setState(() {});
+                    _getAddress();
                   },
                   child: Container(
                     height: 40,
@@ -186,7 +188,10 @@ class _SearchScreenState extends State<SearchScreen> {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const DonorScreen(),
+                  builder: (context) => DonorScreen(
+                    blood_type: blood_type ?? 'AB+',
+                    address: request_address!,
+                  ),
                 ),
               ),
               child: Container(

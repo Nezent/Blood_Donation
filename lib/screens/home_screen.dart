@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
     mongoDB.getProfileData(widget.id);
     Timer.periodic(const Duration(seconds: 8), (timer) {
       mongoDB.getData();
-      mongoDB.getUser();
+      mongoDB.getUser(_currentSelectedValue);
     });
   }
 

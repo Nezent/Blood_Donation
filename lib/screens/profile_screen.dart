@@ -41,7 +41,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  bool newValue = false, dark = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -449,8 +448,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    HomeScreen(id: widget.id)));
+                                builder: (context) => const HelpScreen()));
                       }),
                 ],
               ),

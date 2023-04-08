@@ -27,18 +27,7 @@ SnackBar SnackbarMessage(String message) {
               width: 8,
             ),
             Text(
-              "Network Failure:",
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  overflow: TextOverflow.ellipsis),
-            ),
-            SizedBox(
-              width: 6,
-            ),
-            Text(
-              "I/O Exception",
+              message,
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

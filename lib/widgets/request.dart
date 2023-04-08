@@ -262,14 +262,23 @@ class _BloodRequestState extends State<BloodRequest> {
   void _callNumber() async {
     var result = await MongoDB.getUserData(widget.objectId);
     var data = RegisterDataModel.fromJson(result!);
-    if (widget.objectId != null &&
-        data.donations.length <= 2 &&
-        data.isAvailable == true) {
-      await MongoDB.addDonations(widget.objectId, widget.requestId);
-      String number = widget.number; //set the number here
-      await FlutterPhoneDirectCaller.callNumber(number);
+    if (widget.objectId != null) {
+      if (data.isAvailable == true && data.bloodType == widget.blood_type) {
+        if (data.donations.length <= 2) {
+          await MongoDB.addDonations(widget.objectId, widget.requestId);
+          String number = widget.number; //set the number here
+          await FlutterPhoneDirectCaller.callNumber(number);
+        } else {
+          final SnackBar snackBar =
+              SnackbarMessage("You have Pending Donations!");
+          snackbarKey.currentState?.showSnackBar(snackBar);
+        }
+      } else {
+        final SnackBar snackBar = SnackbarMessage("You aren't Eligible!");
+        snackbarKey.currentState?.showSnackBar(snackBar);
+      }
     } else {
-      final SnackBar snackBar = SnackbarMessage("You aren't Eligible!");
+      final SnackBar snackBar = SnackbarMessage("Data Failure: Login First!");
       snackbarKey.currentState?.showSnackBar(snackBar);
     }
   }

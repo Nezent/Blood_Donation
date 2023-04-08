@@ -333,8 +333,40 @@ class _UserRequestScreenState extends State<UserRequestScreen> {
                         ),
                       );
                     } else {
-                      return const Center(
-                        child: SizedBox(),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 17),
+                        child: Container(
+                          height: 99,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.card
+                                    : Palette.darkSecondary,
+                            borderRadius: BorderRadius.circular(4.0),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 1.0,
+                                offset: Offset(0, 1),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              'The User Has Found His Needs',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Palette.cyanText
+                                    : Palette.darkText,
+                              ),
+                            ),
+                          ),
+                        ),
                       );
                     }
                   });

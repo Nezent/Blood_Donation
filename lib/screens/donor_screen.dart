@@ -8,7 +8,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 
 class DonorScreen extends StatefulWidget {
-  const DonorScreen({Key? key}) : super(key: key);
+  String address, blood_type;
+  DonorScreen({Key? key, required this.blood_type, required this.address})
+      : super(key: key);
 
   @override
   State<DonorScreen> createState() => _DonorScreenState();
@@ -24,6 +26,7 @@ class _DonorScreenState extends State<DonorScreen> {
     LocationTracker _tracker = LocationTracker();
     List temporary_address = await _tracker.requestAddress();
     setState(() {
+      _currentSelectedValue = widget.blood_type;
       latitude = double.parse(temporary_address.elementAt(2));
       longitude = double.parse(temporary_address.elementAt(3));
     });
@@ -39,7 +42,7 @@ class _DonorScreenState extends State<DonorScreen> {
     _getAddress();
     _connection();
     Timer.periodic(const Duration(seconds: 8), (timer) {
-      mongoDB.getUser();
+      mongoDB.getDonorList(_currentSelectedValue, widget.address);
     });
   }
 
@@ -60,7 +63,7 @@ class _DonorScreenState extends State<DonorScreen> {
         ),
       ),
       body: StreamBuilder<dynamic>(
-          stream: mongoDB.donorController.stream,
+          stream: mongoDB.donorListController.stream,
           builder: (context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Column(

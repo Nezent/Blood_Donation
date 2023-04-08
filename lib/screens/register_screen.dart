@@ -190,9 +190,13 @@ class _RegisterScreenState extends State<RegisterScreen>
                                         isLoading = true;
                                       });
                                       if (_signIn.currentState!.validate()) {
-                                        _logIn(numberController.text,
+                                        await _logIn(numberController.text,
                                             passwordController.text);
                                       }
+
+                                      setState(() {
+                                        isLoading = false;
+                                      });
                                     },
                                     child: Container(
                                       height: 46,
@@ -516,21 +520,25 @@ class _RegisterScreenState extends State<RegisterScreen>
   Future<void> _logIn(String number, String password) async {
     try {
       var userData = await MongoDB.logIn(number, password);
-      var user = RegisterDataModel.fromJson(userData!);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ProfileScreen(
-            id: user.id,
+
+      if (userData != null) {
+        var user = RegisterDataModel.fromJson(userData);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfileScreen(
+              id: user.id,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        final SnackBar snackBar =
+            SnackbarMessage("TypeError: Fields didn't Match!");
+        snackbarKey.currentState?.showSnackBar(snackBar);
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("No Data Found"),
-        ),
-      );
+      final SnackBar snackBar = SnackbarMessage("Error: No Data Found!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
     }
   }
 }

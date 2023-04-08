@@ -10,6 +10,7 @@ class MongoDB {
   StreamController requestController = StreamController();
   StreamController donorController = StreamController();
   StreamController profileController = StreamController();
+  StreamController donorListController = StreamController();
 
   static var dataBase;
   static connect() async {
@@ -27,7 +28,8 @@ class MongoDB {
     } on TimeoutException {
       return;
     } on ConnectionException {
-      final SnackBar snackBar = SnackbarMessage("IO Exception!");
+      final SnackBar snackBar =
+          SnackbarMessage("Network Failure: IO Exception!");
       snackbarKey.currentState?.showSnackBar(snackBar);
     } on ClientException {
       final SnackBar snackBar = SnackbarMessage("CAN'T FIND CLIENT!");
@@ -67,12 +69,29 @@ class MongoDB {
     }
   }
 
-  Future<void> getUser() async {
+  Future<void> getUser(String bloodType) async {
     try {
       final arrData = await dataBase
           .collection('Register')
-          .find({"isAvailable": true}).toList();
+          .find({"isAvailable": true, "blood_type": bloodType}).toList();
       donorController.sink.add(arrData);
+    } on NoSuchMethodError {
+      return;
+    } on MongoDartError {
+      return;
+    } on ConnectionException {
+      return;
+    }
+  }
+
+  Future<void> getDonorList(String bloodType, String address) async {
+    try {
+      final arrData = await dataBase.collection('Register').find({
+        "isAvailable": true,
+        "blood_type": bloodType,
+        "address": address,
+      }).toList();
+      donorListController.sink.add(arrData);
     } on NoSuchMethodError {
       return;
     } on MongoDartError {
