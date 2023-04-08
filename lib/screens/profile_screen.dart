@@ -1,5 +1,6 @@
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
+import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
@@ -21,12 +22,21 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
+  final cloudinary =
+      CloudinaryPublic('bloodconnectionuserimage', 'uiwdzho0', cache: false);
   void _getImage() async {
     String url = "";
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
-    // Uint8List imageByte = await image.readAsBytes();
-    url = "";
+    try {
+      CloudinaryResponse response = await cloudinary.uploadFile(
+        CloudinaryFile.fromFile(image.path,
+            resourceType: CloudinaryResourceType.Image),
+      );
+      url = response.secureUrl;
+    } on CloudinaryException catch (e) {
+      return;
+    }
     if (url != "") {
       MongoDB.changeProfilePicture(widget.id, url);
     }
@@ -35,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget showImage(BuildContext context, String? value) {
     return ClipOval(
       child: Image.network(
-        "",
+        value!,
         fit: BoxFit.cover,
       ),
     );
@@ -146,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ? showImage(context, userData.profilePicture)
                             : const CircleAvatar(
                                 backgroundImage: AssetImage(
-                                  "images/avatar.png",
+                                  "images/bot.png",
                                 ),
                               ),
                         Positioned(

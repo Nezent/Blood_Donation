@@ -1,15 +1,54 @@
+import 'dart:async';
+
+import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/palette.dart';
+import 'package:blood_connection/widgets/request.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
 class RequestBloodScreen extends StatefulWidget {
-  const RequestBloodScreen({super.key});
+  final Mongo.ObjectId? objectId;
+  const RequestBloodScreen({super.key, required this.objectId});
 
   @override
   State<RequestBloodScreen> createState() => _RequestBloodScreenState();
 }
 
 class _RequestBloodScreenState extends State<RequestBloodScreen> {
+  double? latitude;
+  double? longitude;
+  MongoDB mongoDB = MongoDB();
+  @override
+  void initState() {
+    super.initState();
+    _connection();
+    _getAddress();
+    Timer.periodic(const Duration(seconds: 8), (timer) {
+      mongoDB.getData();
+    });
+  }
+
+  void _connection() async {
+    await MongoDB.connect();
+  }
+
+  void _getAddress() async {
+    LocationTracker _tracker = LocationTracker();
+    List temporary_address = await _tracker.requestAddress();
+    setState(() {
+      latitude = double.parse(temporary_address.elementAt(2));
+      longitude = double.parse(temporary_address.elementAt(3));
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,35 +68,88 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 16,
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Skeleton(height: 20, width: 130),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    child: Skeleton(
-                        height: 95, width: MediaQuery.of(context).size.width),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+        child: StreamBuilder(
+            stream: mongoDB.requestController.stream,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Skeleton(height: 20, width: 130),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: 10,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 4),
+                            child: Skeleton(
+                                height: 95,
+                                width: MediaQuery.of(context).size.width),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              } else if (snapshot.hasData) {
+                return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, index) {
+                      var data =
+                          RequestDataModel.fromJson(snapshot.data![index]);
+                      var names = data.name.split(' ');
+                      var nickName = names[0].trim();
+                      if (data.initBag == data.bag) {
+                        _deleteRequest(data.id!);
+                      }
+                      return BloodRequest(
+                        objectId: widget.objectId,
+                        requestId: data.id!,
+                        blood_type: data.bloodType,
+                        name: data.name,
+                        number: data.number,
+                        bag: data.bag,
+                        initBag: data.initBag,
+                        address: data.address,
+                        distance: Geolocator.distanceBetween(
+                            data.latitude,
+                            data.longitude,
+                            latitude ?? 0.00,
+                            longitude ?? 0.00),
+                      );
+                    });
+              } else {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Lottie.asset(
+                        'animations/not-found.json',
+                        height: 240,
+                        width: 240,
+                        fit: BoxFit.fill,
+                      ),
+                    ],
+                  ),
+                );
+              }
+            }),
       ),
     );
+  }
+
+  void _deleteRequest(Mongo.ObjectId id) async {
+    MongoDB.deleteRequest(id);
   }
 }

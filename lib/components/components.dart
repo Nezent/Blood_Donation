@@ -5,3 +5,4 @@ export 'register_data_model.dart';
 export 'register_model.dart';
 export 'request_model.dart';
 export 'request_data_model.dart';
+export 'shared_preferences.dart';

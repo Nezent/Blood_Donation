@@ -337,7 +337,7 @@ class _UserRequestScreenState extends State<UserRequestScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 2, horizontal: 17),
                         child: Container(
-                          height: 99,
+                          height: 94,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             color:

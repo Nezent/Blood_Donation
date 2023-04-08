@@ -4,6 +4,7 @@ import 'package:blood_connection/screens/profile_screen.dart';
 import 'package:blood_connection/screens/validation_screen.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -523,6 +524,9 @@ class _RegisterScreenState extends State<RegisterScreen>
 
       if (userData != null) {
         var user = RegisterDataModel.fromJson(userData);
+        // Shared Preferences
+        SharedPreferences session = await SharedPreferences.getInstance();
+        await session.setString('login', user.id!.$oid);
         Navigator.push(
           context,
           MaterialPageRoute(

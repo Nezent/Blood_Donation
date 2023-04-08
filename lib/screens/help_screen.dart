@@ -1,6 +1,5 @@
+import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({super.key});
@@ -12,6 +11,20 @@ class HelpScreen extends StatefulWidget {
 class _HelpScreenState extends State<HelpScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Palette.cyan,
+        leading: IconButton(
+          splashRadius: 8.0,
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_outlined,
+            color: Palette.card,
+            size: 36,
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -26,10 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _currentSelectedValue = 'AB+';
   double? latitude;
   double? longitude;
-  // late StreamSubscription _subscription;
-
-  // bool isDeviceConnected = false;
-  String _base64 = "";
+  String? _url = "";
   void _getAddress() async {
     LocationTracker _tracker = LocationTracker();
     List temporary_address = await _tracker.requestAddress();
@@ -48,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (widget.id != null) {
         var result = await MongoDB.getUserData(widget.id);
         if (RegisterDataModel.fromJson(result!).profilePicture != null) {
-          _base64 = RegisterDataModel.fromJson(result).profilePicture!;
+          _url = RegisterDataModel.fromJson(result).profilePicture!;
         }
       }
     } catch (_) {
@@ -226,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ? Colors.black12
                                   : Palette.newText.withOpacity(0.09),
                               blurRadius: 1.0,
-                              offset: Offset(0, 1),
+                              offset: const Offset(0, 1),
                             ),
                           ],
                         ),
@@ -292,10 +289,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         : const RegisterScreen(),
                                   ),
                                 ),
-                                child: const CircleAvatar(
+                                child: CircleAvatar(
                                   radius: 16.0,
                                   backgroundImage:
-                                      AssetImage('images/avatar.png'),
+                                      (widget.id != null && _url != "")
+                                          ? Image.network(_url!).image
+                                          : const AssetImage('images/bot.png'),
                                 ),
                               ),
                             ],
@@ -512,7 +511,7 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: Icons.expand_less_outlined,
         backgroundColor: Theme.of(context).brightness == Brightness.light
             ? Palette.cyan
-            : Color(0xff03DAC6),
+            : const Color(0xff03DAC6),
         overlayColor: Colors.black38,
         overlayOpacity: 0.5,
         spacing: 8,

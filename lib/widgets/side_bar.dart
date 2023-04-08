@@ -1,7 +1,5 @@
 // ignore_for_file: library_prefixes
 
-import 'dart:convert';
-
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/palette.dart';
@@ -10,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SideBar extends StatefulWidget {
   final Mongo.ObjectId? id;
@@ -30,7 +29,10 @@ class _SideBarState extends State<SideBar> {
           future: MongoDB.getUserData(widget.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator.adaptive());
+              return const Center(
+                  child: CircularProgressIndicator.adaptive(
+                backgroundColor: Palette.card,
+              ));
             } else if (snapshot.hasData) {
               var userData = RegisterDataModel.fromJson(snapshot.data!);
               final _controller = ValueNotifier<bool>(userData.isAvailable);
@@ -46,15 +48,20 @@ class _SideBarState extends State<SideBar> {
                                       Brightness.light
                                   ? Palette.cyanText
                                   : Palette.darkWidget),
-                          accountName: Text(userData.name),
-                          accountEmail: Text(userData.number),
+                          accountName: Text(
+                            userData.name,
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                          accountEmail: Text(
+                            userData.number,
+                            style: const TextStyle(fontSize: 18),
+                          ),
                           currentAccountPicture: Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: CircleAvatar(
                               backgroundImage: userData.profilePicture == null
-                                  ? const AssetImage("images/avatar.png")
-                                  : Image.memory(base64Decode(
-                                          userData.profilePicture!))
+                                  ? const AssetImage("images/bot.png")
+                                  : Image.network(userData.profilePicture!)
                                       .image,
                             ),
                           ),
@@ -63,15 +70,9 @@ class _SideBarState extends State<SideBar> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const RequestBloodScreen(),
-                            ),
-                          );
-                        }),
-                        sideBarList("blood-white.svg", "Donors List", () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HelpScreen(),
+                              builder: (context) => RequestBloodScreen(
+                                objectId: widget.id,
+                              ),
                             ),
                           );
                         }),
@@ -117,11 +118,23 @@ class _SideBarState extends State<SideBar> {
                           ),
                         ),
                         const Divider(),
+                        sideBarList("question-mark-white.svg", "Help Center",
+                            () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HelpScreen(),
+                            ),
+                          );
+                        }),
                         sideBarList("cup-white.svg", "Buy Us a Ko-Fi", () {
                           Clipboard.setData(
                               const ClipboardData(text: "01830676720"));
                         }),
-                        sideBarList("logout-white.svg", "Logout", () {
+                        sideBarList("logout-white.svg", "Logout", () async {
+                          SharedPreferences session =
+                              await SharedPreferences.getInstance();
+                          await session.clear();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -171,7 +184,10 @@ class _SideBarState extends State<SideBar> {
                 padding: EdgeInsets.zero,
                 children: [
                   UserAccountsDrawerHeader(
-                    accountName: const Text("Anonymous"),
+                    accountName: const Text(
+                      "Anonymous",
+                      style: TextStyle(fontSize: 18),
+                    ),
                     accountEmail: const Text(""),
                     decoration: BoxDecoration(
                         color: Theme.of(context).brightness == Brightness.light
@@ -182,7 +198,7 @@ class _SideBarState extends State<SideBar> {
                       child: CircleAvatar(
                         child: ClipOval(
                           child: Image.asset(
-                            "images/avatar.png",
+                            "images/bot.png",
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -193,11 +209,13 @@ class _SideBarState extends State<SideBar> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const RequestBloodScreen(),
+                        builder: (context) => RequestBloodScreen(
+                          objectId: widget.id,
+                        ),
                       ),
                     );
                   }),
-                  sideBarList("blood-white.svg", "Donors List", () {
+                  sideBarList("question-mark-white.svg", "Help Center", () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
