@@ -10,6 +10,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:shared_preferences/shared_preferences.dart';
 
 mongo.ObjectId? id;
+bool viewed = false;
 
 Future<void> main() async {
   FlutterError.onError = (details) {
@@ -20,6 +21,7 @@ Future<void> main() async {
   await MongoDB.connect();
   SharedPreferences session = await SharedPreferences.getInstance();
   String? value = session.getString('objectId');
+  viewed = session.getBool('viewed') ?? false;
   if (value != null) {
     id = mongo.ObjectId.fromHexString(value);
   } else {
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData.dark()
             .copyWith(scaffoldBackgroundColor: Palette.darkPrimary),
         themeMode: provider.themeMode,
-        home: HomeScreen(id: id),
+        home: viewed ? HomeScreen(id: id) : const Onboarding(),
       );
     });
   }

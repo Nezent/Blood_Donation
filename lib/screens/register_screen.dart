@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     await MongoDB.connect();
   }
 
-  bool _obscureText = false;
+  bool _obscureText = true;
   @override
   void initState() {
     super.initState();

@@ -545,7 +545,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const RegisterScreen(),
+                builder: (context) => widget.id == null
+                    ? const RegisterScreen()
+                    : RequestBloodScreen(objectId: widget.id),
               ),
             ),
             child: SvgPicture.asset(
