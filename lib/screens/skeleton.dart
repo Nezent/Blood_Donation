@@ -10,11 +10,11 @@ class Skeleton extends StatelessWidget {
     return SizedBox(
       child: Shimmer.fromColors(
         baseColor: Theme.of(context).brightness == Brightness.light
-            ? Color.fromARGB(255, 54, 52, 52)
-            : Color.fromARGB(255, 64, 63, 63),
+            ? const Color.fromARGB(255, 54, 52, 52)
+            : const Color.fromARGB(255, 64, 63, 63),
         highlightColor: Theme.of(context).brightness == Brightness.light
-            ? Color.fromARGB(255, 171, 171, 168)
-            : Color.fromARGB(248, 113, 111, 111),
+            ? const Color.fromARGB(255, 171, 171, 168)
+            : const Color.fromARGB(248, 113, 111, 111),
         child: Container(
           height: height,
           width: width,

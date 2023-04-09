@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, must_be_immutable
+
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/palette.dart';
@@ -70,7 +72,7 @@ class _RequestValidationState extends State<RequestValidation> {
                 child: Center(
                   child: Text(
                     "Welcome ${widget.name}",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Palette.cyanText),
@@ -141,12 +143,15 @@ class _RequestValidationState extends State<RequestValidation> {
                       const SizedBox(
                         width: 4,
                       ),
-                      const Text(
-                        "Resend",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Palette.cyanText),
+                      GestureDetector(
+                        onTap: () {},
+                        child: const Text(
+                          "Resend",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Palette.cyanText),
+                        ),
                       ),
                     ],
                   ),
@@ -160,10 +165,10 @@ class _RequestValidationState extends State<RequestValidation> {
   }
 
   Future<void> _insertData(String name, String number, int bag,
-      String blood_type, double latitude, double longitude) async {
+      String bloodType, double latitude, double longitude) async {
     final data = RequestModel(
       name: name,
-      bloodType: blood_type,
+      bloodType: bloodType,
       number: number,
       bag: bag,
       initBag: widget.initBag,
@@ -171,6 +176,6 @@ class _RequestValidationState extends State<RequestValidation> {
       latitude: latitude,
       longitude: longitude,
     );
-    var result = await MongoDB.insert(data);
+    await MongoDB.insert(data);
   }
 }

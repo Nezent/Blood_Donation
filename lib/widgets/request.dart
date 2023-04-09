@@ -1,14 +1,14 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, must_be_immutable
 
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class BloodRequest extends StatefulWidget {
-  final Mongo.ObjectId? objectId;
-  final Mongo.ObjectId requestId;
+  final mongo.ObjectId? objectId;
+  final mongo.ObjectId requestId;
   String blood_type, name, number, address;
   int bag, initBag;
   double distance;

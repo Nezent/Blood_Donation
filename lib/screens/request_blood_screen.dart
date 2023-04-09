@@ -7,10 +7,10 @@ import 'package:blood_connection/widgets/request.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class RequestBloodScreen extends StatefulWidget {
-  final Mongo.ObjectId? objectId;
+  final mongo.ObjectId? objectId;
   const RequestBloodScreen({super.key, required this.objectId});
 
   @override
@@ -36,11 +36,11 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
   }
 
   void _getAddress() async {
-    LocationTracker _tracker = LocationTracker();
-    List temporary_address = await _tracker.requestAddress();
+    LocationTracker tracker = LocationTracker();
+    List temporaryAddress = await tracker.requestAddress();
     setState(() {
-      latitude = double.parse(temporary_address.elementAt(2));
-      longitude = double.parse(temporary_address.elementAt(3));
+      latitude = double.parse(temporaryAddress.elementAt(2));
+      longitude = double.parse(temporaryAddress.elementAt(3));
     });
   }
 
@@ -117,7 +117,7 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
                         requestId: data.id!,
                         blood_type: data.bloodType,
                         name: data.name,
-                        number: data.number,
+                        number: nickName,
                         bag: data.bag,
                         initBag: data.initBag,
                         address: data.address,
@@ -149,7 +149,7 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
     );
   }
 
-  void _deleteRequest(Mongo.ObjectId id) async {
+  void _deleteRequest(mongo.ObjectId id) async {
     MongoDB.deleteRequest(id);
   }
 }

@@ -9,11 +9,11 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 
 class HomeScreen extends StatefulWidget {
-  final Mongo.ObjectId? id;
+  final mongo.ObjectId? id;
   const HomeScreen({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -28,11 +28,11 @@ class _HomeScreenState extends State<HomeScreen> {
   double? longitude;
   String? _url = "";
   void _getAddress() async {
-    LocationTracker _tracker = LocationTracker();
-    List temporary_address = await _tracker.requestAddress();
+    LocationTracker tracker = LocationTracker();
+    List temporaryAddress = await tracker.requestAddress();
     setState(() {
-      latitude = double.parse(temporary_address.elementAt(2));
-      longitude = double.parse(temporary_address.elementAt(3));
+      latitude = double.parse(temporaryAddress.elementAt(2));
+      longitude = double.parse(temporaryAddress.elementAt(3));
     });
   }
 
@@ -168,12 +168,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Skeleton(height: 20, width: 130),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Skeleton(height: 20, width: 65),
                       ),
@@ -564,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _deleteRequest(Mongo.ObjectId id) async {
+  void _deleteRequest(mongo.ObjectId id) async {
     MongoDB.deleteRequest(id);
   }
 }

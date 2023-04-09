@@ -52,14 +52,14 @@ class LocationTracker {
     Placemark place = placemarks[0];
     double latitude = position.latitude;
     double longitude = position.longitude;
-    List<String> request_address = [];
-    request_address.add('${place.subAdministrativeArea}');
-    request_address.add('${place.country}');
-    request_address.add('$latitude');
-    request_address.add('$longitude');
+    List<String> requestAddress = [];
+    requestAddress.add('${place.subAdministrativeArea}');
+    requestAddress.add('${place.country}');
+    requestAddress.add('$latitude');
+    requestAddress.add('$longitude');
     String address =
         '${place.subLocality}, ${place.locality}\n${place.subAdministrativeArea}, ${place.country}';
-    request_address.add('$address');
-    return Future.value(request_address);
+    requestAddress.add(address);
+    return Future.value(requestAddress);
   }
 }

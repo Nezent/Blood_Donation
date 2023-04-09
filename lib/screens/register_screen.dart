@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/home_screen.dart';
 import 'package:blood_connection/screens/profile_screen.dart';
@@ -29,18 +31,19 @@ class _RegisterScreenState extends State<RegisterScreen>
   var passwordController = TextEditingController();
   var passwordCheckController = TextEditingController();
   void _getAddress() async {
-    List temporary_address = await _tracker.requestAddress();
-    var temp_address = temporary_address.elementAt(0).split(' ');
-    var short_address = temp_address[0].trim();
-    address = "${short_address},${temporary_address.elementAt(1)}";
-    latitude = double.parse(temporary_address.elementAt(2));
-    longitude = double.parse(temporary_address.elementAt(3));
+    List temporaryAddress = await _tracker.requestAddress();
+    var tempAddress = temporaryAddress.elementAt(0).split(' ');
+    var shortAddress = tempAddress[0].trim();
+    address = "$shortAddress,${temporaryAddress.elementAt(1)}";
+    latitude = double.parse(temporaryAddress.elementAt(2));
+    longitude = double.parse(temporaryAddress.elementAt(3));
   }
 
   void _connection() async {
     await MongoDB.connect();
   }
 
+  bool _obscureText = false;
   @override
   void initState() {
     super.initState();
@@ -54,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Theme.of(context).brightness == Brightness.light
@@ -105,11 +108,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                       borderRadius: BorderRadius.circular(4),
                     ),
                     controller: tabController,
-                    tabs: [
-                      const Tab(
+                    tabs: const [
+                      Tab(
                         text: 'Sign In',
                       ),
-                      const Tab(
+                      Tab(
                         text: 'Sign Up',
                       ),
                     ],
@@ -121,156 +124,193 @@ class _RegisterScreenState extends State<RegisterScreen>
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Welcome',
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Palette.newText
-                                  : Palette.darkText,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Form(
-                            key: _signIn,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 40, vertical: 8),
-                                  child: TextFormField(
-                                    validator: (value) {
-                                      if (value!.isEmpty ||
-                                          !RegExp(r'^(?:\+88|88)?(01[3-9]\d{8})+$')
-                                              .hasMatch(value)) {
-                                        return "Enter Valid Phone Number";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    controller: numberController,
-                                    keyboardType: TextInputType.phone,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Enter your Phone Number',
-                                      label: Text('Phone'),
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 40, vertical: 8),
-                                  child: TextFormField(
-                                    obscureText: true,
-                                    controller: passwordController,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Enter your Password',
-                                      label: Text('Password'),
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 60,
-                                ),
-                                Center(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      if (_signIn.currentState!.validate()) {
-                                        await _logIn(numberController.text,
-                                            passwordController.text);
-                                      }
-
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-                                    },
-                                    child: Container(
-                                      height: 46,
-                                      width: 340,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.light
-                                            ? Palette.cyan
-                                            : Palette.darkSecondary,
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
-                                      ),
-                                      child: Center(
-                                        child: isLoading
-                                            ? CircularProgressIndicator(
-                                                color: Palette.card,
-                                              )
-                                            : Text(
-                                                'Log In',
-                                                style: TextStyle(
-                                                  fontSize: 19.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                              .brightness ==
-                                                          Brightness.light
-                                                      ? Palette.card
-                                                      : Palette.darkText,
-                                                ),
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 32,
-                                ),
-                              ],
-                            ),
+                  SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Welcome',
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.newText
+                                    : Palette.darkText,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Don\'t have an account?',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Palette.newText
-                                      : Palette.darkText,
-                                ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Form(
+                              key: _signIn,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 40, vertical: 8),
+                                    child: TextFormField(
+                                      validator: (value) {
+                                        if (value!.isEmpty ||
+                                            !RegExp(r'^(?:\+88|88)?(01[3-9]\d{8})+$')
+                                                .hasMatch(value)) {
+                                          return "Enter Valid Phone Number";
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      controller: numberController,
+                                      keyboardType: TextInputType.phone,
+                                      decoration: const InputDecoration(
+                                        floatingLabelStyle:
+                                            TextStyle(color: Palette.violet),
+                                        hintText: 'Enter your Phone Number',
+                                        label: Text('Phone'),
+                                        border: OutlineInputBorder(),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Palette.violet,
+                                          ),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Palette.cyan,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 40, vertical: 8),
+                                    child: TextFormField(
+                                      obscureText: _obscureText,
+                                      controller: passwordController,
+                                      decoration: InputDecoration(
+                                        floatingLabelStyle: const TextStyle(
+                                            color: Palette.violet),
+                                        hintText: 'Enter your Password',
+                                        label: const Text('Password'),
+                                        suffixIcon: IconButton(
+                                            color: Palette.cyan,
+                                            splashRadius: 16,
+                                            onPressed: () {
+                                              setState(() {
+                                                _obscureText = !_obscureText;
+                                              });
+                                            },
+                                            icon: Icon(_obscureText
+                                                ? Icons.visibility_off
+                                                : Icons.visibility)),
+                                        border: const OutlineInputBorder(),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Palette.violet,
+                                          ),
+                                        ),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Palette.cyan,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 60,
+                                  ),
+                                  Center(
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        if (_signIn.currentState!.validate()) {
+                                          await _logIn(numberController.text,
+                                              passwordController.text);
+                                        }
+
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 46,
+                                        width: 340,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.cyan
+                                              : Palette.darkSecondary,
+                                          borderRadius:
+                                              BorderRadius.circular(4.0),
+                                        ),
+                                        child: Center(
+                                          child: isLoading
+                                              ? const CircularProgressIndicator(
+                                                  color: Palette.card,
+                                                )
+                                              : Text(
+                                                  'Log In',
+                                                  style: TextStyle(
+                                                    fontSize: 19.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                                .brightness ==
+                                                            Brightness.light
+                                                        ? Palette.card
+                                                        : Palette.darkText,
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 32,
+                                  ),
+                                ],
                               ),
-                              GestureDetector(
-                                onTap: () => tabController
-                                    .animateTo((tabController.index + 1) % 2),
-                                child: Text(
-                                  'Register',
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Don\'t have an account?',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                     color: Theme.of(context).brightness ==
                                             Brightness.light
-                                        ? Palette.cyanText
-                                        : Palette.darkWidget,
+                                        ? Palette.newText
+                                        : Palette.darkText,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                                GestureDetector(
+                                  onTap: () => tabController
+                                      .animateTo((tabController.index + 1) % 2),
+                                  child: Text(
+                                    'Register',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? Palette.cyanText
+                                          : Palette.darkWidget,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -312,9 +352,21 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   controller: nameController,
                                   keyboardType: TextInputType.name,
                                   decoration: const InputDecoration(
+                                    floatingLabelStyle:
+                                        TextStyle(color: Palette.violet),
                                     hintText: 'Enter your Name',
                                     label: Text('Name'),
                                     border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Palette.violet,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Palette.cyan,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -334,9 +386,21 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   controller: numberController,
                                   keyboardType: TextInputType.phone,
                                   decoration: const InputDecoration(
+                                    floatingLabelStyle:
+                                        TextStyle(color: Palette.violet),
                                     hintText: 'Enter your Phone Number',
                                     label: Text('Phone'),
                                     border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Palette.violet,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Palette.cyan,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -353,12 +417,24 @@ class _RegisterScreenState extends State<RegisterScreen>
                                       return null;
                                     }
                                   },
-                                  obscureText: true,
+                                  obscureText: _obscureText,
                                   controller: passwordController,
                                   decoration: const InputDecoration(
+                                    floatingLabelStyle:
+                                        TextStyle(color: Palette.violet),
                                     hintText: 'Enter a Password',
                                     label: Text('Password'),
                                     border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Palette.violet,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Palette.cyan,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -377,9 +453,21 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   obscureText: true,
                                   controller: passwordCheckController,
                                   decoration: const InputDecoration(
+                                    floatingLabelStyle:
+                                        TextStyle(color: Palette.violet),
                                     hintText: 'Re-type Password',
                                     label: Text('Confirm Password'),
                                     border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Palette.violet,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Palette.cyan,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -526,7 +614,7 @@ class _RegisterScreenState extends State<RegisterScreen>
         var user = RegisterDataModel.fromJson(userData);
         // Shared Preferences
         SharedPreferences session = await SharedPreferences.getInstance();
-        await session.setString('login', user.id!.$oid);
+        await session.setString('objectId', user.id!.toHexString());
         Navigator.push(
           context,
           MaterialPageRoute(

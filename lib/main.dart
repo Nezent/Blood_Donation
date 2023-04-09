@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
+import 'package:shared_preferences/shared_preferences.dart';
+
+mongo.ObjectId? id;
 
 Future<void> main() async {
   FlutterError.onError = (details) {
@@ -14,9 +18,16 @@ Future<void> main() async {
   };
   WidgetsFlutterBinding.ensureInitialized();
   await MongoDB.connect();
+  SharedPreferences session = await SharedPreferences.getInstance();
+  String? value = session.getString('objectId');
+  if (value != null) {
+    id = mongo.ObjectId.fromHexString(value);
+  } else {
+    id = null;
+  }
   runApp(
     ChangeNotifierProvider<ThemeManager>(
-      create: (_) => ThemeManager(),
+      create: (_) => ThemeManager()..initializeTheme(),
       child: const MyApp(),
     ),
   );
@@ -38,7 +49,7 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData.dark()
             .copyWith(scaffoldBackgroundColor: Palette.darkPrimary),
         themeMode: provider.themeMode,
-        home: const HomeScreen(id: null),
+        home: HomeScreen(id: id),
       );
     });
   }

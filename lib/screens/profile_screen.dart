@@ -8,12 +8,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final Mongo.ObjectId? id;
+  final mongo.ObjectId? id;
   const ProfileScreen({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             resourceType: CloudinaryResourceType.Image),
       );
       url = response.secureUrl;
-    } on CloudinaryException catch (e) {
+    } on CloudinaryException catch (_) {
       return;
     }
     if (url != "") {
@@ -136,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           } else if (snapshot.hasData) {
             var userData = RegisterDataModel.fromJson(snapshot.data!);
-            final _controller = ValueNotifier<bool>(userData.isAvailable);
+            final controller = ValueNotifier<bool>(userData.isAvailable);
 
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -312,13 +312,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                                 AdvancedSwitch(
-                                  controller: _controller,
+                                  controller: controller,
                                   height: 26,
                                   width: 48,
                                   activeColor: Palette.cyanText,
                                   inactiveColor: Palette.cyan,
                                   thumb: ValueListenableBuilder(
-                                      valueListenable: _controller,
+                                      valueListenable: controller,
                                       builder:
                                           (BuildContext context, value, child) {
                                         MongoDB.changeAvailability(

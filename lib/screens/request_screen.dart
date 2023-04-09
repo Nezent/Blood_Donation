@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:blood_connection/components/connection.dart';
 import 'package:blood_connection/components/location_tracker.dart';
 import 'package:blood_connection/screens/request_validation_screen.dart';
@@ -24,12 +26,12 @@ class _RequestScreenState extends State<RequestScreen> {
   var numberController = TextEditingController();
 
   void _getAddress() async {
-    List temporary_address = await _tracker.requestAddress();
-    var temp_address = temporary_address.elementAt(0).split(' ');
-    var short_address = temp_address[0].trim();
-    address = "${short_address},${temporary_address.elementAt(1)}";
-    latitude = double.parse(temporary_address.elementAt(2));
-    longitude = double.parse(temporary_address.elementAt(3));
+    List temporaryAddress = await _tracker.requestAddress();
+    var tempAddress = temporaryAddress.elementAt(0).split(' ');
+    var shortAddress = tempAddress[0].trim();
+    address = "$shortAddress,${temporaryAddress.elementAt(1)}";
+    latitude = double.parse(temporaryAddress.elementAt(2));
+    longitude = double.parse(temporaryAddress.elementAt(3));
   }
 
   void _connection() async {
@@ -101,6 +103,17 @@ class _RequestScreenState extends State<RequestScreen> {
                         controller: nameController,
                         keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
+                          floatingLabelStyle: TextStyle(color: Palette.violet),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Palette.violet,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Palette.cyan,
+                            ),
+                          ),
                           hintText: 'Enter your Name',
                           label: Text('Name'),
                           border: OutlineInputBorder(),
@@ -126,6 +139,17 @@ class _RequestScreenState extends State<RequestScreen> {
                           hintText: 'Enter your Phone Number',
                           label: Text('Phone'),
                           border: OutlineInputBorder(),
+                          floatingLabelStyle: TextStyle(color: Palette.violet),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Palette.violet,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Palette.cyan,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -136,6 +160,16 @@ class _RequestScreenState extends State<RequestScreen> {
                         builder: (FormFieldState<String> state) {
                           return InputDecorator(
                             decoration: InputDecoration(
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.violet,
+                                ),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.cyan,
+                                ),
+                              ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                               ),

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, must_be_immutable
+
 import 'dart:async';
 
 import 'package:blood_connection/components/components.dart';
@@ -23,12 +25,12 @@ class _DonorScreenState extends State<DonorScreen> {
   double? latitude;
   double? longitude;
   void _getAddress() async {
-    LocationTracker _tracker = LocationTracker();
-    List temporary_address = await _tracker.requestAddress();
+    LocationTracker tracker = LocationTracker();
+    List temporaryAddress = await tracker.requestAddress();
     setState(() {
       _currentSelectedValue = widget.blood_type;
-      latitude = double.parse(temporary_address.elementAt(2));
-      longitude = double.parse(temporary_address.elementAt(3));
+      latitude = double.parse(temporaryAddress.elementAt(2));
+      longitude = double.parse(temporaryAddress.elementAt(3));
     });
   }
 
@@ -73,12 +75,12 @@ class _DonorScreenState extends State<DonorScreen> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Skeleton(height: 20, width: 130),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Skeleton(height: 20, width: 65),
                       ),

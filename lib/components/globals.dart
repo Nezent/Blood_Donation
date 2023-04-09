@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:blood_connection/widgets/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -6,9 +8,9 @@ final GlobalKey<ScaffoldMessengerState> snackbarKey =
 SnackBar SnackbarMessage(String message) {
   return SnackBar(
     content: Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         height: 48,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Palette.cyan,
           borderRadius: BorderRadius.all(
             Radius.circular(15),
@@ -23,12 +25,12 @@ SnackBar SnackbarMessage(String message) {
               height: 32,
               width: 32,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Text(
               message,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:blood_connection/components/location_tracker.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
@@ -18,11 +20,11 @@ class _SearchScreenState extends State<SearchScreen> {
   String? request_address;
 
   void _getAddress() async {
-    var temp_address = await _tracker.requestAddress();
-    var temp = temp_address.elementAt(0).split(' ');
-    var short_address = temp[0].trim();
-    request_address = "${short_address},${temp_address.elementAt(1)}";
-    address = temp_address.elementAt(4);
+    var tempAddress = await _tracker.requestAddress();
+    var temp = tempAddress.elementAt(0).split(' ');
+    var shortAddress = temp[0].trim();
+    request_address = "$shortAddress,${tempAddress.elementAt(1)}";
+    address = tempAddress.elementAt(4);
     if (mounted) {
       setState(() {});
     }
@@ -30,7 +32,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getAddress();
   }
@@ -100,7 +101,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         } else {
                           return Center(
                             child: Text(
-                              '$address',
+                              address,
                               style: TextStyle(
                                 fontSize: 19.0,
                                 fontWeight: FontWeight.w600,
@@ -142,7 +143,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ? Palette.card
                                   : Palette.darkText,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         Text(

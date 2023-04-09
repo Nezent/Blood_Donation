@@ -14,4 +14,5 @@ class Palette {
   static const Color darkText = Color(0xffE1E1E1);
   static const Color darkWidget = Color(0xff353535);
   static const Color darkButton = Color(0xff2C2C2C);
+  static const Color violet = Color.fromARGB(255, 75, 0, 150);
 }

@@ -1,12 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class UserRequestScreen extends StatefulWidget {
   final List<dynamic> donations;
-  final Mongo.ObjectId? id;
+  final mongo.ObjectId? id;
   const UserRequestScreen(
       {super.key, required this.donations, required this.id});
 
@@ -65,35 +67,35 @@ class _UserRequestScreenState extends State<UserRequestScreen> {
                               height: 95,
                               width: MediaQuery.of(context).size.width,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             Skeleton(
                               height: 95,
                               width: MediaQuery.of(context).size.width,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             Skeleton(
                               height: 95,
                               width: MediaQuery.of(context).size.width,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             Skeleton(
                               height: 95,
                               width: MediaQuery.of(context).size.width,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             Skeleton(
                               height: 95,
                               width: MediaQuery.of(context).size.width,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                           ],

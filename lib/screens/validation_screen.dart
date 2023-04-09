@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, must_be_immutable
+
 import 'package:blood_connection/components/connection.dart';
 import 'package:blood_connection/components/register_model.dart';
 import 'package:blood_connection/screens/screens.dart';
@@ -175,11 +177,11 @@ class _ValidationScreenState extends State<ValidationScreen> {
   }
 
   Future<void> _insertData(String name, String number, String password,
-      String blood_type, String gender) async {
+      String bloodType, String gender) async {
     final data = RegisterModel(
       name: name,
       profilePicture: null,
-      bloodType: blood_type,
+      bloodType: bloodType,
       number: number,
       password: password,
       gender: gender,

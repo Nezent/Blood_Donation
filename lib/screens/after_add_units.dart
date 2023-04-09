@@ -4,10 +4,10 @@ import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class AfterUnitsAdd extends StatefulWidget {
-  final Mongo.ObjectId? id;
+  final mongo.ObjectId? id;
   const AfterUnitsAdd({super.key, required this.id});
 
   @override
@@ -17,7 +17,7 @@ class AfterUnitsAdd extends StatefulWidget {
 class _AfterUnitsAddState extends State<AfterUnitsAdd> {
   @override
   void initState() {
-    var _id = widget.id;
+    var id = widget.id;
     super.initState();
     Timer(
       const Duration(seconds: 5),
@@ -25,7 +25,7 @@ class _AfterUnitsAddState extends State<AfterUnitsAdd> {
         MaterialPageRoute(
           builder: (BuildContext context) => UserRequestScreen(
             donations: const [],
-            id: _id,
+            id: id,
           ),
         ),
       ),

@@ -1,4 +1,4 @@
-// ignore_for_file: library_prefixes
+// ignore_for_file: library_prefixes, use_build_context_synchronously
 
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
@@ -35,7 +35,7 @@ class _SideBarState extends State<SideBar> {
               ));
             } else if (snapshot.hasData) {
               var userData = RegisterDataModel.fromJson(snapshot.data!);
-              final _controller = ValueNotifier<bool>(userData.isAvailable);
+              final controller = ValueNotifier<bool>(userData.isAvailable);
               return Column(
                 children: [
                   Expanded(
@@ -95,13 +95,13 @@ class _SideBarState extends State<SideBar> {
                             ),
                           ),
                           trailing: AdvancedSwitch(
-                            controller: _controller,
+                            controller: controller,
                             height: 26,
                             width: 48,
                             activeColor: Palette.cyanText,
                             inactiveColor: Palette.cyanLight,
                             thumb: ValueListenableBuilder(
-                                valueListenable: _controller,
+                                valueListenable: controller,
                                 builder: (BuildContext context, value, child) {
                                   MongoDB.changeAvailability(widget.id, value);
                                   return Container(
@@ -134,7 +134,7 @@ class _SideBarState extends State<SideBar> {
                         sideBarList("logout-white.svg", "Logout", () async {
                           SharedPreferences session =
                               await SharedPreferences.getInstance();
-                          await session.clear();
+                          await session.remove('objectId');
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -254,7 +254,7 @@ class _SideBarState extends State<SideBar> {
   Widget sideBarList(String image, String title, VoidCallback tap) {
     return ListTile(
       leading: SvgPicture.asset(
-        "images/${image}",
+        "images/$image",
         height: 24,
         width: 24,
       ),
