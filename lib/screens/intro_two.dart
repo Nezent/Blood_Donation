@@ -16,10 +16,22 @@ class IntroTwo extends StatelessWidget {
           children: [
             const Center(
               child: Text(
-                'DISCOVER THE WORLD',
+                'DISCOVER THE WORLD OF',
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.w600,
+                    color: Palette.card),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            const Center(
+              child: Text(
+                'HUMANITY',
+                style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
                     color: Palette.card),
               ),
             ),

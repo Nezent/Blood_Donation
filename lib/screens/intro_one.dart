@@ -15,7 +15,7 @@ class IntroOne extends StatelessWidget {
           children: [
             LottieBuilder.asset('animations/welcome.json'),
             const Text(
-              'WELCOME TO THE WORLD OF',
+              'WELCOME TO',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -25,11 +25,11 @@ class IntroOne extends StatelessWidget {
               height: 8,
             ),
             const Text(
-              'HUMANITY',
+              'BLOOD CONNECTION',
               style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: Palette.cyanText),
+                  color: Palette.card),
             ),
           ],
         ),
