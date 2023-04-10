@@ -238,21 +238,24 @@ class _RequestScreenState extends State<RequestScreen> {
                     ),
                     GestureDetector(
                       onTap: () async {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         if (_formKey.currentState!.validate()) {
                           if (_currentSelectedValue !=
                               'How much Units you need') {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RequestValidation(
-                                        bag: int.parse(_currentSelectedValue),
-                                        initBag: 0,
-                                        blood_type: blood_type ?? "AB+",
-                                        latitude: latitude,
-                                        longitude: longitude,
-                                        name: nameController.text,
-                                        number: numberController.text,
-                                        address: address)));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RequestValidation(
+                                    bag: int.parse(_currentSelectedValue),
+                                    initBag: 0,
+                                    blood_type: blood_type ?? "AB+",
+                                    latitude: latitude,
+                                    longitude: longitude,
+                                    name: nameController.text,
+                                    number: numberController.text,
+                                    address: address),
+                              ),
+                            );
                           }
                         }
                       },

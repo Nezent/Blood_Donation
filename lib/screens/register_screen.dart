@@ -227,6 +227,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   Center(
                                     child: GestureDetector(
                                       onTap: () async {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
                                         setState(() {
                                           isLoading = true;
                                         });
@@ -495,6 +497,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 child: Center(
                                   child: Gender(
                                     gender_type: (String value) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
                                       gender_type = value;
                                     },
                                   ),
@@ -528,6 +532,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 child: Center(
                                   child: SelectBlood(
                                     blood_type: (String value) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
                                       blood_type = value;
                                     },
                                   ),
@@ -550,28 +556,29 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   child: Center(
                                     child: GestureDetector(
                                       onTap: () async {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
                                         if (_signUp.currentState!.validate()) {
                                           Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ValidationScreen(
-                                                          address: address,
-                                                          blood_type:
-                                                              blood_type ??
-                                                                  "AB+",
-                                                          gender: gender_type ??
-                                                              "Male",
-                                                          latitude: latitude,
-                                                          longitude: longitude,
-                                                          name: nameController
-                                                              .text,
-                                                          number:
-                                                              numberController
-                                                                  .text,
-                                                          password:
-                                                              passwordController
-                                                                  .text)));
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ValidationScreen(
+                                                      address: address,
+                                                      blood_type:
+                                                          blood_type ?? "AB+",
+                                                      gender:
+                                                          gender_type ?? "Male",
+                                                      latitude: latitude,
+                                                      longitude: longitude,
+                                                      name: nameController.text,
+                                                      number:
+                                                          numberController.text,
+                                                      password:
+                                                          passwordController
+                                                              .text),
+                                            ),
+                                          );
                                         }
                                       },
                                       child: Text(
