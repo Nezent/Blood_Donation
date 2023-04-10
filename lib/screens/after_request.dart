@@ -38,7 +38,7 @@ class _AfterRequestState extends State<AfterRequest> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Lottie.asset(
-                'animations/request.json',
+                'animations/syringe.json',
                 height: 240,
                 width: 240,
                 fit: BoxFit.fill,

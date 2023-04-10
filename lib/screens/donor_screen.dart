@@ -138,6 +138,7 @@ class _DonorScreenState extends State<DonorScreen> {
                             builder: (FormFieldState<String> state) {
                               return DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
+                                  borderRadius: BorderRadius.circular(10),
                                   value: _currentSelectedValue,
                                   isDense: true,
                                   onChanged: (String? newValue) {

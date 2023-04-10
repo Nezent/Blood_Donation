@@ -23,7 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   MongoDB mongoDB = MongoDB();
-  final _bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
+  final _bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-", "Wait"];
   String _currentSelectedValue = 'AB+';
   double? latitude;
   double? longitude;
@@ -76,7 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
     mongoDB.getProfileData(widget.id);
     Timer.periodic(const Duration(seconds: 8), (timer) {
       mongoDB.getData();
-      mongoDB.getUser(_currentSelectedValue);
+      if (_currentSelectedValue != "Wait") {
+        mongoDB.getUser(_currentSelectedValue);
+      }
     });
   }
 
@@ -263,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 builder: (context) =>
                                                     const SearchScreen())),
                                         child: Text(
-                                          'Search Blood',
+                                          'Search Blood Donors',
                                           style: TextStyle(
                                             fontSize: 19.0,
                                             fontWeight: FontWeight.w500,
@@ -427,11 +429,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (FormFieldState<String> state) {
                                 return DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
+                                    borderRadius: BorderRadius.circular(10),
                                     value: _currentSelectedValue,
                                     isDense: true,
                                     onChanged: (String? newValue) {
                                       setState(() {
-                                        _currentSelectedValue = newValue!;
+                                        _currentSelectedValue = "Wait";
+                                      });
+                                      Timer(const Duration(seconds: 8), () {
+                                        setState(() {
+                                          _currentSelectedValue = newValue!;
+                                        });
                                       });
                                     },
                                     items: _bloodType.map((String value) {
