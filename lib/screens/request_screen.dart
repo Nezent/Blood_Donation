@@ -176,6 +176,7 @@ class _RequestScreenState extends State<RequestScreen> {
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
+                                borderRadius: BorderRadius.circular(10),
                                 value: _currentSelectedValue,
                                 isDense: true,
                                 onChanged: (String? newValue) {

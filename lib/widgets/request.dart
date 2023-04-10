@@ -260,11 +260,11 @@ class _BloodRequestState extends State<BloodRequest> {
   }
 
   void _callNumber() async {
-    var result = await MongoDB.getUserData(widget.objectId);
-    var data = RegisterDataModel.fromJson(result!);
     if (widget.objectId != null) {
+      var result = await MongoDB.getUserData(widget.objectId);
+      var data = RegisterDataModel.fromJson(result!);
       if (data.isAvailable == true && data.bloodType == widget.blood_type) {
-        if (data.donations.length <= 2) {
+        if (data.donations.length <= 10) {
           await MongoDB.addDonations(widget.objectId, widget.requestId);
           String number = widget.number; //set the number here
           await FlutterPhoneDirectCaller.callNumber(number);
