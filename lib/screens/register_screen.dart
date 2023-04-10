@@ -6,6 +6,7 @@ import 'package:blood_connection/screens/profile_screen.dart';
 import 'package:blood_connection/screens/validation_screen.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -67,9 +68,9 @@ class _RegisterScreenState extends State<RegisterScreen>
             splashRadius: 8.0,
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => const HomeScreen(id: null),
-              ),
+              PageTransition(
+                  child: const HomeScreen(id: null),
+                  type: PageTransitionType.leftToRight),
             ),
             icon: const Icon(
               Icons.arrow_back_outlined,

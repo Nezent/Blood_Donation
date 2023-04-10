@@ -13,7 +13,7 @@ class IntroOne extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            LottieBuilder.asset('animations/welcome.json'),
+            LottieBuilder.asset('animations/hello.json'),
             const Text(
               'WELCOME TO',
               style: TextStyle(

@@ -11,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
+import 'package:page_transition/page_transition.dart';
 
 class HomeScreen extends StatefulWidget {
   final mongo.ObjectId? id;
@@ -281,13 +282,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               GestureDetector(
                                 onTap: () => Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) => widget.id != null
-                                        ? ProfileScreen(
-                                            id: widget.id,
-                                          )
-                                        : const RegisterScreen(),
-                                  ),
+                                  PageTransition(
+                                      child: widget.id == null
+                                          ? const RegisterScreen()
+                                          : ProfileScreen(id: widget.id),
+                                      type: PageTransitionType.rightToLeft),
                                 ),
                                 child: CircleAvatar(
                                   radius: 16.0,

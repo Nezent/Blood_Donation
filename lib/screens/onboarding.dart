@@ -1,6 +1,7 @@
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -37,7 +38,7 @@ class _OnboardingState extends State<Onboarding> {
             ],
           ),
           Container(
-            alignment: const Alignment(0, 0.75),
+            alignment: const Alignment(0, 0.80),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -72,6 +73,8 @@ class _OnboardingState extends State<Onboarding> {
                   controller: _controller,
                   count: 2,
                   effect: const WormEffect(
+                      dotHeight: 12,
+                      dotWidth: 12,
                       dotColor: Palette.cyanLight,
                       activeDotColor: Palette.cyanText),
                 ),
@@ -79,12 +82,11 @@ class _OnboardingState extends State<Onboarding> {
                     ? GestureDetector(
                         onTap: () {
                           getViews();
-
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeScreen(id: null),
-                            ),
+                            PageTransition(
+                                child: const HomeScreen(id: null),
+                                type: PageTransitionType.fade),
                           );
                         },
                         child: const Text(
