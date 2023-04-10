@@ -95,8 +95,8 @@ class _RequestValidationState extends State<RequestValidation> {
                 height: 24,
               ),
               OtpTextField(
-                fieldWidth: 64,
-                numberOfFields: 4,
+                fieldWidth: 44,
+                numberOfFields: 6,
                 enabledBorderColor: Palette.cyan,
                 keyboardType: TextInputType.number,
                 textStyle: const TextStyle(
@@ -106,7 +106,7 @@ class _RequestValidationState extends State<RequestValidation> {
                 borderColor: const Color(0xFF512DA8),
                 showFieldAsBox: true,
                 onSubmit: (String verificationCode) async {
-                  if (verificationCode == "1616") {
+                  if (verificationCode == "161616") {
                     await _insertData(
                       widget.name,
                       widget.number,
@@ -125,7 +125,7 @@ class _RequestValidationState extends State<RequestValidation> {
                 },
               ),
               const SizedBox(
-                height: 8,
+                height: 16,
               ),
               SizedBox(
                 width: 300,
