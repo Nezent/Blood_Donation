@@ -53,7 +53,9 @@ class _DonorScreenState extends State<DonorScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Palette.cyan,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Palette.cyan
+            : Palette.darkSecondary,
         leading: IconButton(
           splashRadius: 8.0,
           onPressed: () => Navigator.pop(context),
@@ -155,8 +157,12 @@ class _DonorScreenState extends State<DonorScreen> {
                                         ),
                                         child: Text(
                                           value,
-                                          style: const TextStyle(
-                                            color: Palette.textColor,
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Palette.newText
+                                                    : Palette.card,
                                           ),
                                         ),
                                       ),
@@ -205,13 +211,6 @@ class _DonorScreenState extends State<DonorScreen> {
                       height: 240,
                       width: 240,
                       fit: BoxFit.fill,
-                    ),
-                    const Text(
-                      "NO DATA FOUND",
-                      style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
-                          color: Palette.cyanText),
                     ),
                   ],
                 ),

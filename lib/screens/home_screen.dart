@@ -23,7 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   MongoDB mongoDB = MongoDB();
-  final _bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-", "Wait"];
+  final _bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   String _currentSelectedValue = 'AB+';
   double? latitude;
   double? longitude;
@@ -76,9 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     mongoDB.getProfileData(widget.id);
     Timer.periodic(const Duration(seconds: 8), (timer) {
       mongoDB.getData();
-      if (_currentSelectedValue != "Wait") {
-        mongoDB.getUser(_currentSelectedValue);
-      }
+      mongoDB.getUser(_currentSelectedValue);
     });
   }
 
@@ -265,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 builder: (context) =>
                                                     const SearchScreen())),
                                         child: Text(
-                                          'Search Blood Donors',
+                                          'Donors Near Me',
                                           style: TextStyle(
                                             fontSize: 19.0,
                                             fontWeight: FontWeight.w500,
@@ -376,21 +374,31 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (data.initBag == data.bag) {
                           _deleteRequest(data.id!);
                         }
-                        return BloodRequest(
-                          objectId: widget.id,
-                          requestId: data.id!,
-                          blood_type: data.bloodType,
-                          name: nickName,
-                          number: data.number,
-                          bag: data.bag,
-                          initBag: data.initBag,
-                          address: data.address,
-                          distance: Geolocator.distanceBetween(
-                              data.latitude,
-                              data.longitude,
-                              latitude ?? 0.0,
-                              longitude ?? 0.0),
-                        );
+                        if ((Geolocator.distanceBetween(
+                                    data.latitude,
+                                    data.longitude,
+                                    latitude ?? 0.0,
+                                    longitude ?? 0.0) /
+                                1000) <=
+                            20) {
+                          return BloodRequest(
+                            objectId: widget.id,
+                            requestId: data.id!,
+                            blood_type: data.bloodType,
+                            name: nickName,
+                            number: data.number,
+                            bag: data.bag,
+                            initBag: data.initBag,
+                            address: data.address,
+                            distance: Geolocator.distanceBetween(
+                                data.latitude,
+                                data.longitude,
+                                latitude ?? 0.0,
+                                longitude ?? 0.0),
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
                       },
                       childCount: totalRequests,
                     ),
@@ -433,13 +441,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     value: _currentSelectedValue,
                                     isDense: true,
                                     onChanged: (String? newValue) {
-                                      setState(() {
-                                        _currentSelectedValue = "Wait";
-                                      });
-                                      Timer(const Duration(seconds: 8), () {
+                                      Timer(const Duration(milliseconds: 500),
+                                          () {
                                         setState(() {
                                           _currentSelectedValue = newValue!;
                                         });
+                                        mongoDB.getUser(_currentSelectedValue);
                                       });
                                     },
                                     items: _bloodType.map((String value) {
@@ -456,7 +463,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           .brightness ==
                                                       Brightness.light
                                                   ? Palette.newText
-                                                  : Palette.darkText,
+                                                  : Palette.card,
                                             ),
                                           ),
                                         ),
@@ -478,17 +485,27 @@ class _HomeScreenState extends State<HomeScreen> {
                             snapshots.snapshot2.data![index]);
                         var names = data.name.split(' ');
                         var nickName = names[0].trim();
-                        return DonorList(
-                          blood_type: data.bloodType,
-                          name: nickName,
-                          number: data.number,
-                          address: data.address,
-                          distance: Geolocator.distanceBetween(
-                              data.latitude,
-                              data.longitude,
-                              latitude ?? 0.00,
-                              longitude ?? 0.00),
-                        );
+                        if ((Geolocator.distanceBetween(
+                                    data.latitude,
+                                    data.longitude,
+                                    latitude ?? 0.00,
+                                    longitude ?? 0.00) /
+                                1000) <=
+                            20) {
+                          return DonorList(
+                            blood_type: data.bloodType,
+                            name: nickName,
+                            number: data.number,
+                            address: data.address,
+                            distance: Geolocator.distanceBetween(
+                                data.latitude,
+                                data.longitude,
+                                latitude ?? 0.00,
+                                longitude ?? 0.00),
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
                       },
                       childCount: totalDonors,
                     ),

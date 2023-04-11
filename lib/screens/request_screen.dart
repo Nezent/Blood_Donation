@@ -189,8 +189,11 @@ class _RequestScreenState extends State<RequestScreen> {
                                     value: value,
                                     child: Text(
                                       value,
-                                      style: const TextStyle(
-                                        color: Palette.outText,
+                                      style: TextStyle(
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? Palette.newText
+                                            : Palette.card,
                                       ),
                                     ),
                                   );
