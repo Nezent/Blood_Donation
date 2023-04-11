@@ -135,17 +135,26 @@ class _RequestScreenState extends State<RequestScreen> {
                         },
                         controller: numberController,
                         keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Image.asset(
+                              'images/bangladesh.png',
+                              height: 16,
+                              width: 16,
+                            ),
+                          ),
                           hintText: 'Enter your Phone Number',
-                          label: Text('Phone'),
-                          border: OutlineInputBorder(),
-                          floatingLabelStyle: TextStyle(color: Palette.violet),
-                          focusedBorder: OutlineInputBorder(
+                          label: const Text('Phone'),
+                          border: const OutlineInputBorder(),
+                          floatingLabelStyle:
+                              const TextStyle(color: Palette.violet),
+                          focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Palette.violet,
                             ),
                           ),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Palette.cyan,
                             ),
@@ -231,6 +240,7 @@ class _RequestScreenState extends State<RequestScreen> {
                       child: Center(
                         child: SelectBlood(
                           blood_type: (String value) {
+                            FocusManager.instance.primaryFocus?.unfocus();
                             blood_type = value;
                           },
                         ),

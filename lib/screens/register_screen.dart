@@ -388,18 +388,27 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   },
                                   controller: numberController,
                                   keyboardType: TextInputType.phone,
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
+                                    prefixIcon: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      child: Image.asset(
+                                        'images/bangladesh.png',
+                                        height: 16,
+                                        width: 16,
+                                      ),
+                                    ),
                                     floatingLabelStyle:
-                                        TextStyle(color: Palette.violet),
+                                        const TextStyle(color: Palette.violet),
                                     hintText: 'Enter your Phone Number',
-                                    label: Text('Phone'),
-                                    border: OutlineInputBorder(),
-                                    focusedBorder: OutlineInputBorder(
+                                    label: const Text('Phone'),
+                                    border: const OutlineInputBorder(),
+                                    focusedBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Palette.violet,
                                       ),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
+                                    enabledBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Palette.cyan,
                                       ),
