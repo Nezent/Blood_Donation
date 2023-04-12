@@ -75,6 +75,14 @@ class MongoDB {
     }
   }
 
+  static Future<void> feedback(FeedbackModel data) async {
+    try {
+      await dataBase.collection('Feedback').insertOne(data.toJson());
+    } catch (e) {
+      return;
+    }
+  }
+
   Future<void> getUser(String bloodType) async {
     try {
       final arrData = await dataBase
@@ -159,11 +167,41 @@ class MongoDB {
     }
   }
 
+  static Future<void> changeName(ObjectId? id, String value) async {
+    try {
+      await dataBase
+          .collection('Register')
+          .updateOne({"_id": id}, modify.set("name", value));
+    } catch (e) {
+      return;
+    }
+  }
+
+  static Future<void> changePassword(ObjectId? id, String value) async {
+    try {
+      await dataBase
+          .collection('Register')
+          .updateOne({"_id": id}, modify.set("password", value));
+    } catch (e) {
+      return;
+    }
+  }
+
   static Future<void> addBloodUnits(ObjectId? id, int value) async {
     try {
       await dataBase
           .collection('Request')
           .updateOne({"_id": id}, modify.set("initBag", value));
+    } catch (e) {
+      return;
+    }
+  }
+
+  static Future<void> addDonationTimes(ObjectId? id, int value) async {
+    try {
+      await dataBase
+          .collection('Register')
+          .updateOne({"_id": id}, modify.set("donated", value));
     } catch (e) {
       return;
     }

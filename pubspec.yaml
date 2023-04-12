@@ -58,6 +58,7 @@ dependencies:
   cloudinary_public: ^0.20.0
   smooth_page_indicator: ^1.0.1
   page_transition: ^2.0.9
+  jumping_dot: ^0.0.4
 
 dev_dependencies:
   flutter_test:

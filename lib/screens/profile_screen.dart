@@ -40,6 +40,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (url != "") {
       MongoDB.changeProfilePicture(widget.id, url);
     }
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Widget showImage(BuildContext context, String? value) {
@@ -116,11 +119,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Skeleton(height: 32, width: 240),
                 ),
                 const SizedBox(
+                  height: 8,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Skeleton(height: 32, width: 150),
+                ),
+                const SizedBox(
                   height: 16,
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: 10,
+                    itemCount: 6,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
@@ -213,6 +223,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(
+                    height: 8,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                      child: Text(
+                        "Donated: ${userData.donated} times",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.textColor
+                                    : Palette.darkText,
+                            overflow: TextOverflow.ellipsis),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
                     height: 16,
                   ),
                   ProfileWidget(
@@ -220,9 +249,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     text: "My Profile",
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreen(id: widget.id)));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditProfile(
+                            id: widget.id,
+                            name: userData.name,
+                            number: userData.number,
+                            password: userData.password,
+                          ),
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(
@@ -238,6 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               builder: (context) => UserRequestScreen(
                                     donations: userData.donations,
                                     id: widget.id,
+                                    value: userData.donated,
                                   )));
                     },
                   ),
@@ -441,25 +478,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ProfileWidget(
                     icon: "settings.svg",
                     text: "Settings",
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreen(id: widget.id)));
-                    },
+                    onTap: () {},
                   ),
                   const SizedBox(
                     height: 12,
                   ),
                   ProfileWidget(
-                      icon: "help.svg",
-                      text: "Help Center",
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HelpScreen()));
-                      }),
+                    icon: "help.svg",
+                    text: "Help Center",
+                    onTap: () {},
+                  ),
                 ],
               ),
             );

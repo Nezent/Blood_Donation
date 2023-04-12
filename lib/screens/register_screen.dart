@@ -1,11 +1,10 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:blood_connection/components/components.dart';
-import 'package:blood_connection/screens/home_screen.dart';
-import 'package:blood_connection/screens/profile_screen.dart';
-import 'package:blood_connection/screens/validation_screen.dart';
+import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:jumping_dot/jumping_dot.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +17,8 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen>
     with TickerProviderStateMixin {
-  bool isLoading = false;
+  bool isLogin = false;
+  bool isRegistering = false;
   final _signIn = GlobalKey<FormState>();
   final _signUp = GlobalKey<FormState>();
   final LocationTracker _tracker = LocationTracker();
@@ -230,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                         FocusManager.instance.primaryFocus
                                             ?.unfocus();
                                         setState(() {
-                                          isLoading = true;
+                                          isLogin = true;
                                         });
                                         if (_signIn.currentState!.validate()) {
                                           await _logIn(numberController.text,
@@ -238,7 +238,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                         }
 
                                         setState(() {
-                                          isLoading = false;
+                                          isLogin = false;
                                         });
                                       },
                                       child: Container(
@@ -253,9 +253,13 @@ class _RegisterScreenState extends State<RegisterScreen>
                                               BorderRadius.circular(4.0),
                                         ),
                                         child: Center(
-                                          child: isLoading
-                                              ? const CircularProgressIndicator(
+                                          child: isLogin
+                                              ? const JumpingDots(
+                                                  radius: 8,
                                                   color: Palette.card,
+                                                  animationDuration: Duration(
+                                                      milliseconds: 200),
+                                                  numberOfDots: 3,
                                                 )
                                               : Text(
                                                   'Log In',
@@ -552,55 +556,67 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 height: 60,
                               ),
                               Center(
-                                child: Container(
-                                  height: 46,
-                                  width: 340,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).brightness ==
-                                            Brightness.light
-                                        ? Palette.cyan
-                                        : Palette.darkSecondary,
-                                    borderRadius: BorderRadius.circular(4.0),
-                                  ),
-                                  child: Center(
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        FocusManager.instance.primaryFocus
-                                            ?.unfocus();
-                                        if (_signUp.currentState!.validate()) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ValidationScreen(
-                                                      address: address,
-                                                      blood_type:
-                                                          blood_type ?? "AB+",
-                                                      gender:
-                                                          gender_type ?? "Male",
-                                                      latitude: latitude,
-                                                      longitude: longitude,
-                                                      name: nameController.text,
-                                                      number:
-                                                          numberController.text,
-                                                      password:
-                                                          passwordController
-                                                              .text),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      child: Text(
-                                        'Register',
-                                        style: TextStyle(
-                                          fontSize: 19.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).brightness ==
-                                                  Brightness.light
-                                              ? Palette.card
-                                              : Palette.darkText,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    setState(() {
+                                      isRegistering = true;
+                                    });
+                                    if (_signUp.currentState!.validate()) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ValidationScreen(
+                                                  address: address,
+                                                  blood_type:
+                                                      blood_type ?? "AB+",
+                                                  gender: gender_type ?? "Male",
+                                                  latitude: latitude,
+                                                  longitude: longitude,
+                                                  name: nameController.text,
+                                                  number: numberController.text,
+                                                  password:
+                                                      passwordController.text),
                                         ),
-                                      ),
+                                      );
+                                    }
+                                    setState(() {
+                                      isRegistering = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 46,
+                                    width: 340,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? Palette.cyan
+                                          : Palette.darkSecondary,
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
+                                    child: Center(
+                                      child: isRegistering
+                                          ? const JumpingDots(
+                                              color: Palette.card,
+                                              animationDuration:
+                                                  Duration(milliseconds: 200),
+                                              radius: 8,
+                                              numberOfDots: 3,
+                                            )
+                                          : Text(
+                                              'Register',
+                                              style: TextStyle(
+                                                fontSize: 19.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.light
+                                                    ? Palette.card
+                                                    : Palette.darkText,
+                                              ),
+                                            ),
                                     ),
                                   ),
                                 ),

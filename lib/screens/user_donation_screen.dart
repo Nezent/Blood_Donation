@@ -9,8 +9,12 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 class UserRequestScreen extends StatefulWidget {
   final List<dynamic> donations;
   final mongo.ObjectId? id;
+  final int value;
   const UserRequestScreen(
-      {super.key, required this.donations, required this.id});
+      {super.key,
+      required this.donations,
+      required this.id,
+      required this.value});
 
   @override
   State<UserRequestScreen> createState() => _UserRequestScreenState();
@@ -219,6 +223,8 @@ class _UserRequestScreenState extends State<UserRequestScreen> {
                                             widget.id);
                                         await MongoDB.changeAvailability(
                                             widget.id, false);
+                                        await MongoDB.addDonationTimes(
+                                            widget.id, widget.value + 1);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(

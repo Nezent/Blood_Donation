@@ -16,3 +16,5 @@ export 'help_screen.dart';
 export 'onboarding.dart';
 export 'intro_one.dart';
 export 'intro_two.dart';
+export 'after_feedback.dart';
+export 'edit_profile.dart';

@@ -263,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 builder: (context) =>
                                                     const SearchScreen())),
                                         child: Text(
-                                          'Donors Near Me',
+                                          'Donors near me',
                                           style: TextStyle(
                                             fontSize: 19.0,
                                             fontWeight: FontWeight.w500,
@@ -380,7 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     latitude ?? 0.0,
                                     longitude ?? 0.0) /
                                 1000) <=
-                            20) {
+                            300) {
                           return BloodRequest(
                             objectId: widget.id,
                             requestId: data.id!,
@@ -491,7 +491,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     latitude ?? 0.00,
                                     longitude ?? 0.00) /
                                 1000) <=
-                            20) {
+                            300) {
                           return DonorList(
                             blood_type: data.bloodType,
                             name: nickName,

@@ -102,32 +102,35 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
                   ],
                 );
               } else if (snapshot.hasData) {
-                return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, index) {
-                      var data =
-                          RequestDataModel.fromJson(snapshot.data![index]);
-                      var names = data.name.split(' ');
-                      var nickName = names[0].trim();
-                      if (data.initBag == data.bag) {
-                        _deleteRequest(data.id!);
-                      }
-                      return BloodRequest(
-                        objectId: widget.objectId,
-                        requestId: data.id!,
-                        blood_type: data.bloodType,
-                        name: data.name,
-                        number: nickName,
-                        bag: data.bag,
-                        initBag: data.initBag,
-                        address: data.address,
-                        distance: Geolocator.distanceBetween(
-                            data.latitude,
-                            data.longitude,
-                            latitude ?? 0.00,
-                            longitude ?? 0.00),
-                      );
-                    });
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, index) {
+                        var data =
+                            RequestDataModel.fromJson(snapshot.data![index]);
+                        var names = data.name.split(' ');
+                        var nickName = names[0].trim();
+                        if (data.initBag == data.bag) {
+                          _deleteRequest(data.id!);
+                        }
+                        return BloodRequest(
+                          objectId: widget.objectId,
+                          requestId: data.id!,
+                          blood_type: data.bloodType,
+                          name: nickName,
+                          number: nickName,
+                          bag: data.bag,
+                          initBag: data.initBag,
+                          address: data.address,
+                          distance: Geolocator.distanceBetween(
+                              data.latitude,
+                              data.longitude,
+                              latitude ?? 0.00,
+                              longitude ?? 0.00),
+                        );
+                      }),
+                );
               } else {
                 return Center(
                   child: Column(

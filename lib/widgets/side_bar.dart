@@ -123,7 +123,9 @@ class _SideBarState extends State<SideBar> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const HelpScreen(),
+                              builder: (context) => HelpScreen(
+                                id: widget.id,
+                              ),
                             ),
                           );
                         }),
@@ -219,7 +221,9 @@ class _SideBarState extends State<SideBar> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HelpScreen(),
+                        builder: (context) => const HelpScreen(
+                          id: null,
+                        ),
                       ),
                     );
                   }),
