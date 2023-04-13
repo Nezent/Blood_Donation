@@ -228,8 +228,10 @@ class _UserRequestScreenState extends State<UserRequestScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                AfterUnitsAdd(id: widget.id),
+                                            builder: (context) => AfterUnitsAdd(
+                                              id: widget.id,
+                                              value: widget.value,
+                                            ),
                                           ),
                                         );
                                       },

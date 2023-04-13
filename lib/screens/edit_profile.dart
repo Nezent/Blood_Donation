@@ -24,8 +24,6 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   bool editName = false;
   bool editPassword = false;
-  final editProfileName = GlobalKey<FormState>();
-  final editProfilePassword = GlobalKey<FormState>();
   final editProfile = GlobalKey<FormState>();
   late String address;
   late double latitude;
@@ -90,11 +88,7 @@ class _EditProfileState extends State<EditProfile> {
                 height: 16,
               ),
               Form(
-                key: (editName && editPassword)
-                    ? editProfile
-                    : editName
-                        ? editProfileName
-                        : editProfilePassword,
+                key: editProfile,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -142,55 +136,61 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                     ),
-                    CheckboxListTile(
-                      activeColor:
-                          Theme.of(context).brightness == Brightness.light
-                              ? Palette.cyanText
-                              : Palette.darkSecondary,
-                      title: Text(
-                        "Edit Name",
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Palette.newText
-                                  : Palette.darkText,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 11),
+                      child: CheckboxListTile(
+                        activeColor:
+                            Theme.of(context).brightness == Brightness.light
+                                ? Palette.cyanText
+                                : Palette.darkSecondary,
+                        title: Text(
+                          "Edit Name",
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.newText
+                                    : Palette.darkText,
+                          ),
                         ),
+                        value: editName,
+                        onChanged: (newValue) {
+                          setState(() {
+                            editName = !editName;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity
+                            .leading, //  <-- leading Checkbox
                       ),
-                      value: editName,
-                      onChanged: (newValue) {
-                        setState(() {
-                          editName = !editName;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
                     ),
-                    CheckboxListTile(
-                      activeColor:
-                          Theme.of(context).brightness == Brightness.light
-                              ? Palette.cyanText
-                              : Palette.darkSecondary,
-                      title: Text(
-                        "Change Password",
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Palette.newText
-                                  : Palette.darkText,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 11),
+                      child: CheckboxListTile(
+                        activeColor:
+                            Theme.of(context).brightness == Brightness.light
+                                ? Palette.cyanText
+                                : Palette.darkSecondary,
+                        title: Text(
+                          "Change Password",
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.newText
+                                    : Palette.darkText,
+                          ),
                         ),
+                        value: editPassword,
+                        onChanged: (newValue) {
+                          setState(() {
+                            editPassword = !editPassword;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity
+                            .leading, //  <-- leading Checkbox
                       ),
-                      value: editPassword,
-                      onChanged: (newValue) {
-                        setState(() {
-                          editPassword = !editPassword;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
                     ),
                     Visibility(
                       visible: editName ? true : false,
@@ -348,13 +348,7 @@ class _EditProfileState extends State<EditProfile> {
                             setState(() {
                               isediting = true;
                             });
-                            if (((editName && editPassword)
-                                    ? editProfile
-                                    : editName
-                                        ? editProfileName
-                                        : editProfilePassword)
-                                .currentState!
-                                .validate()) {
+                            if (editProfile.currentState!.validate()) {
                               if (editName && editPassword) {
                                 _changeName(nameController.text);
                                 _changePassword(passwordCheckController.text);

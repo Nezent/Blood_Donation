@@ -184,17 +184,27 @@ class _DonorScreenState extends State<DonorScreen> {
                             RegisterDataModel.fromJson(snapshot.data[index]);
                         var names = data.name.split(' ');
                         var nickName = names[0].trim();
-                        return DonorList(
-                          name: nickName,
-                          number: data.number,
-                          blood_type: data.bloodType,
-                          address: data.address,
-                          distance: Geolocator.distanceBetween(
-                              data.latitude,
-                              data.longitude,
-                              latitude ?? 0.00,
-                              longitude ?? 0.00),
-                        );
+                        if ((Geolocator.distanceBetween(
+                                    data.latitude,
+                                    data.longitude,
+                                    latitude ?? 0.00,
+                                    longitude ?? 0.00) /
+                                1000) <=
+                            20) {
+                          return DonorList(
+                            name: nickName,
+                            number: data.number,
+                            blood_type: data.bloodType,
+                            address: data.address,
+                            distance: Geolocator.distanceBetween(
+                                data.latitude,
+                                data.longitude,
+                                latitude ?? 0.00,
+                                longitude ?? 0.00),
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
                       },
                     ),
                   ),

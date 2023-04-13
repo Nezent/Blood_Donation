@@ -478,7 +478,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ProfileWidget(
                     icon: "settings.svg",
                     text: "Settings",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Settings(
+                              id: widget.id, password: userData.password),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(
                     height: 12,
@@ -486,7 +494,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ProfileWidget(
                     icon: "help.svg",
                     text: "Help Center",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HelpScreen(id: widget.id),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

@@ -6,3 +6,4 @@ export 'register_model.dart';
 export 'request_model.dart';
 export 'request_data_model.dart';
 export 'feedback_model.dart';
+export 'sponsor_model.dart';

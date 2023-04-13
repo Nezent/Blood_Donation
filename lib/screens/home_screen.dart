@@ -73,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getPicture();
     _connection();
     _getAddress();
+    mongoDB.getSponsor();
     mongoDB.getProfileData(widget.id);
     Timer.periodic(const Duration(seconds: 8), (timer) {
       mongoDB.getData();
@@ -98,10 +99,11 @@ class _HomeScreenState extends State<HomeScreen> {
         id: widget.id,
       ),
       body: SafeArea(
-        child: StreamBuilder2(
-          streams: StreamTuple2(
-              mongoDB.requestController.stream, mongoDB.donorController.stream),
-          builder: (context, SnapshotTuple2<dynamic, dynamic> snapshots) {
+        child: StreamBuilder3(
+          streams: StreamTuple3(mongoDB.requestController.stream,
+              mongoDB.donorController.stream, mongoDB.sponsorController.stream),
+          builder:
+              (context, SnapshotTuple3<dynamic, dynamic, dynamic> snapshots) {
             if (snapshots.snapshot1.connectionState ==
                     ConnectionState.waiting &&
                 snapshots.snapshot2.connectionState ==
@@ -200,9 +202,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               );
             } else if (snapshots.snapshot1.hasData &&
-                snapshots.snapshot2.hasData) {
+                snapshots.snapshot2.hasData &&
+                snapshots.snapshot3.hasData) {
               var totalRequests = snapshots.snapshot1.data!.length;
               var totalDonors = snapshots.snapshot2.data!.length;
+              var totalLength = snapshots.snapshot3.data!.length;
               return CustomScrollView(
                 slivers: [
                   SliverPadding(
@@ -325,8 +329,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 90.0,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: 6,
+                          itemCount: totalLength,
                           itemBuilder: (BuildContext context, int index) {
+                            var sponsorData = SponsorModel.fromJson(
+                                snapshots.snapshot3.data![index]);
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 4.0,
@@ -335,6 +341,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 90.0,
                                 width: 113.0,
                                 decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(sponsorData.picture),
+                                      fit: BoxFit.fill),
                                   color: Theme.of(context).brightness ==
                                           Brightness.light
                                       ? Palette.cyanLight
@@ -380,7 +389,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     latitude ?? 0.0,
                                     longitude ?? 0.0) /
                                 1000) <=
-                            300) {
+                            20) {
                           return BloodRequest(
                             objectId: widget.id,
                             requestId: data.id!,
@@ -491,7 +500,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     latitude ?? 0.00,
                                     longitude ?? 0.00) /
                                 1000) <=
-                            300) {
+                            20) {
                           return DonorList(
                             blood_type: data.bloodType,
                             name: nickName,

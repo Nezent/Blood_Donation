@@ -114,21 +114,31 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
                         if (data.initBag == data.bag) {
                           _deleteRequest(data.id!);
                         }
-                        return BloodRequest(
-                          objectId: widget.objectId,
-                          requestId: data.id!,
-                          blood_type: data.bloodType,
-                          name: nickName,
-                          number: nickName,
-                          bag: data.bag,
-                          initBag: data.initBag,
-                          address: data.address,
-                          distance: Geolocator.distanceBetween(
-                              data.latitude,
-                              data.longitude,
-                              latitude ?? 0.00,
-                              longitude ?? 0.00),
-                        );
+                        if ((Geolocator.distanceBetween(
+                                    data.latitude,
+                                    data.longitude,
+                                    latitude ?? 0.00,
+                                    longitude ?? 0.00) /
+                                1000) <=
+                            20) {
+                          return BloodRequest(
+                            objectId: widget.objectId,
+                            requestId: data.id!,
+                            blood_type: data.bloodType,
+                            name: nickName,
+                            number: nickName,
+                            bag: data.bag,
+                            initBag: data.initBag,
+                            address: data.address,
+                            distance: Geolocator.distanceBetween(
+                                data.latitude,
+                                data.longitude,
+                                latitude ?? 0.00,
+                                longitude ?? 0.00),
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
                       }),
                 );
               } else {

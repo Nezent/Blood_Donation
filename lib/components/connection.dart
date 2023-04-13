@@ -13,6 +13,7 @@ class MongoDB {
   StreamController donorController = StreamController();
   StreamController profileController = StreamController();
   StreamController donorListController = StreamController();
+  StreamController sponsorController = StreamController();
 
   static var dataBase;
   static connect() async {
@@ -106,6 +107,19 @@ class MongoDB {
         "address": address,
       }).toList();
       donorListController.sink.add(arrData);
+    } on NoSuchMethodError {
+      return;
+    } on MongoDartError {
+      return;
+    } on ConnectionException {
+      return;
+    }
+  }
+
+  Future<void> getSponsor() async {
+    try {
+      final arrData = await dataBase.collection('Sponsor').find().toList();
+      sponsorController.sink.add(arrData);
     } on NoSuchMethodError {
       return;
     } on MongoDartError {
@@ -220,6 +234,14 @@ class MongoDB {
   static Future<void> deleteRequest(ObjectId? id) async {
     try {
       await dataBase.collection('Request').deleteOne({"_id": id});
+    } catch (e) {
+      return;
+    }
+  }
+
+  static Future<void> deleteUser(ObjectId? id) async {
+    try {
+      await dataBase.collection('Register').remove({"_id": id});
     } catch (e) {
       return;
     }

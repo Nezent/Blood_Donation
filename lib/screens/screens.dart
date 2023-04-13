@@ -18,3 +18,4 @@ export 'intro_one.dart';
 export 'intro_two.dart';
 export 'after_feedback.dart';
 export 'edit_profile.dart';
+export 'settings_screen.dart';

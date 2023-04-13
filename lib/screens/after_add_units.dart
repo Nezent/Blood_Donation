@@ -8,7 +8,8 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class AfterUnitsAdd extends StatefulWidget {
   final mongo.ObjectId? id;
-  const AfterUnitsAdd({super.key, required this.id});
+  final int value;
+  const AfterUnitsAdd({super.key, required this.id, required this.value});
 
   @override
   State<AfterUnitsAdd> createState() => _AfterUnitsAddState();
@@ -26,6 +27,7 @@ class _AfterUnitsAddState extends State<AfterUnitsAdd> {
           builder: (BuildContext context) => UserRequestScreen(
             donations: const [],
             id: id,
+            value: widget.value,
           ),
         ),
       ),
