@@ -222,6 +222,48 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     ),
                                   ),
                                   const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Forgot Password?',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.newText
+                                              : Palette.darkText,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const ForgetPassword(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          'Reset',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Palette.cyanText
+                                                    : Palette.darkWidget,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
                                     height: 60,
                                   ),
                                   Center(
@@ -564,23 +606,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                       isRegistering = true;
                                     });
                                     if (_signUp.currentState!.validate()) {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ValidationScreen(
-                                                  address: address,
-                                                  blood_type:
-                                                      blood_type ?? "AB+",
-                                                  gender: gender_type ?? "Male",
-                                                  latitude: latitude,
-                                                  longitude: longitude,
-                                                  name: nameController.text,
-                                                  number: numberController.text,
-                                                  password:
-                                                      passwordController.text),
-                                        ),
-                                      );
+                                      _checkUser(numberController.text);
                                     }
                                     setState(() {
                                       isRegistering = false;
@@ -663,6 +689,35 @@ class _RegisterScreenState extends State<RegisterScreen>
       }
     } catch (e) {
       final SnackBar snackBar = SnackbarMessage("Error: No Data Found!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
+    }
+  }
+
+  Future<void> _checkUser(String number) async {
+    try {
+      var userData = await MongoDB.checkUserData(number);
+      if (userData == null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ValidationScreen(
+              address: address,
+              blood_type: blood_type ?? "AB+",
+              gender: gender_type ?? "Male",
+              latitude: latitude,
+              longitude: longitude,
+              name: nameController.text,
+              number: numberController.text,
+              password: passwordController.text,
+            ),
+          ),
+        );
+      } else {
+        final SnackBar snackBar = SnackbarMessage("USER ALREADY EXISTS!");
+        snackbarKey.currentState?.showSnackBar(snackBar);
+      }
+    } catch (e) {
+      final SnackBar snackBar = SnackbarMessage("USER ALREADY EXISTS!");
       snackbarKey.currentState?.showSnackBar(snackBar);
     }
   }

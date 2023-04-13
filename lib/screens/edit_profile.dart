@@ -283,7 +283,7 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: const InputDecoration(
                             floatingLabelStyle:
                                 TextStyle(color: Palette.violet),
-                            hintText: 'Enter a Password',
+                            hintText: 'Enter New Password',
                             label: Text('Password'),
                             border: OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(

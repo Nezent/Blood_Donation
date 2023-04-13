@@ -41,6 +41,9 @@ class MongoDB {
       final SnackBar snackBar = SnackbarMessage("CAN'T FIND CLIENT!");
       snackbarKey.currentState?.showSnackBar(snackBar);
       connect();
+    } on HttpException {
+      connect();
+      return;
     }
   }
   // Request Model
@@ -161,6 +164,16 @@ class MongoDB {
     }
   }
 
+  static Future<Map<String, dynamic>?> checkUserData(String number) async {
+    try {
+      var data =
+          await dataBase.collection('Register').findOne({"number": number});
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
   static Future<Map<String, dynamic>?> getRequestData(ObjectId? id) async {
     try {
       final userRequest =
@@ -176,6 +189,16 @@ class MongoDB {
       await dataBase
           .collection('Register')
           .updateOne({"_id": id}, modify.set("isAvailable", value));
+    } catch (e) {
+      return;
+    }
+  }
+
+  static Future<void> forgetPassword(String number, String value) async {
+    try {
+      await dataBase
+          .collection('Register')
+          .updateOne({"number": number}, modify.set("password", value));
     } catch (e) {
       return;
     }

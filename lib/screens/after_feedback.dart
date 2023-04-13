@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:ffi';
-
-import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
