@@ -18,7 +18,6 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen>
     with TickerProviderStateMixin {
   bool isLogin = false;
-  bool isRegistering = false;
   final _signIn = GlobalKey<FormState>();
   final _signUp = GlobalKey<FormState>();
   final LocationTracker _tracker = LocationTracker();
@@ -602,15 +601,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   onTap: () async {
                                     FocusManager.instance.primaryFocus
                                         ?.unfocus();
-                                    setState(() {
-                                      isRegistering = true;
-                                    });
                                     if (_signUp.currentState!.validate()) {
                                       _checkUser(numberController.text);
                                     }
-                                    setState(() {
-                                      isRegistering = false;
-                                    });
                                   },
                                   child: Container(
                                     height: 46,
@@ -623,26 +616,17 @@ class _RegisterScreenState extends State<RegisterScreen>
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
                                     child: Center(
-                                      child: isRegistering
-                                          ? const JumpingDots(
-                                              color: Palette.card,
-                                              animationDuration:
-                                                  Duration(milliseconds: 200),
-                                              radius: 8,
-                                              numberOfDots: 3,
-                                            )
-                                          : Text(
-                                              'Register',
-                                              style: TextStyle(
-                                                fontSize: 19.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Theme.of(context)
-                                                            .brightness ==
-                                                        Brightness.light
-                                                    ? Palette.card
-                                                    : Palette.darkText,
-                                              ),
-                                            ),
+                                      child: Text(
+                                        'Register',
+                                        style: TextStyle(
+                                          fontSize: 19.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.card
+                                              : Palette.darkText,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
