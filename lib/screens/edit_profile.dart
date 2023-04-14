@@ -203,6 +203,7 @@ class _EditProfileState extends State<EditProfile> {
                                 !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                               return "Enter Correct Name";
                             } else {
+                              nameController.text = value;
                               return null;
                             }
                           },
