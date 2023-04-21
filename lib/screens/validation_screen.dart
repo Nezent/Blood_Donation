@@ -95,7 +95,7 @@ class _ValidationScreenState extends State<ValidationScreen> {
                 width: 300,
                 child: Center(
                   child: Text(
-                    "OTP sent to ${widget.number.replaceRange(3, 9, '******')}",
+                    "OTP sent to ${widget.number.replaceRange(4, 12, '********')}",
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

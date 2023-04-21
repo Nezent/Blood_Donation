@@ -87,7 +87,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       isReseting = true;
                     });
                     if (forgetKey.currentState!.validate()) {
-                      _checkUser(numberController.text);
+                      _checkUser(
+                        (numberController.text.length == 11)
+                            ? ('+88${numberController.text}')
+                            : (numberController.text.length == 13)
+                                ? ('+88${numberController.text}')
+                                : numberController.text,
+                      );
                     }
 
                     setState(() {
@@ -143,8 +149,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                ForgetValidation(number: numberController.text),
+            builder: (context) => ForgetValidation(
+              number: (numberController.text.length == 11)
+                  ? ('+88${numberController.text}')
+                  : (numberController.text.length == 13)
+                      ? ('+88${numberController.text}')
+                      : numberController.text,
+            ),
           ),
         );
       } else {

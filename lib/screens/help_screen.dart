@@ -152,7 +152,11 @@ class _HelpScreenState extends State<HelpScreen> {
                             if (feedback.currentState!.validate()) {
                               try {
                                 var data = FeedbackModel(
-                                    number: numberController.text,
+                                    number: (numberController.text.length == 11)
+                                        ? ('+88${numberController.text}')
+                                        : (numberController.text.length == 13)
+                                            ? ('+88${numberController.text}')
+                                            : numberController.text,
                                     feedback: feedbackController.text);
                                 await MongoDB.feedback(data);
                                 Navigator.pushReplacement(

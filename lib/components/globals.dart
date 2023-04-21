@@ -28,7 +28,8 @@ SnackBar SnackbarMessage(String message) {
             const SizedBox(
               width: 8,
             ),
-            Expanded(
+            SizedBox(
+              width: 245,
               child: Text(
                 message,
                 style: const TextStyle(

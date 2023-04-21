@@ -91,7 +91,7 @@ class _RequestValidationState extends State<RequestValidation> {
                 width: 300,
                 child: Center(
                   child: Text(
-                    "OTP sent to ${widget.number.replaceRange(3, 9, '******')}",
+                    "OTP sent to ${widget.number.replaceRange(4, 12, '********')}",
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

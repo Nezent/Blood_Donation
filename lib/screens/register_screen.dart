@@ -274,7 +274,15 @@ class _RegisterScreenState extends State<RegisterScreen>
                                           isLogin = true;
                                         });
                                         if (_signIn.currentState!.validate()) {
-                                          await _logIn(numberController.text,
+                                          await _logIn(
+                                              (numberController.text.length ==
+                                                      11)
+                                                  ? ('+88${numberController.text}')
+                                                  : (numberController
+                                                              .text.length ==
+                                                          13)
+                                                      ? ('+88${numberController.text}')
+                                                      : numberController.text,
                                               passwordController.text);
                                         }
 
@@ -602,7 +610,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     FocusManager.instance.primaryFocus
                                         ?.unfocus();
                                     if (_signUp.currentState!.validate()) {
-                                      _checkUser(numberController.text);
+                                      _checkUser(
+                                        (numberController.text.length == 11)
+                                            ? ('+88${numberController.text}')
+                                            : (numberController.text.length ==
+                                                    13)
+                                                ? ('+88${numberController.text}')
+                                                : numberController.text,
+                                      );
                                     }
                                   },
                                   child: Container(
@@ -691,7 +706,11 @@ class _RegisterScreenState extends State<RegisterScreen>
               latitude: latitude,
               longitude: longitude,
               name: nameController.text,
-              number: numberController.text,
+              number: (numberController.text.length == 11)
+                  ? ('+88${numberController.text}')
+                  : (numberController.text.length == 13)
+                      ? ('+88${numberController.text}')
+                      : numberController.text,
               password: passwordController.text,
             ),
           ),
