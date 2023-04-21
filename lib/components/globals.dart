@@ -28,13 +28,15 @@ SnackBar SnackbarMessage(String message) {
             const SizedBox(
               width: 8,
             ),
-            Text(
-              message,
-              style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  overflow: TextOverflow.ellipsis),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    overflow: TextOverflow.ellipsis),
+              ),
             ),
           ],
         )),

@@ -28,21 +28,16 @@ class MongoDB {
     } on SocketException {
       final SnackBar snackBar = SnackbarMessage("No Internet Connection!");
       snackbarKey.currentState?.showSnackBar(snackBar);
-      connect();
     } on TimeoutException {
-      connect();
       return;
     } on ConnectionException {
       final SnackBar snackBar =
           SnackbarMessage("Network Failure: IO Exception!");
       snackbarKey.currentState?.showSnackBar(snackBar);
-      connect();
     } on ClientException {
       final SnackBar snackBar = SnackbarMessage("CAN'T FIND CLIENT!");
       snackbarKey.currentState?.showSnackBar(snackBar);
-      connect();
     } on HttpException {
-      connect();
       return;
     }
   }

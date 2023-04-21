@@ -26,6 +26,14 @@ class RequestValidation extends StatefulWidget {
 }
 
 class _RequestValidationState extends State<RequestValidation> {
+  late int code;
+  @override
+  void initState() {
+    super.initState();
+    code = Randoms.generateRand();
+    VerificationCode.sendCode(code.toString(), widget.number);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +114,7 @@ class _RequestValidationState extends State<RequestValidation> {
                 borderColor: const Color(0xFF512DA8),
                 showFieldAsBox: true,
                 onSubmit: (String verificationCode) async {
-                  if (verificationCode == "161616") {
+                  if (verificationCode == code.toString()) {
                     await _insertData(
                       widget.name,
                       widget.number,
@@ -144,7 +152,11 @@ class _RequestValidationState extends State<RequestValidation> {
                         width: 4,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          code = Randoms.generateRand();
+                          VerificationCode.sendCode(
+                              code.toString(), widget.number);
+                        },
                         child: const Text(
                           "Resend",
                           style: TextStyle(

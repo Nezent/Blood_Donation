@@ -1,3 +1,4 @@
+import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,14 @@ class ForgetValidation extends StatefulWidget {
 }
 
 class _ForgetValidationState extends State<ForgetValidation> {
+  late int code;
+  @override
+  void initState() {
+    super.initState();
+    code = Randoms.generateRand();
+    VerificationCode.sendCode(code.toString(), widget.number);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +93,7 @@ class _ForgetValidationState extends State<ForgetValidation> {
                 borderColor: const Color(0xFF512DA8),
                 showFieldAsBox: true,
                 onSubmit: (String verificationCode) async {
-                  if (verificationCode == "616161") {
+                  if (verificationCode == code.toString()) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -118,7 +127,11 @@ class _ForgetValidationState extends State<ForgetValidation> {
                         width: 4,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          code = Randoms.generateRand();
+                          VerificationCode.sendCode(
+                              code.toString(), widget.number);
+                        },
                         child: Text(
                           "Resend",
                           style: TextStyle(

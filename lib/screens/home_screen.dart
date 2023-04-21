@@ -54,19 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // void _getConnectivity() {
-  //   try {
-  //     _subscription = Connectivity()
-  //         .onConnectivityChanged
-  //         .listen((ConnectivityResult result) async {
-  //       isDeviceConnected = await InternetConnectionChecker().hasConnection;
-  //     });
-  //   } catch (_) {
-  //     final SnackBar snackBar = SnackbarMessage("NO INTERNET!");
-  //     snackbarKey.currentState?.showSnackBar(snackBar);
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();

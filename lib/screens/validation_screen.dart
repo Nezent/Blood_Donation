@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, must_be_immutable
 
-import 'package:blood_connection/components/connection.dart';
-import 'package:blood_connection/components/register_model.dart';
+import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
@@ -27,6 +26,14 @@ class ValidationScreen extends StatefulWidget {
 }
 
 class _ValidationScreenState extends State<ValidationScreen> {
+  late int code;
+  @override
+  void initState() {
+    super.initState();
+    code = Randoms.generateRand();
+    VerificationCode.sendCode(code.toString(), widget.number);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +120,7 @@ class _ValidationScreenState extends State<ValidationScreen> {
                 borderColor: const Color(0xFF512DA8),
                 showFieldAsBox: true,
                 onSubmit: (String verificationCode) async {
-                  if (verificationCode == "616161") {
+                  if (verificationCode == code.toString()) {
                     await _insertData(
                       widget.name,
                       widget.number,
@@ -153,7 +160,11 @@ class _ValidationScreenState extends State<ValidationScreen> {
                         width: 4,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          code = Randoms.generateRand();
+                          VerificationCode.sendCode(
+                              code.toString(), widget.number);
+                        },
                         child: Text(
                           "Resend",
                           style: TextStyle(
