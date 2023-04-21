@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           return const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 4),
-                            child: Skeleton(height: 90, width: 113),
+                            child: Skeleton(height: 90, width: 160),
                           );
                         },
                       ),
@@ -326,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: Container(
                                 height: 90.0,
-                                width: 113.0,
+                                width: 160.0,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: NetworkImage(sponsorData.picture),
