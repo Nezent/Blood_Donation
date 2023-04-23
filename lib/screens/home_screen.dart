@@ -56,6 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
         mongoDB.getData();
         mongoDB.getUser(_currentSelectedValue);
       });
+    } else {
+      final SnackBar snackBar = SnackbarMessage("No Internet Connection!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
     }
   }
 
