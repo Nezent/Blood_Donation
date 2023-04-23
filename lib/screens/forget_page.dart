@@ -91,7 +91,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         (numberController.text.length == 11)
                             ? ('+88${numberController.text}')
                             : (numberController.text.length == 13)
-                                ? ('+88${numberController.text}')
+                                ? ('+${numberController.text}')
                                 : numberController.text,
                       );
                     }
@@ -153,7 +153,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               number: (numberController.text.length == 11)
                   ? ('+88${numberController.text}')
                   : (numberController.text.length == 13)
-                      ? ('+88${numberController.text}')
+                      ? ('+${numberController.text}')
                       : numberController.text,
             ),
           ),

@@ -215,7 +215,7 @@ class _BloodRequestState extends State<BloodRequest> {
                   LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
                     double maxBarWidth =
-                        MediaQuery.of(context).size.width * 0.61;
+                        MediaQuery.of(context).size.width * 0.65;
                     final double left = widget.initBag / widget.bag;
                     double barWidth = left * maxBarWidth;
 

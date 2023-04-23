@@ -43,7 +43,6 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   multiple_stream_builder: ^3.0.2
   internet_connection_checker: ^1.0.0+1
-  connectivity_plus: ^3.0.3
   flutter_svg: ^2.0.4
   flutter_otp_text_field: ^1.1.0+2
   shimmer: ^2.0.0

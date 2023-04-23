@@ -268,7 +268,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                     number: (numberController.text.length == 11)
                                         ? ('+88${numberController.text}')
                                         : (numberController.text.length == 13)
-                                            ? ('+88${numberController.text}')
+                                            ? ('+${numberController.text}')
                                             : numberController.text,
                                     address: address),
                               ),

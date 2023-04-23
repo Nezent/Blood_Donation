@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
@@ -28,6 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
   double? latitude;
   double? longitude;
   String? _url = "";
+  late StreamSubscription subscription;
+  var isDeviceConnected = false;
   void _getAddress() async {
     LocationTracker tracker = LocationTracker();
     List temporaryAddress = await tracker.requestAddress();
@@ -39,6 +42,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _connection() async {
     await MongoDB.connect();
+  }
+
+  void _getConnection() async {
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
+    if (isDeviceConnected) {
+      getPicture();
+      _connection();
+      _getAddress();
+      mongoDB.getSponsor();
+      mongoDB.getProfileData(widget.id);
+      Timer.periodic(const Duration(seconds: 8), (timer) {
+        mongoDB.getData();
+        mongoDB.getUser(_currentSelectedValue);
+      });
+    }
   }
 
   Future<void> getPicture() async {
@@ -57,20 +75,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getPicture();
-    _connection();
-    _getAddress();
-    mongoDB.getSponsor();
-    mongoDB.getProfileData(widget.id);
-    Timer.periodic(const Duration(seconds: 8), (timer) {
-      mongoDB.getData();
-      mongoDB.getUser(_currentSelectedValue);
-    });
+    _getConnection();
+    if (!isDeviceConnected) {
+      Timer.periodic(const Duration(seconds: 4), (timer) {
+        _getConnection();
+        if (isDeviceConnected) {
+          timer.cancel();
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
-    // _subscription.cancel();
     super.dispose();
   }
 

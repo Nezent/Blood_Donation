@@ -281,7 +281,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                                   : (numberController
                                                               .text.length ==
                                                           13)
-                                                      ? ('+88${numberController.text}')
+                                                      ? ('+${numberController.text}')
                                                       : numberController.text,
                                               passwordController.text);
                                         }
@@ -615,7 +615,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                             ? ('+88${numberController.text}')
                                             : (numberController.text.length ==
                                                     13)
-                                                ? ('+88${numberController.text}')
+                                                ? ('+${numberController.text}')
                                                 : numberController.text,
                                       );
                                     }
@@ -709,7 +709,7 @@ class _RegisterScreenState extends State<RegisterScreen>
               number: (numberController.text.length == 11)
                   ? ('+88${numberController.text}')
                   : (numberController.text.length == 13)
-                      ? ('+88${numberController.text}')
+                      ? ('+${numberController.text}')
                       : numberController.text,
               password: passwordController.text,
             ),

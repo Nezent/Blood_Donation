@@ -155,7 +155,7 @@ class _HelpScreenState extends State<HelpScreen> {
                                     number: (numberController.text.length == 11)
                                         ? ('+88${numberController.text}')
                                         : (numberController.text.length == 13)
-                                            ? ('+88${numberController.text}')
+                                            ? ('+${numberController.text}')
                                             : numberController.text,
                                     feedback: feedbackController.text);
                                 await MongoDB.feedback(data);
