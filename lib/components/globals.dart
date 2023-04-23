@@ -19,16 +19,12 @@ SnackBar SnackbarMessage(String message) {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              flex: 2,
-              child: Image.asset(
-                "images/logo.png",
-                height: 32,
-                width: 32,
-              ),
+            Image.asset(
+              "images/logo.png",
+              height: 32,
+              width: 32,
             ),
-            Expanded(
-              flex: 8,
+            Flexible(
               child: Text(
                 message,
                 style: const TextStyle(
