@@ -72,34 +72,12 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
             stream: mongoDB.requestController.stream,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Skeleton(height: 20, width: 130),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 4),
-                            child: Skeleton(
-                                height: 95,
-                                width: MediaQuery.of(context).size.width),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.cyanText
+                        : Palette.newText,
+                  ),
                 );
               } else if (snapshot.hasData) {
                 return Padding(

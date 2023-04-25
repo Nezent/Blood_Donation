@@ -131,79 +131,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Skeleton(height: 20, width: 130),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 16,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: SizedBox(
-                      height: 90,
+                      height: 100,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: 4,
                         itemBuilder: (BuildContext context, int index) {
                           return const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 4),
-                            child: Skeleton(height: 90, width: 160),
+                            child: Skeleton(height: 100, width: 160),
                           );
                         },
                       ),
                     ),
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 48,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Skeleton(height: 20, width: 130),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: 4,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
-                          child: Skeleton(
-                              height: 95,
-                              width: MediaQuery.of(context).size.width),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Skeleton(height: 20, width: 130),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Skeleton(height: 20, width: 65),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: 8,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
-                          child: Skeleton(
-                              height: 80,
-                              width: MediaQuery.of(context).size.width),
-                        );
-                      },
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.cyanText
+                          : Palette.newText,
                     ),
                   ),
                 ],

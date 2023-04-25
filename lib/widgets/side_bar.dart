@@ -98,8 +98,14 @@ class _SideBarState extends State<SideBar> {
                             controller: controller,
                             height: 26,
                             width: 48,
-                            activeColor: Palette.cyanText,
-                            inactiveColor: Palette.cyanLight,
+                            activeColor:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.cyanText
+                                    : Palette.darkWidget,
+                            inactiveColor:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Palette.cyanLight
+                                    : Palette.textColor,
                             thumb: ValueListenableBuilder(
                                 valueListenable: controller,
                                 builder: (BuildContext context, value, child) {
@@ -110,8 +116,14 @@ class _SideBarState extends State<SideBar> {
                                         Radius.circular(20),
                                       ),
                                       color: value
-                                          ? Palette.cyan
-                                          : Palette.cyanText,
+                                          ? Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.card
+                                              : Palette.card
+                                          : Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.card
+                                              : Palette.card,
                                     ),
                                   );
                                 }),
@@ -187,7 +199,7 @@ class _SideBarState extends State<SideBar> {
                 children: [
                   UserAccountsDrawerHeader(
                     accountName: const Text(
-                      "Anonymous",
+                      "Nezent Bot",
                       style: TextStyle(fontSize: 18),
                     ),
                     accountEmail: const Text(""),

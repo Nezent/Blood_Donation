@@ -352,8 +352,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   controller: controller,
                                   height: 26,
                                   width: 48,
-                                  activeColor: Palette.cyanText,
-                                  inactiveColor: Palette.cyan,
+                                  activeColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Palette.cyanText
+                                      : Palette.darkWidget,
+                                  inactiveColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Palette.cyan
+                                      : Palette.textColor,
                                   thumb: ValueListenableBuilder(
                                       valueListenable: controller,
                                       builder:
@@ -454,8 +460,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         width: 48,
                                         padding: 1.8,
                                         toggleSize: 23,
-                                        activeColor: Palette.cyanText,
-                                        inactiveColor: Palette.cyan,
+                                        activeColor:
+                                            Theme.of(context).brightness ==
+                                                    Brightness.light
+                                                ? Palette.cyanText
+                                                : Palette.darkWidget,
+                                        inactiveColor:
+                                            Theme.of(context).brightness ==
+                                                    Brightness.light
+                                                ? Palette.cyan
+                                                : Palette.textColor,
                                         value: provider.themeMode ==
                                             ThemeMode.dark,
                                         onToggle: (bool value) {

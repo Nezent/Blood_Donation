@@ -70,42 +70,12 @@ class _DonorScreenState extends State<DonorScreen> {
           stream: mongoDB.donorListController.stream,
           builder: (context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Column(
-                children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Skeleton(height: 20, width: 130),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Skeleton(height: 20, width: 65),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: 8,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
-                          child: Skeleton(
-                              height: 80,
-                              width: MediaQuery.of(context).size.width),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Palette.cyanText
+                      : Palette.newText,
+                ),
               );
             } else if (snapshot.hasData) {
               return Column(
