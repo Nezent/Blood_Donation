@@ -23,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ScrollController _scrollController = ScrollController();
   MongoDB mongoDB = MongoDB();
   final _bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   String _currentSelectedValue = 'AB+';
@@ -167,6 +168,20 @@ class _HomeScreenState extends State<HomeScreen> {
               var totalRequests = snapshots.snapshot1.data!.length;
               var totalDonors = snapshots.snapshot2.data!.length;
               var totalLength = snapshots.snapshot3.data!.length;
+              Future.delayed(const Duration(seconds: 3), () {
+                _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent,
+                    duration: const Duration(seconds: 8),
+                    curve: Curves.linear);
+              });
+
+              _scrollController.addListener(() {
+                if (_scrollController.position.pixels ==
+                    _scrollController.position.maxScrollExtent) {
+                  _scrollController
+                      .jumpTo(_scrollController.position.minScrollExtent);
+                }
+              });
               return CustomScrollView(
                 slivers: [
                   SliverPadding(
@@ -289,6 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 90.0,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
+                          controller: _scrollController,
                           itemCount: totalLength,
                           itemBuilder: (BuildContext context, int index) {
                             var sponsorData = SponsorModel.fromJson(
