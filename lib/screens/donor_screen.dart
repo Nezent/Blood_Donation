@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:blood_connection/components/components.dart';
-import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SideBar extends StatefulWidget {
@@ -19,6 +20,20 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
+  String version = '1.0';
+  String buildNumber = '1';
+  _packageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _packageInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -163,7 +178,7 @@ class _SideBarState extends State<SideBar> {
                     child: Align(
                       alignment: FractionalOffset.bottomCenter,
                       child: Text(
-                        "Version: 1.0.0",
+                        "Version: $version",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -250,7 +265,7 @@ class _SideBarState extends State<SideBar> {
               child: Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: Text(
-                  "Version: 1.0.0",
+                  "Version: $version",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
