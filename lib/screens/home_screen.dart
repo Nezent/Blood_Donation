@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
@@ -308,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                            image: NetworkImage(
+                                            image: CachedNetworkImageProvider(
                                                 sponsorData.picture),
                                             fit: BoxFit.fill),
                                         color: Theme.of(context).brightness ==

@@ -1,5 +1,6 @@
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
@@ -46,10 +47,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget showImage(BuildContext context, String? value) {
-    return ClipOval(
-      child: Image.network(
-        value!,
-        fit: BoxFit.cover,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        border: Border.all(
+            color: Theme.of(context).brightness == Brightness.light
+                ? Palette.cyanText
+                : Palette.darkWidget,
+            width: 3),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: ClipOval(
+          child: CachedNetworkImage(
+            imageUrl: value!,
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }
