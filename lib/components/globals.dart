@@ -24,6 +24,9 @@ SnackBar SnackbarMessage(String message) {
               height: 32,
               width: 32,
             ),
+            const SizedBox(
+              height: 8,
+            ),
             Flexible(
               child: Text(
                 message,
