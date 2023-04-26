@@ -114,16 +114,16 @@ class MongoDB {
     }
   }
 
-  Future<void> getSponsor() async {
+  Future<List<Map<String, dynamic>>?> getSponsor() async {
     try {
       final arrData = await dataBase.collection('Sponsor').find().toList();
-      sponsorController.sink.add(arrData);
+      return arrData;
     } on NoSuchMethodError {
-      return;
+      return null;
     } on MongoDartError {
-      return;
+      return null;
     } on ConnectionException {
-      return;
+      return null;
     }
   }
 

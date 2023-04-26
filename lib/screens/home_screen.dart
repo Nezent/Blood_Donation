@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +24,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final ScrollController _scrollController = ScrollController();
   MongoDB mongoDB = MongoDB();
   final _bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   String _currentSelectedValue = 'AB+';
@@ -51,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
       getPicture();
       _connection();
       _getAddress();
-      mongoDB.getSponsor();
       mongoDB.getProfileData(widget.id);
       Timer.periodic(const Duration(seconds: 8), (timer) {
         mongoDB.getData();
@@ -107,11 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
         id: widget.id,
       ),
       body: SafeArea(
-        child: StreamBuilder3(
-          streams: StreamTuple3(mongoDB.requestController.stream,
-              mongoDB.donorController.stream, mongoDB.sponsorController.stream),
-          builder:
-              (context, SnapshotTuple3<dynamic, dynamic, dynamic> snapshots) {
+        child: StreamBuilder2(
+          streams: StreamTuple2(
+            mongoDB.requestController.stream,
+            mongoDB.donorController.stream,
+          ),
+          builder: (context, SnapshotTuple2<dynamic, dynamic> snapshots) {
             if (snapshots.snapshot1.connectionState ==
                     ConnectionState.waiting &&
                 snapshots.snapshot2.connectionState ==
@@ -142,9 +142,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         scrollDirection: Axis.horizontal,
                         itemCount: 4,
                         itemBuilder: (BuildContext context, int index) {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4),
-                            child: Skeleton(height: 100, width: 160),
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Skeleton(
+                                height: 100,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.85),
                           );
                         },
                       ),
@@ -163,25 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               );
             } else if (snapshots.snapshot1.hasData &&
-                snapshots.snapshot2.hasData &&
-                snapshots.snapshot3.hasData) {
+                snapshots.snapshot2.hasData) {
               var totalRequests = snapshots.snapshot1.data!.length;
               var totalDonors = snapshots.snapshot2.data!.length;
-              var totalLength = snapshots.snapshot3.data!.length;
-              Future.delayed(const Duration(seconds: 3), () {
-                _scrollController.animateTo(
-                    _scrollController.position.maxScrollExtent,
-                    duration: const Duration(seconds: 8),
-                    curve: Curves.linear);
-              });
-
-              _scrollController.addListener(() {
-                if (_scrollController.position.pixels ==
-                    _scrollController.position.maxScrollExtent) {
-                  _scrollController
-                      .jumpTo(_scrollController.position.minScrollExtent);
-                }
-              });
               return CustomScrollView(
                 slivers: [
                   SliverPadding(
@@ -301,34 +288,68 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 14),
                       child: SizedBox(
-                        height: 90.0,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          controller: _scrollController,
-                          itemCount: totalLength,
-                          itemBuilder: (BuildContext context, int index) {
-                            var sponsorData = SponsorModel.fromJson(
-                                snapshots.snapshot3.data![index]);
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 4.0,
-                              ),
-                              child: Container(
-                                height: 90.0,
-                                width: 160.0,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(sponsorData.picture),
-                                      fit: BoxFit.fill),
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Palette.cyanLight
-                                      : Palette.darkSecondary,
-                                  borderRadius: BorderRadius.circular(4.0),
+                        height: 100.0,
+                        child: FutureBuilder(
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData) {
+                              return CarouselSlider.builder(
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (BuildContext context,
+                                    int itemIndex, int realIndex) {
+                                  var sponsorData = SponsorModel.fromJson(
+                                      snapshot.data![itemIndex]);
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0,
+                                    ),
+                                    child: Container(
+                                      height: 100.0,
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                sponsorData.picture),
+                                            fit: BoxFit.fill),
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? Palette.cyanLight
+                                            : Palette.darkSecondary,
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                options: CarouselOptions(autoPlay: true),
+                              );
+                            } else {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: SizedBox(
+                                  height: 100,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: 4,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4),
+                                        child: Skeleton(
+                                            height: 100,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            }
                           },
+                          future: mongoDB.getSponsor(),
                         ),
                       ),
                     ),
