@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "224721033692",
+    "project_id": "blood-connection-1b844",
+    "storage_bucket": "blood-connection-1b844.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224721033692:android:0b1b05727c9fc63716d719",
+        "android_client_info": {
+          "package_name": "com.nezent.BloodConnection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224721033692-0cu95a6hjgglitgonicsmk0of12reb0u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArX17fq3sOSaXTDnl6ccoHv-c65owX41s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224721033692-0cu95a6hjgglitgonicsmk0of12reb0u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "224721033692-s6lvm3ugit9vrfkeavadk5a07p7ul4u6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nezent.BloodConnection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

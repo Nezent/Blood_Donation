@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blood_connection/components/components.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/screens/screens.dart';
@@ -19,6 +20,7 @@ Future<void> main() async {
     if (kReleaseMode) exit(1);
   };
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   ByteData data =
       await PlatformAssetBundle().load('assets/lets-encrypt-r3.pem');
   SecurityContext.defaultContext

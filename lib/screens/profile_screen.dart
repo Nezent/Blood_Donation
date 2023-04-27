@@ -1,10 +1,11 @@
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloudinary_public/cloudinary_public.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,20 +24,28 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
-  final cloudinary =
-      CloudinaryPublic('bloodconnectionuserimage', 'uiwdzho0', cache: false);
   void _getImage() async {
     String url = "";
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
-    try {
-      CloudinaryResponse response = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(image.path,
-            resourceType: CloudinaryResourceType.Image),
-      );
-      url = response.secureUrl;
-    } on CloudinaryException catch (_) {
+    String uniqueName = DateTime.now().microsecondsSinceEpoch.toString();
+    var result = await FlutterImageCompress.compressWithFile(
+      image.path,
+      quality: 20,
+    );
+    if (result == null) {
       return;
+    }
+    try {
+      Reference rootRef = FirebaseStorage.instance.ref();
+      Reference directory = rootRef.child('userImages');
+      Reference refImageToUpload = directory.child(uniqueName);
+      await refImageToUpload.putData(result);
+      url = await refImageToUpload.getDownloadURL();
+    } on FirebaseException {
+      final SnackBar snackBar = SnackbarMessage("Error: Something Went Wrong!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
+      return null;
     }
     if (url != "") {
       MongoDB.changeProfilePicture(widget.id, url);
