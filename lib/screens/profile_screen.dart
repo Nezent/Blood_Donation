@@ -120,8 +120,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.only(top: 32),
                   child: SizedBox(
                     child: Shimmer.fromColors(
-                      baseColor: const Color.fromARGB(255, 30, 29, 29),
-                      highlightColor: const Color.fromARGB(146, 238, 238, 233),
+                      baseColor:
+                          Theme.of(context).brightness == Brightness.light
+                              ? const Color.fromARGB(255, 54, 52, 52)
+                              : const Color.fromARGB(255, 64, 63, 63),
+                      highlightColor:
+                          Theme.of(context).brightness == Brightness.light
+                              ? const Color.fromARGB(255, 171, 171, 168)
+                              : const Color.fromARGB(248, 113, 111, 111),
                       child: Container(
                         height: 124,
                         width: 124,
@@ -163,10 +169,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             SizedBox(
                               child: Shimmer.fromColors(
-                                baseColor:
-                                    const Color.fromARGB(255, 30, 29, 29),
-                                highlightColor:
-                                    const Color.fromARGB(146, 238, 238, 233),
+                                baseColor: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? const Color.fromARGB(255, 54, 52, 52)
+                                    : const Color.fromARGB(255, 64, 63, 63),
+                                highlightColor: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? const Color.fromARGB(255, 171, 171, 168)
+                                    : const Color.fromARGB(248, 113, 111, 111),
                                 child: Container(
                                   height: 48,
                                   width: 48,
