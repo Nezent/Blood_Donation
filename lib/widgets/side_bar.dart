@@ -38,8 +38,8 @@ class _SideBarState extends State<SideBar> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Theme.of(context).brightness == Brightness.light
-          ? Palette.cyan
-          : Palette.darkSecondary,
+          ? const Color.fromARGB(224, 0, 149, 144)
+          : const Color.fromARGB(224, 31, 31, 31),
       child: FutureBuilder(
           future: MongoDB.getUserData(widget.id),
           builder: (context, snapshot) {

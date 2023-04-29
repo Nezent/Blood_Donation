@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -146,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Skeleton(height: 32, width: 150),
+                  child: Skeleton(height: 20, width: 150),
                 ),
                 const SizedBox(
                   height: 16,
@@ -157,10 +158,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                        child: Skeleton(
-                            height: 64,
-                            width: MediaQuery.of(context).size.width),
+                            horizontal: 32, vertical: 12),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              child: Shimmer.fromColors(
+                                baseColor:
+                                    const Color.fromARGB(255, 30, 29, 29),
+                                highlightColor:
+                                    const Color.fromARGB(146, 238, 238, 233),
+                                child: Container(
+                                  height: 48,
+                                  width: 48,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.04),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(100),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 24,
+                            ),
+                            Skeleton(
+                                height: 20,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.48),
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -258,7 +285,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.w600,
                             color:
                                 Theme.of(context).brightness == Brightness.light
-                                    ? Palette.textColor
+                                    ? Palette.newText
                                     : Palette.darkText,
                             overflow: TextOverflow.ellipsis),
                       ),
@@ -313,17 +340,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 64.0,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).brightness == Brightness.light
-                            ? Palette.card
-                            : Palette.darkSecondary,
+                        color: Colors.transparent,
                         borderRadius: BorderRadius.circular(8.0),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 0.5,
-                            offset: Offset(0, 1),
-                          ),
-                        ],
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -418,17 +436,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 64.0,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).brightness == Brightness.light
-                            ? Palette.card
-                            : Palette.darkSecondary,
+                        color: Colors.transparent,
                         borderRadius: BorderRadius.circular(8.0),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 0.5,
-                            offset: Offset(0, 1),
-                          ),
-                        ],
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -498,6 +507,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         onToggle: (bool value) {
                                           setState(() {
                                             provider.toggleTheme(value);
+                                            SystemChrome
+                                                .setSystemUIOverlayStyle(
+                                                    SystemUiOverlayStyle(
+                                              statusBarColor: !value
+                                                  ? Palette.cyan
+                                                  : Palette.darkSecondary,
+                                            ));
                                           });
                                         });
                                   },

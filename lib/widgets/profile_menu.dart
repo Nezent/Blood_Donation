@@ -21,17 +21,8 @@ class ProfileWidget extends StatelessWidget {
           height: 64.0,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.light
-                ? Palette.card
-                : Palette.darkSecondary,
+            color: Colors.transparent,
             borderRadius: BorderRadius.circular(8.0),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 0.5,
-                offset: Offset(0, 1),
-              ),
-            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
