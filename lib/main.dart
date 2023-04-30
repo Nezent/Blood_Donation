@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:upgrader/upgrader.dart';
 
 mongo.ObjectId? id;
 bool viewed = false;
@@ -58,7 +59,9 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData.dark()
             .copyWith(scaffoldBackgroundColor: Palette.darkPrimary),
         themeMode: provider.themeMode,
-        home: viewed ? HomeScreen(id: id) : const Onboarding(),
+        home: viewed
+            ? UpgradeAlert(child: HomeScreen(id: id))
+            : const Onboarding(),
       );
     });
   }
