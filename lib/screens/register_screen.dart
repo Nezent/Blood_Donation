@@ -3,6 +3,7 @@
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:page_transition/page_transition.dart';
@@ -602,7 +603,54 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 ),
                               ),
                               const SizedBox(
-                                height: 60,
+                                height: 32,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Center(
+                                  child: Text.rich(
+                                    TextSpan(
+                                      text: "By signing up I accept the ",
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? Palette.outText
+                                            : Palette.darkText,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: "terms and Condition",
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const TermsAndCondition(),
+                                                  ),
+                                                ),
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w600,
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Palette.cyanText
+                                                    : Palette.darkText,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 32,
                               ),
                               Center(
                                 child: GestureDetector(

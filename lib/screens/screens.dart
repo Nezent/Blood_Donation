@@ -22,3 +22,4 @@ export 'settings_screen.dart';
 export 'forget_page.dart';
 export 'forget_validation.dart';
 export 'change_password.dart';
+export 'terms_condition.dart';

@@ -29,12 +29,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String url = "";
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
-    String uniqueName = DateTime.now().microsecondsSinceEpoch.toString();
+    String uniqueName = widget.id!.toHexString();
     var result = await FlutterImageCompress.compressWithFile(
       image.path,
-      quality: 20,
+      quality: 18,
     );
     if (result == null) {
+      final SnackBar snackBar = SnackbarMessage("Error: Something Went Wrong!");
+      snackbarKey.currentState?.showSnackBar(snackBar);
       return;
     }
     try {
