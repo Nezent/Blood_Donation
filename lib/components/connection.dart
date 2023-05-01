@@ -19,10 +19,7 @@ class MongoDB {
   static connect() async {
     try {
       dataBase = await Db.create(
-              "mongodb+srv://Anon:2010013@cluster0.seaspb1.mongodb.net/Blood_Connection?retryWrites=true&w=majority")
-          .timeout(
-        const Duration(seconds: 10),
-      );
+          "mongodb+srv://Anon_BloodConnection:NezentWCD042020@bloodconnection.mkeahoo.mongodb.net/Blood_Connection?tls=true&retryWrites=true&retryReads=true&connectTimeoutMS=1500&w=majority");
       await dataBase.open(secure: true);
       // inspect(db);
     } on SocketException {

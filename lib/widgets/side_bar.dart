@@ -204,8 +204,8 @@ class _SideBarState extends State<SideBar> {
       width: 120,
       child: Drawer(
         backgroundColor: Theme.of(context).brightness == Brightness.light
-            ? Palette.cyan
-            : Palette.darkSecondary,
+            ? const Color.fromARGB(224, 0, 149, 144)
+            : const Color.fromARGB(224, 31, 31, 31),
         child: Column(
           children: [
             Expanded(

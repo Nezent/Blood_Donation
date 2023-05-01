@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:blood_connection/screens/home_screen.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -12,22 +15,22 @@ class AfterFeedback extends StatefulWidget {
 }
 
 class _AfterFeedbackState extends State<AfterFeedback> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Timer(
-  //     const Duration(seconds: 5),
-  //     () => Navigator.of(context).pushReplacement(
-  //       MaterialPageRoute(
-  //         builder: (BuildContext context) => widget.id != null
-  //             ? ProfileScreen(
-  //                 id: widget.id,
-  //               )
-  //             : const HomeScreen(id: null),
-  //       ),
-  //     ),
-  //   );
-  // }
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+      const Duration(seconds: 5),
+      () => Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (BuildContext context) => widget.id != null
+              ? HomeScreen(
+                  id: widget.id,
+                )
+              : const HomeScreen(id: null),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
