@@ -15,6 +15,7 @@ import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HomeScreen extends StatefulWidget {
   final mongo.ObjectId? id;
@@ -230,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 builder: (context) =>
                                                     const SearchScreen())),
                                         child: Text(
-                                          'Donors near me',
+                                          'Nearby Donors',
                                           style: TextStyle(
                                             fontSize: 19.0,
                                             fontWeight: FontWeight.w500,
@@ -300,24 +301,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                     int itemIndex, int realIndex) {
                                   var sponsorData = SponsorModel.fromJson(
                                       snapshot.data![itemIndex]);
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 4.0,
-                                    ),
-                                    child: Container(
-                                      height: 100.0,
-                                      width: MediaQuery.of(context).size.width,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: CachedNetworkImageProvider(
-                                                sponsorData.picture),
-                                            fit: BoxFit.fill),
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.light
-                                            ? Palette.cyanLight
-                                            : Palette.darkSecondary,
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      await launchUrlString(sponsorData.name);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 4.0,
+                                      ),
+                                      child: Container(
+                                        height: 100.0,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: CachedNetworkImageProvider(
+                                                  sponsorData.picture),
+                                              fit: BoxFit.fill),
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.cyanLight
+                                              : Palette.darkSecondary,
+                                          borderRadius:
+                                              BorderRadius.circular(4.0),
+                                        ),
                                       ),
                                     ),
                                   );

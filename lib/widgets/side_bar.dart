@@ -4,7 +4,6 @@ import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/palette.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
@@ -157,9 +156,14 @@ class _SideBarState extends State<SideBar> {
                           );
                         }),
                         sideBarList("cup-white.svg", "Buy Us a Ko-Fi", () {
-                          Clipboard.setData(
-                              const ClipboardData(text: "01830676720"));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DonateUs(),
+                            ),
+                          );
                         }),
+                        sideBarList("star.svg", "Rate Us", () {}),
                         sideBarList("logout-white.svg", "Logout", () async {
                           SharedPreferences session =
                               await SharedPreferences.getInstance();
@@ -255,8 +259,14 @@ class _SideBarState extends State<SideBar> {
                     );
                   }),
                   sideBarList("cup-white.svg", "Buy Us a Ko-Fi", () {
-                    Clipboard.setData(const ClipboardData(text: "01830676720"));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DonateUs(),
+                      ),
+                    );
                   }),
+                  sideBarList("star.svg", "Rate Us", () {}),
                 ],
               ),
             ),

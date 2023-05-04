@@ -37,7 +37,7 @@ class _EditProfileState extends State<EditProfile> {
   bool isediting = false;
 
   void _getAddress() async {
-    List temporaryAddress = await _tracker.requestAddress();
+    List? temporaryAddress = await _tracker.requestAddress();
     var tempAddress = temporaryAddress.elementAt(0).split(' ');
     var shortAddress = tempAddress[0].trim();
     address = "$shortAddress,${temporaryAddress.elementAt(1)}";

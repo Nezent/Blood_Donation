@@ -26,7 +26,7 @@ class _RequestScreenState extends State<RequestScreen> {
   var numberController = TextEditingController();
 
   void _getAddress() async {
-    List temporaryAddress = await _tracker.requestAddress();
+    List? temporaryAddress = await _tracker.requestAddress();
     var tempAddress = temporaryAddress.elementAt(0).split(' ');
     var shortAddress = tempAddress[0].trim();
     address = "$shortAddress,${temporaryAddress.elementAt(1)}";

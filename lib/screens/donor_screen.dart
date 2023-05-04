@@ -25,7 +25,7 @@ class _DonorScreenState extends State<DonorScreen> {
   double? longitude;
   void _getAddress() async {
     LocationTracker tracker = LocationTracker();
-    List temporaryAddress = await tracker.requestAddress();
+    List? temporaryAddress = await tracker.requestAddress();
     setState(() {
       _currentSelectedValue = widget.blood_type;
       latitude = double.parse(temporaryAddress.elementAt(2));

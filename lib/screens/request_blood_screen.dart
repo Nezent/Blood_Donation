@@ -36,7 +36,7 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
 
   void _getAddress() async {
     LocationTracker tracker = LocationTracker();
-    List temporaryAddress = await tracker.requestAddress();
+    List? temporaryAddress = await tracker.requestAddress();
     setState(() {
       latitude = double.parse(temporaryAddress.elementAt(2));
       longitude = double.parse(temporaryAddress.elementAt(3));

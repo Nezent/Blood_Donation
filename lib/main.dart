@@ -14,6 +14,7 @@ import 'package:upgrader/upgrader.dart';
 
 mongo.ObjectId? id;
 bool viewed = false;
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   FlutterError.onError = (details) {
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         title: 'Blood Connection',
         scaffoldMessengerKey: snackbarKey,
         debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
         theme: ThemeData.light()
             .copyWith(scaffoldBackgroundColor: Palette.background),
         darkTheme: ThemeData.dark()

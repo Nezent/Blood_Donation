@@ -6,7 +6,6 @@ import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -32,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   var passwordController = TextEditingController();
   var passwordCheckController = TextEditingController();
   void _getAddress() async {
-    List temporaryAddress = await _tracker.requestAddress();
+    List? temporaryAddress = await _tracker.requestAddress();
     var tempAddress = temporaryAddress.elementAt(0).split(' ');
     var shortAddress = tempAddress[0].trim();
     address = "$shortAddress,${temporaryAddress.elementAt(1)}";
@@ -66,12 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen>
               : Palette.darkSecondary,
           leading: IconButton(
             splashRadius: 8.0,
-            onPressed: () => Navigator.push(
-              context,
-              PageTransition(
-                  child: const HomeScreen(id: null),
-                  type: PageTransitionType.leftToRight),
-            ),
+            onPressed: () => Navigator.pop(context),
             icon: const Icon(
               Icons.arrow_back_outlined,
               color: Palette.card,
@@ -95,8 +89,12 @@ class _RegisterScreenState extends State<RegisterScreen>
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TabBar(
+                    unselectedLabelColor:
+                        Theme.of(context).brightness == Brightness.light
+                            ? Colors.black
+                            : Palette.darkText,
                     labelColor: Theme.of(context).brightness == Brightness.light
-                        ? Colors.black
+                        ? Palette.card
                         : Palette.darkText,
                     labelStyle: const TextStyle(
                       fontSize: 19.0,
@@ -721,10 +719,10 @@ class _RegisterScreenState extends State<RegisterScreen>
         // Shared Preferences
         SharedPreferences session = await SharedPreferences.getInstance();
         await session.setString('objectId', user.id!.toHexString());
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => ProfileScreen(
+            builder: (context) => HomeScreen(
               id: user.id,
             ),
           ),

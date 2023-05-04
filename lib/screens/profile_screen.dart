@@ -98,12 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : Palette.darkSecondary,
         leading: IconButton(
           splashRadius: 8.0,
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(id: widget.id),
-            ),
-          ),
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(
             Icons.arrow_back_outlined,
             color: Palette.card,
