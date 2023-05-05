@@ -85,7 +85,8 @@ class _SettingsState extends State<Settings> {
                           horizontal: 40, vertical: 8),
                       child: TextFormField(
                         validator: (value) {
-                          if (value!.isEmpty || value != widget.password) {
+                          if (value!.isEmpty ||
+                              Encryption.encryption(value) != widget.password) {
                             return "Password is not Correct!";
                           } else {
                             return null;

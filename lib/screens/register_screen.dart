@@ -713,7 +713,6 @@ class _RegisterScreenState extends State<RegisterScreen>
   Future<void> _logIn(String number, String password) async {
     try {
       var userData = await MongoDB.logIn(number, password);
-
       if (userData != null) {
         var user = RegisterDataModel.fromJson(userData);
         // Shared Preferences
@@ -757,7 +756,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                   : (numberController.text.length == 13)
                       ? ('+${numberController.text}')
                       : numberController.text,
-              password: passwordController.text,
+              password: Encryption.encryption(passwordController.text),
             ),
           ),
         );

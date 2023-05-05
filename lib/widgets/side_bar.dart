@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SideBar extends StatefulWidget {
   final Mongo.ObjectId? id;
@@ -163,8 +164,11 @@ class _SideBarState extends State<SideBar> {
                             ),
                           );
                         }),
-                        sideBarList("star.svg", "Rate Us", () {}),
-                        sideBarList("logout-white.svg", "Logout", () async {
+                        sideBarList("star.svg", "Rate Us", () async {
+                          await launchUrlString(
+                              "https://play.google.com/store/apps/details?id=com.nezent.BloodConnection");
+                        }),
+                        sideBarList("logout.svg", "Logout", () async {
                           SharedPreferences session =
                               await SharedPreferences.getInstance();
                           await session.remove('objectId');
@@ -266,7 +270,10 @@ class _SideBarState extends State<SideBar> {
                       ),
                     );
                   }),
-                  sideBarList("star.svg", "Rate Us", () {}),
+                  sideBarList("star.svg", "Rate Us", () async {
+                    await launchUrlString(
+                        "https://play.google.com/store/apps/details?id=com.nezent.BloodConnection");
+                  }),
                 ],
               ),
             ),

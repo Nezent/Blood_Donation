@@ -66,6 +66,7 @@ dependencies:
   firebase_core: ^2.10.0
   upgrader: ^6.2.0
   url_launcher: ^6.1.10
+  encrypt: ^5.0.1
 
 dev_dependencies:
   flutter_test:
@@ -82,7 +83,12 @@ dev_dependencies:
 flutter_native_splash:
   color: "#009591"
   image: images/logo.png
-  android12: true
+  android: true
+  ios: true
+  android_12:
+    color: "#ffffff"
+    image: images/android12.png
+    icon_background_color: "#ffffff"
   web: false
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

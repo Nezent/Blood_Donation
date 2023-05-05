@@ -128,7 +128,7 @@ class _ValidationScreenState extends State<ValidationScreen> {
                       widget.blood_type,
                       widget.gender,
                     );
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const AfterDonation(),

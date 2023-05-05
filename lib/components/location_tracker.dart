@@ -81,7 +81,7 @@ class LocationTracker {
     Position position = await _determinePosition();
     List<Placemark> placemarks = await placemarkFromCoordinates(
         position.latitude, position.longitude,
-        localeIdentifier: "en_US");
+        localeIdentifier: "en");
     Placemark place = placemarks[0];
     double latitude = position.latitude;
     double longitude = position.longitude;

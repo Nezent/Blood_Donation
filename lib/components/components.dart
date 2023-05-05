@@ -9,3 +9,4 @@ export 'feedback_model.dart';
 export 'sponsor_model.dart';
 export 'randoms.dart';
 export 'verification_code.dart';
+export 'password_encryption.dart';

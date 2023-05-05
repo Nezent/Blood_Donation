@@ -236,7 +236,9 @@ class _EditProfileState extends State<EditProfile> {
                             horizontal: 40, vertical: 8),
                         child: TextFormField(
                           validator: (value) {
-                            if (value!.isEmpty || value != widget.password) {
+                            if (value!.isEmpty ||
+                                Encryption.encryption(value) !=
+                                    widget.password) {
                               return "Password is not Correct!";
                             } else {
                               return null;
@@ -352,11 +354,17 @@ class _EditProfileState extends State<EditProfile> {
                             if (editProfile.currentState!.validate()) {
                               if (editName && editPassword) {
                                 _changeName(nameController.text);
-                                _changePassword(passwordCheckController.text);
+                                _changePassword(
+                                  Encryption.encryption(
+                                      passwordCheckController.text),
+                                );
                               } else if (editName) {
                                 _changeName(nameController.text);
                               } else {
-                                _changePassword(passwordCheckController.text);
+                                _changePassword(
+                                  Encryption.encryption(
+                                      passwordCheckController.text),
+                                );
                               }
                             }
                             setState(() {

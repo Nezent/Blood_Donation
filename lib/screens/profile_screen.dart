@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -58,6 +61,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  void _checkData() async {
+    var userData = await MongoDB.getUserData(widget.id);
+    if (userData == null) {
+      SharedPreferences session = await SharedPreferences.getInstance();
+      await session.remove('objectId');
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const RegisterScreen()));
+    }
+  }
+
   Widget showImage(BuildContext context, String? value) {
     return Container(
       decoration: BoxDecoration(
@@ -78,6 +91,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    _checkData();
+    super.initState();
   }
 
   @override
@@ -543,7 +562,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Settings(
-                              id: widget.id, password: userData.password),
+                            id: widget.id,
+                            password: userData.password,
+                          ),
                         ),
                       );
                     },

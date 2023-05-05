@@ -115,7 +115,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                     });
                     if (changePassword.currentState!.validate()) {
                       _changePassword(
-                          widget.number, passwordCheckController.text);
+                        widget.number,
+                        Encryption.encryption(passwordCheckController.text),
+                      );
                       SharedPreferences session =
                           await SharedPreferences.getInstance();
                       await session.remove('objectId');

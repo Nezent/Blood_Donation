@@ -13,7 +13,6 @@ class MongoDB {
   StreamController donorController = StreamController();
   StreamController profileController = StreamController();
   StreamController donorListController = StreamController();
-  StreamController sponsorController = StreamController();
 
   static var dataBase;
   static connect() async {
@@ -126,6 +125,7 @@ class MongoDB {
 
   static Future<Map<String, dynamic>?> logIn(
       String number, String password) async {
+    password = Encryption.encryption(password);
     try {
       final data = await dataBase
           .collection('Register')
