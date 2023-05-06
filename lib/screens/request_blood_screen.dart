@@ -74,91 +74,94 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).brightness == Brightness.light
-            ? Palette.cyan
-            : Palette.darkSecondary,
-        leading: IconButton(
-          splashRadius: 8.0,
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.arrow_back_outlined,
-            color: Palette.card,
-            size: 36,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Palette.cyan
+              : Palette.darkSecondary,
+          leading: IconButton(
+            splashRadius: 8.0,
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back_outlined,
+              color: Palette.card,
+              size: 36,
+            ),
           ),
         ),
-      ),
-      body: SafeArea(
-        child: StreamBuilder(
-            stream: mongoDB.requestController.stream,
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? Palette.cyanText
-                        : Palette.newText,
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, index) {
-                        var data =
-                            RequestDataModel.fromJson(snapshot.data![index]);
-                        var names = data.name.split(' ');
-                        var nickName = names[0].trim();
-                        if (data.initBag == data.bag) {
-                          _deleteRequest(data.id!);
-                        }
-                        if ((Geolocator.distanceBetween(
-                                    data.latitude,
-                                    data.longitude,
-                                    latitude ?? 0.00,
-                                    longitude ?? 0.00) /
-                                1000) <=
-                            20) {
-                          return BloodRequest(
-                            objectId: widget.objectId,
-                            requestId: data.id!,
-                            blood_type: data.bloodType,
-                            name: nickName,
-                            number: nickName,
-                            bag: data.bag,
-                            initBag: data.initBag,
-                            address: data.address,
-                            distance: Geolocator.distanceBetween(
-                                data.latitude,
-                                data.longitude,
-                                latitude ?? 0.00,
-                                longitude ?? 0.00),
-                          );
-                        } else {
-                          return const SizedBox();
-                        }
-                      }),
-                );
-              } else {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Lottie.asset(
-                        'animations/not-found.json',
-                        height: 240,
-                        width: 240,
-                        fit: BoxFit.fill,
-                      ),
-                    ],
-                  ),
-                );
-              }
-            }),
+        body: SafeArea(
+          child: StreamBuilder(
+              stream: mongoDB.requestController.stream,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.cyanText
+                          : Palette.newText,
+                    ),
+                  );
+                } else if (snapshot.hasData) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, index) {
+                          var data =
+                              RequestDataModel.fromJson(snapshot.data![index]);
+                          var names = data.name.split(' ');
+                          var nickName = names[0].trim();
+                          if (data.initBag == data.bag) {
+                            _deleteRequest(data.id!);
+                          }
+                          if ((Geolocator.distanceBetween(
+                                      data.latitude,
+                                      data.longitude,
+                                      latitude ?? 0.00,
+                                      longitude ?? 0.00) /
+                                  1000) <=
+                              20) {
+                            return BloodRequest(
+                              objectId: widget.objectId,
+                              requestId: data.id!,
+                              blood_type: data.bloodType,
+                              name: nickName,
+                              number: nickName,
+                              bag: data.bag,
+                              initBag: data.initBag,
+                              address: data.address,
+                              distance: Geolocator.distanceBetween(
+                                  data.latitude,
+                                  data.longitude,
+                                  latitude ?? 0.00,
+                                  longitude ?? 0.00),
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        }),
+                  );
+                } else {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          'animations/not-found.json',
+                          height: 240,
+                          width: 240,
+                          fit: BoxFit.fill,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              }),
+        ),
       ),
     );
   }

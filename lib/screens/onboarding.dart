@@ -22,101 +22,104 @@ class _OnboardingState extends State<Onboarding> {
   bool onLastpage = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          PageView(
-            onPageChanged: (index) {
-              setState(() {
-                onLastpage = (index == 1);
-              });
-            },
-            controller: _controller,
-            children: const [
-              IntroOne(),
-              IntroTwo(),
-            ],
-          ),
-          Container(
-            alignment: const Alignment(0, 0.80),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                onLastpage
-                    ? GestureDetector(
-                        onTap: () {
-                          _controller.previousPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeIn);
-                        },
-                        child: const Text(
-                          'Prev',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Palette.card,
-                          ),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () {},
-                        child: const Text(
-                          '    ',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Palette.card,
-                          ),
-                        ),
-                      ),
-                SmoothPageIndicator(
-                  controller: _controller,
-                  count: 2,
-                  effect: const WormEffect(
-                      dotHeight: 12,
-                      dotWidth: 12,
-                      dotColor: Palette.cyanLight,
-                      activeDotColor: Palette.cyanText),
-                ),
-                onLastpage
-                    ? GestureDetector(
-                        onTap: () {
-                          getViews();
-                          Navigator.pushReplacement(
-                            context,
-                            PageTransition(
-                                child: const HomeScreen(id: null),
-                                type: PageTransitionType.fade),
-                          );
-                        },
-                        child: const Text(
-                          'Done',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Palette.card,
-                          ),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          _controller.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeIn);
-                        },
-                        child: const Text(
-                          'Next',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Palette.card,
-                          ),
-                        ),
-                      ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            PageView(
+              onPageChanged: (index) {
+                setState(() {
+                  onLastpage = (index == 1);
+                });
+              },
+              controller: _controller,
+              children: const [
+                IntroOne(),
+                IntroTwo(),
               ],
             ),
-          ),
-        ],
+            Container(
+              alignment: const Alignment(0, 0.80),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  onLastpage
+                      ? GestureDetector(
+                          onTap: () {
+                            _controller.previousPage(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeIn);
+                          },
+                          child: const Text(
+                            'Prev',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Palette.card,
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {},
+                          child: const Text(
+                            '    ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Palette.card,
+                            ),
+                          ),
+                        ),
+                  SmoothPageIndicator(
+                    controller: _controller,
+                    count: 2,
+                    effect: const WormEffect(
+                        dotHeight: 12,
+                        dotWidth: 12,
+                        dotColor: Palette.cyanLight,
+                        activeDotColor: Palette.cyanText),
+                  ),
+                  onLastpage
+                      ? GestureDetector(
+                          onTap: () {
+                            getViews();
+                            Navigator.pushReplacement(
+                              context,
+                              PageTransition(
+                                  child: const HomeScreen(id: null),
+                                  type: PageTransitionType.fade),
+                            );
+                          },
+                          child: const Text(
+                            'Done',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Palette.card,
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            _controller.nextPage(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeIn);
+                          },
+                          child: const Text(
+                            'Next',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Palette.card,
+                            ),
+                          ),
+                        ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

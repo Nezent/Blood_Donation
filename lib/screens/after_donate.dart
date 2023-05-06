@@ -30,39 +30,42 @@ class _AfterDonationState extends State<AfterDonation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Lottie.asset(
-                'animations/donate.json',
-                height: 240,
-                width: 240,
-                fit: BoxFit.fill,
-                reverse: true,
-              ),
-              Text(
-                "THANK YOU FOR",
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? Palette.cyanText
-                        : Palette.darkText),
-              ),
-              Text(
-                "JOINING US",
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? Palette.cyanText
-                        : Palette.darkText),
-              ),
-            ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Lottie.asset(
+                  'animations/donate.json',
+                  height: 240,
+                  width: 240,
+                  fit: BoxFit.fill,
+                  reverse: true,
+                ),
+                Text(
+                  "THANK YOU FOR",
+                  style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.cyanText
+                          : Palette.darkText),
+                ),
+                Text(
+                  "JOINING US",
+                  style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.cyanText
+                          : Palette.darkText),
+                ),
+              ],
+            ),
           ),
         ),
       ),

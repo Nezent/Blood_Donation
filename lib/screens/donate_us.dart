@@ -52,7 +52,7 @@ class DonateUs extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "+8801747438603",
+                    "+8801830676720",
                     style: TextStyle(
                       fontSize: 19.0,
                       fontWeight: FontWeight.w500,

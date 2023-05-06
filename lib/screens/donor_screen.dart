@@ -49,153 +49,156 @@ class _DonorScreenState extends State<DonorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).brightness == Brightness.light
-            ? Palette.cyan
-            : Palette.darkSecondary,
-        leading: IconButton(
-          splashRadius: 8.0,
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.arrow_back_outlined,
-            color: Palette.card,
-            size: 36,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Palette.cyan
+              : Palette.darkSecondary,
+          leading: IconButton(
+            splashRadius: 8.0,
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back_outlined,
+              color: Palette.card,
+              size: 36,
+            ),
           ),
         ),
-      ),
-      body: StreamBuilder<dynamic>(
-          stream: mongoDB.donorListController.stream,
-          builder: (context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).brightness == Brightness.light
-                      ? Palette.cyanText
-                      : Palette.newText,
-                ),
-              );
-            } else if (snapshot.hasData) {
-              return Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(17, 18, 0, 8),
-                        child: Text(
-                          'Blood Donors',
-                          style: TextStyle(
-                            fontSize: 19.0,
-                            fontWeight: FontWeight.w600,
-                            color: Palette.textColor,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 18, 17, 8),
-                        child: Container(
-                          height: 24,
-                          width: 65,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1,
+        body: StreamBuilder<dynamic>(
+            stream: mongoDB.donorListController.stream,
+            builder: (context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Palette.cyanText
+                        : Palette.newText,
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(17, 18, 0, 8),
+                          child: Text(
+                            'Blood Donors',
+                            style: TextStyle(
+                              fontSize: 19.0,
+                              fontWeight: FontWeight.w600,
                               color: Palette.textColor,
                             ),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: FormField<String>(
-                            builder: (FormFieldState<String> state) {
-                              return DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  borderRadius: BorderRadius.circular(10),
-                                  value: _currentSelectedValue,
-                                  isDense: true,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      _currentSelectedValue = newValue!;
-                                    });
-                                  },
-                                  items: _bloodType.map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 6,
-                                        ),
-                                        child: Text(
-                                          value,
-                                          style: TextStyle(
-                                            color:
-                                                Theme.of(context).brightness ==
-                                                        Brightness.light
-                                                    ? Palette.newText
-                                                    : Palette.card,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              );
-                            },
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 18, 17, 8),
+                          child: Container(
+                            height: 24,
+                            width: 65,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 1,
+                                color: Palette.textColor,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: FormField<String>(
+                              builder: (FormFieldState<String> state) {
+                                return DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    borderRadius: BorderRadius.circular(10),
+                                    value: _currentSelectedValue,
+                                    isDense: true,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        _currentSelectedValue = newValue!;
+                                      });
+                                    },
+                                    items: _bloodType.map((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 6,
+                                          ),
+                                          child: Text(
+                                            value,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? Palette.newText
+                                                  : Palette.card,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var data =
+                              RegisterDataModel.fromJson(snapshot.data[index]);
+                          var names = data.name.split(' ');
+                          var nickName = names[0].trim();
+                          if ((Geolocator.distanceBetween(
+                                      data.latitude,
+                                      data.longitude,
+                                      latitude ?? 0.00,
+                                      longitude ?? 0.00) /
+                                  1000) <=
+                              20) {
+                            return DonorList(
+                              name: nickName,
+                              number: data.number,
+                              blood_type: data.bloodType,
+                              address: data.address,
+                              distance: Geolocator.distanceBetween(
+                                  data.latitude,
+                                  data.longitude,
+                                  latitude ?? 0.00,
+                                  longitude ?? 0.00),
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Lottie.asset(
+                        'animations/not-found.json',
+                        height: 240,
+                        width: 240,
+                        fit: BoxFit.fill,
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var data =
-                            RegisterDataModel.fromJson(snapshot.data[index]);
-                        var names = data.name.split(' ');
-                        var nickName = names[0].trim();
-                        if ((Geolocator.distanceBetween(
-                                    data.latitude,
-                                    data.longitude,
-                                    latitude ?? 0.00,
-                                    longitude ?? 0.00) /
-                                1000) <=
-                            20) {
-                          return DonorList(
-                            name: nickName,
-                            number: data.number,
-                            blood_type: data.bloodType,
-                            address: data.address,
-                            distance: Geolocator.distanceBetween(
-                                data.latitude,
-                                data.longitude,
-                                latitude ?? 0.00,
-                                longitude ?? 0.00),
-                          );
-                        } else {
-                          return const SizedBox();
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              );
-            } else {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Lottie.asset(
-                      'animations/not-found.json',
-                      height: 240,
-                      width: 240,
-                      fit: BoxFit.fill,
-                    ),
-                  ],
-                ),
-              );
-            }
-          }),
+                );
+              }
+            }),
+      ),
     );
   }
 }

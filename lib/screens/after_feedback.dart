@@ -34,42 +34,45 @@ class _AfterFeedbackState extends State<AfterFeedback> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Lottie.asset(
-                'animations/feedback.json',
-                height: 240,
-                width: 300,
-                fit: BoxFit.fill,
-                reverse: true,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Text(
-                "THANK YOU FOR",
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? Palette.cyanText
-                        : Palette.darkText),
-              ),
-              Text(
-                "THE FEEDBACK",
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? Palette.cyanText
-                        : Palette.darkText),
-              ),
-            ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Lottie.asset(
+                  'animations/feedback.json',
+                  height: 240,
+                  width: 300,
+                  fit: BoxFit.fill,
+                  reverse: true,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  "THANK YOU FOR",
+                  style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.cyanText
+                          : Palette.darkText),
+                ),
+                Text(
+                  "THE FEEDBACK",
+                  style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Palette.cyanText
+                          : Palette.darkText),
+                ),
+              ],
+            ),
           ),
         ),
       ),

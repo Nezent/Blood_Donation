@@ -104,513 +104,526 @@ class _HomeScreenState extends State<HomeScreen> {
           : Palette.darkSecondary,
     ));
     return UpgradeAlert(
-      child: Scaffold(
-        drawer: SideBar(
-          id: widget.id,
-        ),
-        body: SafeArea(
-          child: StreamBuilder2(
-            streams: StreamTuple2(
-              mongoDB.requestController.stream,
-              mongoDB.donorController.stream,
-            ),
-            builder: (context, SnapshotTuple2<dynamic, dynamic> snapshots) {
-              if (snapshots.snapshot1.connectionState ==
-                      ConnectionState.waiting &&
-                  snapshots.snapshot2.connectionState ==
-                      ConnectionState.waiting) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Skeleton(
-                          height: 54, width: MediaQuery.of(context).size.width),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Skeleton(height: 20, width: 130),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: SizedBox(
-                        height: 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 4,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                              child: Skeleton(
-                                  height: 100,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.85),
-                            );
-                          },
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          drawer: SideBar(
+            id: widget.id,
+          ),
+          body: SafeArea(
+            child: StreamBuilder2(
+              streams: StreamTuple2(
+                mongoDB.requestController.stream,
+                mongoDB.donorController.stream,
+              ),
+              builder: (context, SnapshotTuple2<dynamic, dynamic> snapshots) {
+                if (snapshots.snapshot1.connectionState ==
+                        ConnectionState.waiting &&
+                    snapshots.snapshot2.connectionState ==
+                        ConnectionState.waiting) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Skeleton(
+                            height: 54,
+                            width: MediaQuery.of(context).size.width),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Skeleton(height: 20, width: 130),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: SizedBox(
+                          height: 100,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 4,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Skeleton(
+                                    height: 100,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.85),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 48,
-                    ),
-                    Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).brightness == Brightness.light
-                            ? Palette.cyanText
-                            : Palette.newText,
+                      const SizedBox(
+                        height: 48,
                       ),
-                    ),
-                  ],
-                );
-              } else if (snapshots.snapshot1.hasData &&
-                  snapshots.snapshot2.hasData) {
-                var totalRequests = snapshots.snapshot1.data!.length;
-                var totalDonors = snapshots.snapshot2.data!.length;
-                return CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                      padding: const EdgeInsets.all(14.0),
-                      sliver: SliverToBoxAdapter(
-                        child: Container(
-                          height: 54,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Palette.card
-                                    : Palette.darkSecondary,
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context).brightness ==
-                                        Brightness.light
-                                    ? Colors.black12
-                                    : Palette.newText.withOpacity(0.09),
-                                blurRadius: 1.0,
-                                offset: const Offset(0, 1),
-                              ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Builder(builder: (context) {
-                                        return IconButton(
-                                          splashRadius: 8.0,
-                                          onPressed: () {
-                                            Scaffold.of(context).openDrawer();
-                                          },
-                                          icon: Icon(
-                                            Icons.menu_outlined,
-                                            color:
-                                                Theme.of(context).brightness ==
-                                                        Brightness.light
-                                                    ? Palette.newText
-                                                    : Palette.darkText,
-                                            size: 24.0,
-                                          ),
-                                        );
-                                      }),
-                                      const SizedBox(
-                                        width: 16.9,
-                                      ),
-                                      Expanded(
-                                        child: GestureDetector(
-                                          onTap: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const SearchScreen())),
-                                          child: Text(
-                                            'Nearby Donors',
-                                            style: TextStyle(
-                                              fontSize: 19.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: Theme.of(context)
-                                                          .brightness ==
-                                                      Brightness.light
-                                                  ? Palette.textColor
-                                                  : Palette.darkText,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        child: widget.id == null
-                                            ? const RegisterScreen(
-                                                prevScreen: "HomeScreen",
-                                              )
-                                            : ProfileScreen(
-                                                id: widget.id,
-                                                prevScreen: "HomeScreen",
-                                              ),
-                                        type: PageTransitionType.rightToLeft),
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 16.0,
-                                    backgroundImage: (widget.id != null &&
-                                            _url != "")
-                                        ? Image.network(_url!).image
-                                        : const AssetImage('images/bot.png'),
-                                  ),
+                      Center(
+                        child: CircularProgressIndicator(
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.cyanText
+                                  : Palette.newText,
+                        ),
+                      ),
+                    ],
+                  );
+                } else if (snapshots.snapshot1.hasData &&
+                    snapshots.snapshot2.hasData) {
+                  var totalRequests = snapshots.snapshot1.data!.length;
+                  var totalDonors = snapshots.snapshot2.data!.length;
+                  return CustomScrollView(
+                    slivers: [
+                      SliverPadding(
+                        padding: const EdgeInsets.all(14.0),
+                        sliver: SliverToBoxAdapter(
+                          child: Container(
+                            height: 54,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Palette.card
+                                  : Palette.darkSecondary,
+                              borderRadius: BorderRadius.circular(8.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.black12
+                                      : Palette.newText.withOpacity(0.09),
+                                  blurRadius: 1.0,
+                                  offset: const Offset(0, 1),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
-                        child: Text(
-                          'Our Partners',
-                          style: TextStyle(
-                            fontSize: 19.0,
-                            fontWeight: FontWeight.w600,
-                            color:
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Palette.newText
-                                    : Palette.darkText,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 14),
-                        child: SizedBox(
-                          height: 100.0,
-                          child: FutureBuilder(
-                            builder:
-                                (BuildContext context, AsyncSnapshot snapshot) {
-                              if (snapshot.hasData) {
-                                return CarouselSlider.builder(
-                                  itemCount: snapshot.data!.length,
-                                  itemBuilder: (BuildContext context,
-                                      int itemIndex, int realIndex) {
-                                    var sponsorData = SponsorModel.fromJson(
-                                        snapshot.data![itemIndex]);
-                                    return GestureDetector(
-                                      onTap: () async {
-                                        await launchUrlString(sponsorData.name);
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 4.0,
-                                        ),
-                                        child: Container(
-                                          height: 100.0,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image:
-                                                    CachedNetworkImageProvider(
-                                                        sponsorData.picture),
-                                                fit: BoxFit.fill),
-                                            color:
-                                                Theme.of(context).brightness ==
-                                                        Brightness.light
-                                                    ? Palette.cyanLight
-                                                    : Palette.darkSecondary,
-                                            borderRadius:
-                                                BorderRadius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  options: CarouselOptions(autoPlay: true),
-                                );
-                              } else {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: SizedBox(
-                                    height: 100,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: 4,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 4),
-                                          child: Skeleton(
-                                              height: 100,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            future: mongoDB.getSponsor(),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
-                        child: Text(
-                          'Blood Requests',
-                          style: TextStyle(
-                            fontSize: 19.0,
-                            fontWeight: FontWeight.w600,
-                            color:
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Palette.newText
-                                    : Palette.darkText,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          var data = RequestDataModel.fromJson(
-                              snapshots.snapshot1.data![index]);
-                          var names = data.name.split(' ');
-                          var nickName = names[0].trim();
-                          if (data.initBag == data.bag) {
-                            _deleteRequest(data.id!);
-                          }
-                          if ((Geolocator.distanceBetween(
-                                      data.latitude,
-                                      data.longitude,
-                                      latitude ?? 0.0,
-                                      longitude ?? 0.0) /
-                                  1000) <=
-                              20) {
-                            return BloodRequest(
-                              objectId: widget.id,
-                              requestId: data.id!,
-                              blood_type: data.bloodType,
-                              name: nickName,
-                              number: data.number,
-                              bag: data.bag,
-                              initBag: data.initBag,
-                              address: data.address,
-                              distance: Geolocator.distanceBetween(
-                                  data.latitude,
-                                  data.longitude,
-                                  latitude ?? 0.0,
-                                  longitude ?? 0.0),
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                        childCount: totalRequests,
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
-                            child: Text(
-                              'Blood Donors',
-                              style: TextStyle(
-                                fontSize: 19.0,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.light
-                                    ? Palette.newText
-                                    : Palette.darkText,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 18, 17, 8),
-                            child: Container(
-                              height: 24,
-                              width: 65,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 1,
-                                  color: Palette.outText,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: FormField<String>(
-                                builder: (FormFieldState<String> state) {
-                                  return DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      borderRadius: BorderRadius.circular(10),
-                                      value: _currentSelectedValue,
-                                      isDense: true,
-                                      onChanged: (String? newValue) {
-                                        Timer(const Duration(milliseconds: 500),
-                                            () {
-                                          setState(() {
-                                            _currentSelectedValue = newValue!;
-                                          });
-                                          mongoDB
-                                              .getUser(_currentSelectedValue);
-                                        });
-                                      },
-                                      items: _bloodType.map((String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 6,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 10.0, 0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Builder(builder: (context) {
+                                          return IconButton(
+                                            splashRadius: 8.0,
+                                            onPressed: () {
+                                              Scaffold.of(context).openDrawer();
+                                            },
+                                            icon: Icon(
+                                              Icons.menu_outlined,
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? Palette.newText
+                                                  : Palette.darkText,
+                                              size: 24.0,
                                             ),
+                                          );
+                                        }),
+                                        const SizedBox(
+                                          width: 16.9,
+                                        ),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const SearchScreen())),
                                             child: Text(
-                                              value,
+                                              'Nearby Donors',
                                               style: TextStyle(
+                                                fontSize: 19.0,
+                                                fontWeight: FontWeight.w500,
                                                 color: Theme.of(context)
                                                             .brightness ==
                                                         Brightness.light
-                                                    ? Palette.newText
-                                                    : Palette.card,
+                                                    ? Palette.textColor
+                                                    : Palette.darkText,
                                               ),
                                             ),
                                           ),
-                                        );
-                                      }).toList(),
+                                        ),
+                                      ],
                                     ),
-                                  );
-                                },
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          child: widget.id == null
+                                              ? const RegisterScreen(
+                                                  prevScreen: "HomeScreen",
+                                                )
+                                              : ProfileScreen(
+                                                  id: widget.id,
+                                                  prevScreen: "HomeScreen",
+                                                ),
+                                          type: PageTransitionType.rightToLeft),
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 16.0,
+                                      backgroundImage: (widget.id != null &&
+                                              _url != "")
+                                          ? Image.network(_url!).image
+                                          : const AssetImage('images/bot.png'),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          var data = RegisterDataModel.fromJson(
-                              snapshots.snapshot2.data![index]);
-                          var names = data.name.split(' ');
-                          var nickName = names[0].trim();
-                          if ((Geolocator.distanceBetween(
-                                      data.latitude,
-                                      data.longitude,
-                                      latitude ?? 0.00,
-                                      longitude ?? 0.00) /
-                                  1000) <=
-                              20) {
-                            return DonorList(
-                              blood_type: data.bloodType,
-                              name: nickName,
-                              number: data.number,
-                              address: data.address,
-                              distance: Geolocator.distanceBetween(
-                                  data.latitude,
-                                  data.longitude,
-                                  latitude ?? 0.00,
-                                  longitude ?? 0.00),
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                        childCount: totalDonors,
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
+                          child: Text(
+                            'Our Partners',
+                            style: TextStyle(
+                              fontSize: 19.0,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Palette.newText
+                                  : Palette.darkText,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              } else {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Lottie.asset(
-                        'animations/not-found.json',
-                        height: 240,
-                        width: 240,
-                        fit: BoxFit.fill,
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 14),
+                          child: SizedBox(
+                            height: 100.0,
+                            child: FutureBuilder(
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                if (snapshot.hasData) {
+                                  return CarouselSlider.builder(
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (BuildContext context,
+                                        int itemIndex, int realIndex) {
+                                      var sponsorData = SponsorModel.fromJson(
+                                          snapshot.data![itemIndex]);
+                                      return GestureDetector(
+                                        onTap: () async {
+                                          await launchUrlString(
+                                              sponsorData.name);
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 4.0,
+                                          ),
+                                          child: Container(
+                                            height: 100.0,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                          sponsorData.picture),
+                                                  fit: BoxFit.fill),
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? Palette.cyanLight
+                                                  : Palette.darkSecondary,
+                                              borderRadius:
+                                                  BorderRadius.circular(4.0),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    options: CarouselOptions(autoPlay: true),
+                                  );
+                                } else {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: SizedBox(
+                                      height: 100,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: 4,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4),
+                                            child: Skeleton(
+                                                height: 100,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              future: mongoDB.getSponsor(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
+                          child: Text(
+                            'Blood Requests',
+                            style: TextStyle(
+                              fontSize: 19.0,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Palette.newText
+                                  : Palette.darkText,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            var data = RequestDataModel.fromJson(
+                                snapshots.snapshot1.data![index]);
+                            var names = data.name.split(' ');
+                            var nickName = names[0].trim();
+                            if (data.initBag == data.bag) {
+                              _deleteRequest(data.id!);
+                            }
+                            if ((Geolocator.distanceBetween(
+                                        data.latitude,
+                                        data.longitude,
+                                        latitude ?? 0.0,
+                                        longitude ?? 0.0) /
+                                    1000) <=
+                                20) {
+                              return BloodRequest(
+                                objectId: widget.id,
+                                requestId: data.id!,
+                                blood_type: data.bloodType,
+                                name: nickName,
+                                number: data.number,
+                                bag: data.bag,
+                                initBag: data.initBag,
+                                address: data.address,
+                                distance: Geolocator.distanceBetween(
+                                    data.latitude,
+                                    data.longitude,
+                                    latitude ?? 0.0,
+                                    longitude ?? 0.0),
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          },
+                          childCount: totalRequests,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(17, 18, 0, 8),
+                              child: Text(
+                                'Blood Donors',
+                                style: TextStyle(
+                                  fontSize: 19.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Palette.newText
+                                      : Palette.darkText,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 18, 17, 8),
+                              child: Container(
+                                height: 24,
+                                width: 65,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Palette.outText,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: FormField<String>(
+                                  builder: (FormFieldState<String> state) {
+                                    return DropdownButtonHideUnderline(
+                                      child: DropdownButton<String>(
+                                        borderRadius: BorderRadius.circular(10),
+                                        value: _currentSelectedValue,
+                                        isDense: true,
+                                        onChanged: (String? newValue) {
+                                          Timer(
+                                              const Duration(milliseconds: 500),
+                                              () {
+                                            setState(() {
+                                              _currentSelectedValue = newValue!;
+                                            });
+                                            mongoDB
+                                                .getUser(_currentSelectedValue);
+                                          });
+                                        },
+                                        items: _bloodType.map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 6,
+                                              ),
+                                              child: Text(
+                                                value,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.light
+                                                      ? Palette.newText
+                                                      : Palette.card,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            var data = RegisterDataModel.fromJson(
+                                snapshots.snapshot2.data![index]);
+                            var names = data.name.split(' ');
+                            var nickName = names[0].trim();
+                            if ((Geolocator.distanceBetween(
+                                        data.latitude,
+                                        data.longitude,
+                                        latitude ?? 0.00,
+                                        longitude ?? 0.00) /
+                                    1000) <=
+                                20) {
+                              return DonorList(
+                                blood_type: data.bloodType,
+                                name: nickName,
+                                number: data.number,
+                                address: data.address,
+                                distance: Geolocator.distanceBetween(
+                                    data.latitude,
+                                    data.longitude,
+                                    latitude ?? 0.00,
+                                    longitude ?? 0.00),
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          },
+                          childCount: totalDonors,
+                        ),
                       ),
                     ],
-                  ),
-                );
-              }
-            },
+                  );
+                } else {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          'animations/not-found.json',
+                          height: 240,
+                          width: 240,
+                          fit: BoxFit.fill,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
           ),
-        ),
-        floatingActionButton: SpeedDial(
-          icon: Icons.expand_less_outlined,
-          backgroundColor: Theme.of(context).brightness == Brightness.light
-              ? Palette.cyan
-              : const Color(0xff03DAC6),
-          overlayColor: Colors.black38,
-          overlayOpacity: 0.5,
-          spacing: 8,
-          spaceBetweenChildren: 4,
-          children: [
-            SpeedDialChild(
-              backgroundColor: Theme.of(context).brightness == Brightness.light
-                  ? Palette.cyan
-                  : Palette.darkSecondary,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const RequestScreen(),
+          floatingActionButton: SpeedDial(
+            icon: Icons.expand_less_outlined,
+            backgroundColor: Theme.of(context).brightness == Brightness.light
+                ? Palette.cyan
+                : const Color(0xff03DAC6),
+            overlayColor: Colors.black38,
+            overlayOpacity: 0.5,
+            spacing: 8,
+            spaceBetweenChildren: 4,
+            children: [
+              SpeedDialChild(
+                backgroundColor:
+                    Theme.of(context).brightness == Brightness.light
+                        ? Palette.cyan
+                        : Palette.darkSecondary,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RequestScreen(
+                      id: widget.id,
+                    ),
+                  ),
                 ),
-              ),
-              child: SvgPicture.asset(
-                "images/blood-white.svg",
-                height: 24,
-                width: 24,
-              ),
-              label: 'Request',
-              labelStyle: const TextStyle(
-                color: Palette.card,
-              ),
-              labelBackgroundColor: Palette.textColor,
-            ),
-            SpeedDialChild(
-              backgroundColor: Theme.of(context).brightness == Brightness.light
-                  ? Palette.cyan
-                  : Palette.darkSecondary,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => widget.id == null
-                      ? const RegisterScreen(prevScreen: "HomeScreen")
-                      : RequestBloodScreen(objectId: widget.id),
+                child: SvgPicture.asset(
+                  "images/blood-white.svg",
+                  height: 24,
+                  width: 24,
                 ),
+                label: 'Request',
+                labelStyle: const TextStyle(
+                  color: Palette.card,
+                ),
+                labelBackgroundColor: Palette.textColor,
               ),
-              child: SvgPicture.asset(
-                "images/donates-white.svg",
-                height: 24,
-                width: 24,
+              SpeedDialChild(
+                backgroundColor:
+                    Theme.of(context).brightness == Brightness.light
+                        ? Palette.cyan
+                        : Palette.darkSecondary,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => widget.id == null
+                        ? const RegisterScreen(prevScreen: "HomeScreen")
+                        : RequestBloodScreen(objectId: widget.id),
+                  ),
+                ),
+                child: SvgPicture.asset(
+                  "images/donates-white.svg",
+                  height: 24,
+                  width: 24,
+                ),
+                label: 'Donate',
+                labelStyle: const TextStyle(
+                  color: Palette.card,
+                ),
+                labelBackgroundColor: Palette.textColor,
               ),
-              label: 'Donate',
-              labelStyle: const TextStyle(
-                color: Palette.card,
-              ),
-              labelBackgroundColor: Palette.textColor,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
