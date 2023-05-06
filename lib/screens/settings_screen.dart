@@ -183,7 +183,7 @@ class _SettingsState extends State<Settings> {
     await MongoDB.deleteUser(widget.id);
     SharedPreferences session = await SharedPreferences.getInstance();
     await session.remove('objectId');
-    Navigator.push(context,
+    Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const HomeScreen(id: null)));
   }
 }

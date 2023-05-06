@@ -20,7 +20,9 @@ import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
   final mongo.ObjectId? id;
-  const ProfileScreen({Key? key, required this.id}) : super(key: key);
+  final String prevScreen;
+  const ProfileScreen({Key? key, required this.id, required this.prevScreen})
+      : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -66,8 +68,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (userData == null) {
       SharedPreferences session = await SharedPreferences.getInstance();
       await session.remove('objectId');
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const RegisterScreen()));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const RegisterScreen(
+                    prevScreen: "ProfileScreen",
+                  )));
     }
   }
 
@@ -117,7 +123,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : Palette.darkSecondary,
         leading: IconButton(
           splashRadius: 8.0,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            (widget.prevScreen == "HomeScreen")
+                ? Navigator.pop(context)
+                : Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(id: widget.id),
+                    ),
+                  );
+          },
           icon: const Icon(
             Icons.arrow_back_outlined,
             color: Palette.card,

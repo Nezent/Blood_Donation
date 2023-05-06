@@ -1,12 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:blood_connection/components/components.dart';
+import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/palette.dart';
 import 'package:blood_connection/widgets/request.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RequestBloodScreen extends StatefulWidget {
   final mongo.ObjectId? objectId;
@@ -20,9 +24,27 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
   double? latitude;
   double? longitude;
   MongoDB mongoDB = MongoDB();
+
+  void _checkData() async {
+    var userData = await MongoDB.getUserData(widget.objectId);
+    if (userData == null) {
+      SharedPreferences session = await SharedPreferences.getInstance();
+      await session.remove('objectId');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const RegisterScreen(
+            prevScreen: "RequestBloodScreen",
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _checkData();
     _connection();
     _getAddress();
     Timer.periodic(const Duration(seconds: 8), (timer) {
@@ -37,10 +59,12 @@ class _RequestBloodScreenState extends State<RequestBloodScreen> {
   void _getAddress() async {
     LocationTracker tracker = LocationTracker();
     List? temporaryAddress = await tracker.requestAddress();
-    setState(() {
-      latitude = double.parse(temporaryAddress.elementAt(2));
-      longitude = double.parse(temporaryAddress.elementAt(3));
-    });
+    if (mounted) {
+      setState(() {
+        latitude = double.parse(temporaryAddress.elementAt(2));
+        longitude = double.parse(temporaryAddress.elementAt(3));
+      });
+    }
   }
 
   @override

@@ -255,8 +255,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     context,
                                     PageTransition(
                                         child: widget.id == null
-                                            ? const RegisterScreen()
-                                            : ProfileScreen(id: widget.id),
+                                            ? const RegisterScreen(
+                                                prevScreen: "HomeScreen",
+                                              )
+                                            : ProfileScreen(
+                                                id: widget.id,
+                                                prevScreen: "HomeScreen",
+                                              ),
                                         type: PageTransitionType.rightToLeft),
                                   ),
                                   child: CircleAvatar(
@@ -590,7 +595,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => widget.id == null
-                      ? const RegisterScreen()
+                      ? const RegisterScreen(prevScreen: "HomeScreen")
                       : RequestBloodScreen(objectId: widget.id),
                 ),
               ),

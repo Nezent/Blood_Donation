@@ -42,7 +42,10 @@ class _UserRequestScreenState extends State<UserRequestScreen> {
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProfileScreen(id: widget.id),
+              builder: (context) => ProfileScreen(
+                id: widget.id,
+                prevScreen: "UserRequestScreen",
+              ),
             ),
           ),
           icon: const Icon(

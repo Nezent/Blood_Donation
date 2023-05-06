@@ -421,13 +421,27 @@ class _EditProfileState extends State<EditProfile> {
 
   _changeName(String name) async {
     await MongoDB.changeName(widget.id, name);
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => ProfileScreen(id: widget.id)));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileScreen(
+          id: widget.id,
+          prevScreen: "EditProfile",
+        ),
+      ),
+    );
   }
 
   _changePassword(String password) async {
     await MongoDB.changePassword(widget.id, password);
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => ProfileScreen(id: widget.id)));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileScreen(
+          id: widget.id,
+          prevScreen: "EditProfile",
+        ),
+      ),
+    );
   }
 }

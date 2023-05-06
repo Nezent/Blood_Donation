@@ -9,7 +9,8 @@ import 'package:jumping_dot/jumping_dot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  final String prevScreen;
+  const RegisterScreen({Key? key, required this.prevScreen}) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -65,7 +66,14 @@ class _RegisterScreenState extends State<RegisterScreen>
               : Palette.darkSecondary,
           leading: IconButton(
             splashRadius: 8.0,
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              (widget.prevScreen == "HomeScreen")
+                  ? Navigator.pop(context)
+                  : Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomeScreen(id: null)));
+            },
             icon: const Icon(
               Icons.arrow_back_outlined,
               color: Palette.card,

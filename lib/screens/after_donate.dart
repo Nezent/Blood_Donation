@@ -20,7 +20,9 @@ class _AfterDonationState extends State<AfterDonation> {
       const Duration(seconds: 5),
       () => Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (BuildContext context) => const RegisterScreen(),
+          builder: (BuildContext context) => const RegisterScreen(
+            prevScreen: "AfterDonation",
+          ),
         ),
       ),
     );

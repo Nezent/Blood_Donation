@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 
 class VerificationCode {
   static void sendCode(String code, String number) async {
-    String message = "Your Blood Connection Vertification Code is $code";
+    String message =
+        "Your OTP for Blood Connection Application is $code. Thank you for joining our community of blood donors!";
     var response = await http.post(
       Uri.parse(
           'http://bulksmsbd.net/api/smsapi?api_key=TLF3sixpkNeLUATJVzkP&type=text&number=$number&senderid=8809617611040&message=$message'),

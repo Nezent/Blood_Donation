@@ -121,10 +121,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                       SharedPreferences session =
                           await SharedPreferences.getInstance();
                       await session.remove('objectId');
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const RegisterScreen()));
+                              builder: (context) => const RegisterScreen(
+                                    prevScreen: "ChangePassword",
+                                  )));
                     }
 
                     setState(() {
