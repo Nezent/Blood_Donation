@@ -67,6 +67,7 @@ dependencies:
   upgrader: ^6.2.0
   url_launcher: ^6.1.10
   encrypt: ^5.0.1
+  device_info_plus: ^8.2.2
 
 dev_dependencies:
   flutter_test:
@@ -86,7 +87,7 @@ flutter_native_splash:
   android: true
   ios: true
   android_12:
-    color: "#ffffff"
+    color: "#009591"
     image: images/android12.png
     icon_background_color: "#ffffff"
   web: false

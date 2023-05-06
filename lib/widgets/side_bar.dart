@@ -1,8 +1,11 @@
 // ignore_for_file: library_prefixes, use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:blood_connection/widgets/palette.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,18 +23,35 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   String version = '1.0';
   String buildNumber = '1';
+  String? model;
   _packageInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     version = packageInfo.version;
     buildNumber = packageInfo.buildNumber;
   }
 
+  void findModel() async {
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      model = androidInfo.model;
+    }
+    if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      model = iosInfo.utsname.machine!;
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _packageInfo();
+    findModel();
   }
 
   @override
@@ -221,9 +241,9 @@ class _SideBarState extends State<SideBar> {
                 padding: EdgeInsets.zero,
                 children: [
                   UserAccountsDrawerHeader(
-                    accountName: const Text(
-                      "Nezent Bot",
-                      style: TextStyle(fontSize: 18),
+                    accountName: Text(
+                      model ?? "Nezent Bot",
+                      style: const TextStyle(fontSize: 18),
                     ),
                     accountEmail: const Text(""),
                     decoration: BoxDecoration(
