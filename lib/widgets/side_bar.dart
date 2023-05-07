@@ -27,6 +27,7 @@ class _SideBarState extends State<SideBar> {
   String version = '1.0';
   String buildNumber = '1';
   String? model;
+  String? name;
   _packageInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     version = packageInfo.version;
@@ -37,10 +38,12 @@ class _SideBarState extends State<SideBar> {
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       model = androidInfo.model;
+      name = androidInfo.id;
     }
     if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       model = iosInfo.utsname.machine!;
+      name = iosInfo.utsname.sysname!;
     }
     if (mounted) {
       setState(() {});
@@ -94,8 +97,9 @@ class _SideBarState extends State<SideBar> {
                           currentAccountPicture: Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: CircleAvatar(
+                              backgroundColor: Palette.background,
                               backgroundImage: userData.profilePicture == null
-                                  ? const AssetImage("images/bot.png")
+                                  ? const AssetImage("images/user.png")
                                   : Image.network(userData.profilePicture!)
                                       .image,
                             ),
@@ -228,94 +232,99 @@ class _SideBarState extends State<SideBar> {
   }
 
   Widget _defaultData() {
-    return SizedBox(
-      width: 120,
-      child: Drawer(
-        backgroundColor: Theme.of(context).brightness == Brightness.light
-            ? const Color.fromARGB(224, 0, 149, 144)
-            : const Color.fromARGB(224, 31, 31, 31),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  UserAccountsDrawerHeader(
-                    accountName: Text(
-                      model ?? "Nezent Bot",
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    accountEmail: const Text(""),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).brightness == Brightness.light
-                            ? Palette.cyanText
-                            : Palette.darkWidget),
-                    currentAccountPicture: Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: CircleAvatar(
-                        child: ClipOval(
-                          child: Image.asset(
-                            "images/bot.png",
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  sideBarList("donates-white.svg", "Requests List", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RequestBloodScreen(
-                          objectId: widget.id,
-                        ),
-                      ),
-                    );
-                  }),
-                  sideBarList("question-mark-white.svg", "Help Center", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HelpScreen(
-                          id: null,
-                        ),
-                      ),
-                    );
-                  }),
-                  sideBarList("cup-white.svg", "Buy Us a Ko-Fi", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DonateUs(),
-                      ),
-                    );
-                  }),
-                  sideBarList("star.svg", "Rate Us", () async {
-                    await launchUrlString(
-                        "https://play.google.com/store/apps/details?id=com.nezent.BloodConnection");
-                  }),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Text(
-                  "Version: $version",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+    return Column(
+      children: [
+        Expanded(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              UserAccountsDrawerHeader(
+                accountName: Text(
+                  model ?? "Unknown",
+                  style: const TextStyle(fontSize: 18),
+                ),
+                accountEmail: Text(
+                  name ?? "Unknown",
+                  style: const TextStyle(fontSize: 18),
+                ),
+                decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.light
-                        ? Palette.card
-                        : Palette.darkText,
+                        ? Palette.cyanText
+                        : Palette.darkWidget),
+                currentAccountPicture: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: CircleAvatar(
+                    backgroundColor:
+                        Theme.of(context).brightness == Brightness.light
+                            ? Palette.cyan
+                            : Palette.darkSecondary,
+                    child: ClipOval(
+                      child: Text(
+                        model![0],
+                        style: TextStyle(
+                          fontSize: 40,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Palette.card
+                                  : Palette.newText,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              sideBarList("donates-white.svg", "Requests List", () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RequestBloodScreen(
+                      objectId: widget.id,
+                    ),
+                  ),
+                );
+              }),
+              sideBarList("question-mark-white.svg", "Help Center", () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HelpScreen(
+                      id: null,
+                    ),
+                  ),
+                );
+              }),
+              sideBarList("cup-white.svg", "Buy Us a Ko-Fi", () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DonateUs(),
+                  ),
+                );
+              }),
+              sideBarList("star.svg", "Rate Us", () async {
+                await launchUrlString(
+                    "https://play.google.com/store/apps/details?id=com.nezent.BloodConnection");
+              }),
+            ],
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: Text(
+              "Version: $version",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Palette.card
+                    : Palette.darkText,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/services.dart';
@@ -27,12 +29,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   MongoDB mongoDB = MongoDB();
   final _bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   String _currentSelectedValue = 'AB+';
   double? latitude;
   double? longitude;
   String? _url = "";
+  String? model;
   var isDeviceConnected = false;
   void _getAddress() async {
     LocationTracker tracker = LocationTracker();
@@ -41,6 +45,20 @@ class _HomeScreenState extends State<HomeScreen> {
       latitude = double.parse(temporaryAddress.elementAt(2));
       longitude = double.parse(temporaryAddress.elementAt(3));
     });
+  }
+
+  void findModel() async {
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      model = androidInfo.model;
+    }
+    if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      model = iosInfo.utsname.machine!;
+    }
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void _connection() async {
@@ -80,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    findModel();
     _getConnection();
     if (!isDeviceConnected) {
       Timer.periodic(const Duration(seconds: 4), (timer) {
@@ -269,13 +288,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                           type: PageTransitionType.rightToLeft),
                                     ),
-                                    child: CircleAvatar(
-                                      radius: 16.0,
-                                      backgroundImage: (widget.id != null &&
-                                              _url != "")
-                                          ? Image.network(_url!).image
-                                          : const AssetImage('images/bot.png'),
-                                    ),
+                                    child: (widget.id != null)
+                                        ? CircleAvatar(
+                                            backgroundColor: Palette.background,
+                                            radius: 16.0,
+                                            backgroundImage:
+                                                (widget.id != null &&
+                                                        _url != "")
+                                                    ? Image.network(_url!).image
+                                                    : const AssetImage(
+                                                        'images/user.png'),
+                                          )
+                                        : CircleAvatar(
+                                            radius: 16.0,
+                                            backgroundColor:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Palette.cyan
+                                                    : Palette.darkSecondary,
+                                            child: ClipOval(
+                                              child: Text(
+                                                model![0],
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  color: Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.light
+                                                      ? Palette.card
+                                                      : Palette.newText,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                   ),
                                 ],
                               ),
@@ -316,8 +360,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           snapshot.data![itemIndex]);
                                       return GestureDetector(
                                         onTap: () async {
-                                          await launchUrlString(
-                                              sponsorData.name);
+                                          bool launchable =
+                                              await canLaunchUrlString(
+                                                  sponsorData.name);
+
+                                          if (launchable) {
+                                            await launchUrlString(
+                                                sponsorData.name);
+                                          }
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(

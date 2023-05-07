@@ -259,9 +259,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           userData.profilePicture != null
                               ? showImage(context, userData.profilePicture)
-                              : const CircleAvatar(
-                                  backgroundImage: AssetImage(
-                                    "images/bot.png",
+                              : CircleAvatar(
+                                  backgroundColor: Theme.of(context)
+                                              .brightness ==
+                                          Brightness.light
+                                      ? const Color.fromARGB(123, 83, 213, 230)
+                                      : const Color.fromARGB(130, 67, 67, 67),
+                                  backgroundImage: const AssetImage(
+                                    "images/user.png",
                                   ),
                                 ),
                           Positioned(

@@ -95,8 +95,13 @@ class _SearchScreenState extends State<SearchScreen> {
                       future: _tracker.requestAddress(),
                       builder: (context, snapshot) {
                         if (address == 'waiting') {
-                          return const Center(
-                            child: CircularProgressIndicator.adaptive(),
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Palette.cyanText
+                                  : Palette.newText,
+                            ),
                           );
                         } else {
                           return Center(
