@@ -262,7 +262,7 @@ class _SideBarState extends State<SideBar> {
                       child: Text(
                         model![0],
                         style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 36,
                           color:
                               Theme.of(context).brightness == Brightness.light
                                   ? Palette.card

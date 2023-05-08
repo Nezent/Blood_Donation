@@ -310,7 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               child: Text(
                                                 model![0],
                                                 style: TextStyle(
-                                                  fontSize: 24,
+                                                  fontSize: 22,
                                                   color: Theme.of(context)
                                                               .brightness ==
                                                           Brightness.light
