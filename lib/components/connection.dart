@@ -35,6 +35,8 @@ class MongoDB {
       snackbarKey.currentState?.showSnackBar(snackBar);
     } on HttpException {
       return;
+    } on HandshakeException {
+      return;
     }
   }
   // Request Model

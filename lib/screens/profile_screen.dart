@@ -364,9 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(
                       height: 12,
                     ),
-                    ProfileWidget(
-                      icon: "donation-heart.svg",
-                      text: "My Donations",
+                    GestureDetector(
                       onTap: () {
                         Navigator.push(
                             context,
@@ -377,6 +375,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       value: userData.donated,
                                     )));
                       },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 17.0,
+                        ),
+                        child: Container(
+                          height: 64.0,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 40.0,
+                                          width: 40.0,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Palette.background
+                                                    : Palette.darkButton,
+                                            borderRadius: BorderRadius.circular(
+                                              31.0,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: SvgPicture.asset(
+                                              "images/donation-heart.svg",
+                                              height: 32,
+                                              width: 32,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 32,
+                                        ),
+                                        Text(
+                                          "My Donations",
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Palette.newText
+                                                    : Palette.darkText,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.cyan
+                                              : Palette.darkWidget,
+                                      radius: 16,
+                                      child: Text(
+                                        "${userData.donations.length}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Palette.card
+                                              : Palette.darkText,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 12,

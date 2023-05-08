@@ -70,7 +70,7 @@ class _ValidationScreenState extends State<ValidationScreen> {
                   height: 24,
                 ),
                 const Text(
-                  "OTP Varification",
+                  "OTP Verification",
                   style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
