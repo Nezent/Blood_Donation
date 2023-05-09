@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:blood_connection/components/components.dart';
-import 'package:blood_connection/screens/after_feedback.dart';
+import 'package:blood_connection/screens/help_screen_validation.dart';
 import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
@@ -152,26 +151,21 @@ class _HelpScreenState extends State<HelpScreen> {
                                 isRegistering = true;
                               });
                               if (feedback.currentState!.validate()) {
-                                try {
-                                  var data = FeedbackModel(
-                                      number: (numberController.text.length ==
-                                              11)
-                                          ? ('+88${numberController.text}')
-                                          : (numberController.text.length == 13)
-                                              ? ('+${numberController.text}')
-                                              : numberController.text,
-                                      feedback: feedbackController.text);
-                                  await MongoDB.feedback(data);
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          AfterFeedback(id: widget.id),
-                                    ),
-                                  );
-                                } catch (_) {
-                                  return;
-                                }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HelpScreenValidation(
+                                        id: widget.id,
+                                        number: (numberController.text.length ==
+                                                11)
+                                            ? ('+88${numberController.text}')
+                                            : (numberController.text.length ==
+                                                    13)
+                                                ? ('+${numberController.text}')
+                                                : numberController.text,
+                                        feedback: feedbackController.text),
+                                  ),
+                                );
                               }
                               setState(() {
                                 isRegistering = false;

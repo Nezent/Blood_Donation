@@ -31,9 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   var numberController = TextEditingController();
   var passwordController = TextEditingController();
   var passwordCheckController = TextEditingController();
-  bool isEightCharacter = false;
-  final bool hasSpecialCharacter = false;
-  final bool hasNumber = false;
+
   void _getAddress() async {
     List? temporaryAddress = await _tracker.requestAddress();
     var tempAddress = temporaryAddress.elementAt(0).split(' ');
@@ -493,14 +491,6 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 40, vertical: 8),
                                   child: TextFormField(
-                                    onChanged: (value) {
-                                      if (value.length >= 8) {
-                                        isEightCharacter = false;
-                                        setState(() {
-                                          isEightCharacter = true;
-                                        });
-                                      }
-                                    },
                                     validator: (value) {
                                       if (value!.isEmpty ||
                                           !RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$')

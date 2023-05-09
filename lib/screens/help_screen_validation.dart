@@ -1,31 +1,27 @@
-// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, must_be_immutable
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:blood_connection/components/components.dart';
 import 'package:blood_connection/screens/screens.dart';
+import 'package:blood_connection/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
-import '../widgets/palette.dart';
-
-class ValidationScreen extends StatefulWidget {
-  String name, number, password, gender, blood_type, address;
-  double latitude, longitude;
-  ValidationScreen(
-      {super.key,
-      required this.address,
-      required this.blood_type,
-      required this.gender,
-      required this.latitude,
-      required this.longitude,
-      required this.name,
-      required this.number,
-      required this.password});
+class HelpScreenValidation extends StatefulWidget {
+  final mongo.ObjectId? id;
+  final String number, feedback;
+  const HelpScreenValidation({
+    super.key,
+    required this.id,
+    required this.number,
+    required this.feedback,
+  });
 
   @override
-  State<ValidationScreen> createState() => _ValidationScreenState();
+  State<HelpScreenValidation> createState() => _HelpScreenValidationState();
 }
 
-class _ValidationScreenState extends State<ValidationScreen> {
+class _HelpScreenValidationState extends State<HelpScreenValidation> {
   late int code;
   @override
   void initState() {
@@ -83,21 +79,6 @@ class _ValidationScreenState extends State<ValidationScreen> {
                   width: 300,
                   child: Center(
                     child: Text(
-                      "Welcome, ${widget.name}",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Palette.cyanText
-                                  : Palette.darkText),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 300,
-                  child: Center(
-                    child: Text(
                       "OTP sent to ${widget.number.replaceRange(4, 12, '********')}",
                       style: TextStyle(
                           fontSize: 16,
@@ -126,17 +107,8 @@ class _ValidationScreenState extends State<ValidationScreen> {
                   onSubmit: (String verificationCode) async {
                     if (verificationCode == code.toString()) {
                       await _insertData(
-                        widget.name,
                         widget.number,
-                        widget.password,
-                        widget.blood_type,
-                        widget.gender,
-                      );
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AfterDonation(),
-                        ),
+                        widget.feedback,
                       );
                     }
                   },
@@ -192,23 +164,18 @@ class _ValidationScreenState extends State<ValidationScreen> {
     );
   }
 
-  Future<void> _insertData(String name, String number, String password,
-      String bloodType, String gender) async {
-    final data = RegisterModel(
-      name: name,
-      profilePicture: null,
-      bloodType: bloodType,
-      number: number,
-      password: password,
-      gender: gender,
-      address: widget.address,
-      latitude: widget.latitude,
-      longitude: widget.longitude,
-      isAvailable: true,
-      donated: 0,
-      donations: [],
-    );
-    await MongoDB.register(data);
-    await Future.delayed(const Duration(milliseconds: 1000));
+  Future<void> _insertData(String number, String feedback) async {
+    try {
+      var data = FeedbackModel(number: number, feedback: feedback);
+      await MongoDB.feedback(data);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AfterFeedback(id: widget.id),
+        ),
+      );
+    } catch (_) {
+      return;
+    }
   }
 }
